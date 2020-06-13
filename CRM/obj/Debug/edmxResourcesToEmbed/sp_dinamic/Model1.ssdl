@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BDWENCOModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'BDWENCO.dbo.ADMINISTRADOR' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="ADMINISTRADOR">
+    <Key>
+      <PropertyRef Name="ADM_PASSWORD" />
+    </Key>
+    <Property Name="ADM_CODIGO" Type="varchar" MaxLength="5" />
+    <Property Name="ADM_NOMBRE" Type="varchar" MaxLength="10" />
+    <Property Name="ADM_PASSWORD" Type="varchar" MaxLength="8" Nullable="false" />
+    <Property Name="ADM_FECHA_CREACION" Type="smalldatetime" />
+    <Property Name="ADM_FECHA_ELIMINACION" Type="smalldatetime" />
+    <Property Name="EMAIL" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="CRM_Usuarios_Rol">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="codigoEmpresa" Type="varchar" MaxLength="6" />
+    <Property Name="alias" Type="varchar" MaxLength="20" />
+    <Property Name="nombreUser" Type="varchar" MaxLength="20" />
+    <Property Name="contrase" Type="varchar" MaxLength="20" />
+    <Property Name="email" Type="varchar" MaxLength="50" />
+    <Property Name="Rol" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'BDWENCO.dbo.USUARIO_FAC' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="USUARIO_FAC">
+    <Key>
+      <PropertyRef Name="CTUPERMARG" />
+      <PropertyRef Name="CTUPERMPED" />
+      <PropertyRef Name="USU_ESTADO" />
+    </Key>
+    <Property Name="CTEMPRESA" Type="varchar" MaxLength="3" />
+    <Property Name="CTUALIAS" Type="varchar" MaxLength="8" />
+    <Property Name="CTUNOMUSU" Type="varchar" MaxLength="50" />
+    <Property Name="CTUPASSWO" Type="varchar" MaxLength="8" />
+    <Property Name="CTUPUNVEN" Type="varchar" MaxLength="2" />
+    <Property Name="CTUTIPUSU" Type="varchar" MaxLength="1" />
+    <Property Name="CTUNROALM" Type="varchar" MaxLength="2" />
+    <Property Name="CTUFECCRE" Type="smalldatetime" />
+    <Property Name="CTUUSUARI" Type="varchar" MaxLength="8" />
+    <Property Name="CTUSERFAC" Type="varchar" MaxLength="3" />
+    <Property Name="CTUSERBOL" Type="varchar" MaxLength="3" />
+    <Property Name="CTUSERNC" Type="varchar" MaxLength="3" />
+    <Property Name="CTUSERND" Type="varchar" MaxLength="3" />
+    <Property Name="CTUSERGUI" Type="varchar" MaxLength="3" />
+    <Property Name="CTUPEDIDO" Type="varchar" MaxLength="1" />
+    <Property Name="CTUCOTIZA" Type="varchar" MaxLength="1" />
+    <Property Name="CTUVEND" Type="varchar" MaxLength="2" />
+    <Property Name="CTUSERFACE" Type="varchar" MaxLength="3" />
+    <Property Name="CTULOCEMI" Type="varchar" MaxLength="2" />
+    <Property Name="CTUPERMARG" Type="varchar" MaxLength="1" Nullable="false" />
+    <Property Name="CTUPERMPED" Type="bit" Nullable="false" />
+    <Property Name="CTUPRECVTA" Type="bit" />
+    <Property Name="CT_CONFIGURACION" Type="bit" />
+    <Property Name="CTMODIFICA_PRECIO_MINIMO" Type="bit" />
+    <Property Name="CTACTIVAR_CLIE" Type="bit" />
+    <Property Name="CTULIMCRED" Type="bit" />
+    <Property Name="rol_id" Type="int" />
+    <Property Name="EMAIL" Type="varchar" MaxLength="50" />
+    <Property Name="USU_ESTADO" Type="bit" Nullable="false" />
+    <Property Name="USU_FEC_CREA" Type="datetime" />
+    <Property Name="USU_FEC_INACTIVO" Type="datetime" />
+    <Property Name="FLGACTUALIZAR_VENDEDORES" Type="bit" />
+  </EntityType>
+  <Function Name="SP_ACTUALIZAR_USAURIO_PASSWORD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PASSWORD" Type="varchar" Mode="In" />
+    <Parameter Name="EMPRESA" Type="varchar" Mode="In" />
+    <Parameter Name="ALIAS" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="SP_ACTUALIZAR_USUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+    <Parameter Name="EMAIL" Type="varchar" Mode="In" />
+    <Parameter Name="EMPRESA" Type="varchar" Mode="In" />
+    <Parameter Name="ALIAS" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="SP_EMPRESA_CLIENTE_CRM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SP_EMPRESA_USUARIO_CRM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SP_PORTAL_VERIFICAR_DATABASE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="BASEDATOS" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="SP_PORTAL_VERIFICAR_DATABASERE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="BDWENCOModelStoreContainer">
+    <EntitySet Name="CRM_Usuarios_Rol" EntityType="Self.CRM_Usuarios_Rol" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [ADMINISTRADOR].[ADM_CODIGO] AS [ADM_CODIGO], 
+    [ADMINISTRADOR].[ADM_NOMBRE] AS [ADM_NOMBRE], 
+    [ADMINISTRADOR].[ADM_PASSWORD] AS [ADM_PASSWORD], 
+    [ADMINISTRADOR].[ADM_FECHA_CREACION] AS [ADM_FECHA_CREACION], 
+    [ADMINISTRADOR].[ADM_FECHA_ELIMINACION] AS [ADM_FECHA_ELIMINACION], 
+    [ADMINISTRADOR].[EMAIL] AS [EMAIL]
+    FROM [dbo].[ADMINISTRADOR] AS [ADMINISTRADOR]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="USUARIO_FAC" EntityType="Self.USUARIO_FAC" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [USUARIO_FAC].[CTEMPRESA] AS [CTEMPRESA], 
+    [USUARIO_FAC].[CTUALIAS] AS [CTUALIAS], 
+    [USUARIO_FAC].[CTUNOMUSU] AS [CTUNOMUSU], 
+    [USUARIO_FAC].[CTUPASSWO] AS [CTUPASSWO], 
+    [USUARIO_FAC].[CTUPUNVEN] AS [CTUPUNVEN], 
+    [USUARIO_FAC].[CTUTIPUSU] AS [CTUTIPUSU], 
+    [USUARIO_FAC].[CTUNROALM] AS [CTUNROALM], 
+    [USUARIO_FAC].[CTUFECCRE] AS [CTUFECCRE], 
+    [USUARIO_FAC].[CTUUSUARI] AS [CTUUSUARI], 
+    [USUARIO_FAC].[CTUSERFAC] AS [CTUSERFAC], 
+    [USUARIO_FAC].[CTUSERBOL] AS [CTUSERBOL], 
+    [USUARIO_FAC].[CTUSERNC] AS [CTUSERNC], 
+    [USUARIO_FAC].[CTUSERND] AS [CTUSERND], 
+    [USUARIO_FAC].[CTUSERGUI] AS [CTUSERGUI], 
+    [USUARIO_FAC].[CTUPEDIDO] AS [CTUPEDIDO], 
+    [USUARIO_FAC].[CTUCOTIZA] AS [CTUCOTIZA], 
+    [USUARIO_FAC].[CTUVEND] AS [CTUVEND], 
+    [USUARIO_FAC].[CTUSERFACE] AS [CTUSERFACE], 
+    [USUARIO_FAC].[CTULOCEMI] AS [CTULOCEMI], 
+    [USUARIO_FAC].[CTUPERMARG] AS [CTUPERMARG], 
+    [USUARIO_FAC].[CTUPERMPED] AS [CTUPERMPED], 
+    [USUARIO_FAC].[CTUPRECVTA] AS [CTUPRECVTA], 
+    [USUARIO_FAC].[CT_CONFIGURACION] AS [CT_CONFIGURACION], 
+    [USUARIO_FAC].[CTMODIFICA_PRECIO_MINIMO] AS [CTMODIFICA_PRECIO_MINIMO], 
+    [USUARIO_FAC].[CTACTIVAR_CLIE] AS [CTACTIVAR_CLIE], 
+    [USUARIO_FAC].[CTULIMCRED] AS [CTULIMCRED], 
+    [USUARIO_FAC].[rol_id] AS [rol_id], 
+    [USUARIO_FAC].[EMAIL] AS [EMAIL], 
+    [USUARIO_FAC].[USU_ESTADO] AS [USU_ESTADO], 
+    [USUARIO_FAC].[USU_FEC_CREA] AS [USU_FEC_CREA], 
+    [USUARIO_FAC].[USU_FEC_INACTIVO] AS [USU_FEC_INACTIVO], 
+    [USUARIO_FAC].[FLGACTUALIZAR_VENDEDORES] AS [FLGACTUALIZAR_VENDEDORES]
+    FROM [dbo].[USUARIO_FAC] AS [USUARIO_FAC]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

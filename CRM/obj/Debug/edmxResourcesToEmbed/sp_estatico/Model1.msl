@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CLIENTES_PORTALESModelStoreContainer" CdmEntityContainer="CLIENTES_PORTALESEntities">
+    <FunctionImportMapping FunctionImportName="SP_CLIENTE_LOGIN" FunctionName="CLIENTES_PORTALESModel.Store.SP_CLIENTE_LOGIN">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CLIENTES_PORTALESModel.SP_CLIENTE_LOGIN_Result">
+          <ScalarProperty Name="ID_Clientes_Portales" ColumnName="ID_Clientes_Portales" />
+          <ScalarProperty Name="RUC_Cliente" ColumnName="RUC_Cliente" />
+          <ScalarProperty Name="Servidor" ColumnName="Servidor" />
+          <ScalarProperty Name="Base_Datos" ColumnName="Base_Datos" />
+          <ScalarProperty Name="Usuario_Server" ColumnName="Usuario_Server" />
+          <ScalarProperty Name="Contrasenia_Server" ColumnName="Contrasenia_Server" />
+          <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

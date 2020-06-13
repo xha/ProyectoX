@@ -1,0 +1,648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CRMmodel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CONTACTO_POTENCIAL">
+    <Key>
+      <PropertyRef Name="COD_CLIENTE" />
+      <PropertyRef Name="COD_CONTACTO" />
+    </Key>
+    <Property Name="COD_CLIENTE" Type="char" MaxLength="22" Nullable="false" />
+    <Property Name="COD_CONTACTO" Type="numeric" Precision="9" Scale="0" Nullable="false" />
+    <Property Name="CONTACTO" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="TELEFONO" Type="varchar" MaxLength="100" />
+    <Property Name="CORREO" Type="varchar" MaxLength="100" />
+    <Property Name="AREA" Type="varchar" MaxLength="100" />
+    <Property Name="CARGO" Type="varchar" MaxLength="100" />
+    <Property Name="CELULAR" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="CONTACTO_VENTA">
+    <Key>
+      <PropertyRef Name="COD_CLIENTE" />
+      <PropertyRef Name="COD_CONTACTO" />
+    </Key>
+    <Property Name="COD_CLIENTE" Type="char" MaxLength="22" Nullable="false" />
+    <Property Name="COD_CONTACTO" Type="numeric" Precision="9" Scale="0" Nullable="false" />
+    <Property Name="CONTACTO" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="TELEFONO" Type="varchar" MaxLength="100" />
+    <Property Name="CORREO" Type="varchar" MaxLength="100" />
+    <Property Name="AREA" Type="varchar" MaxLength="100" />
+    <Property Name="CARGO" Type="varchar" MaxLength="100" />
+    <Property Name="CELULAR" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="CRONOGRAMA">
+    <Key>
+      <PropertyRef Name="id_cronograma" />
+    </Key>
+    <Property Name="id_cronograma" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="observacion" Type="nvarchar" MaxLength="500" />
+    <Property Name="id_tipoActividad" Type="int" Nullable="false" />
+    <Property Name="descripcion" Type="nvarchar" MaxLength="1000" />
+    <Property Name="id_oportunidad" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="fecha_inicial" Type="datetime" Nullable="false" />
+    <Property Name="fecha_final" Type="datetime" Nullable="false" />
+    <Property Name="estatus" Type="int" Nullable="false" />
+    <Property Name="USU_CODIGO" Type="nvarchar" MaxLength="20" />
+    <Property Name="respuesta" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista '003BDCOMUN.dbo.DIRE_CLIENTE' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="DIRE_CLIENTE">
+    <Key>
+      <PropertyRef Name="COD_DIRECCION" />
+    </Key>
+    <Property Name="COD_DIRECCION" Type="numeric" Precision="9" Scale="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CCODCLI" Type="varchar" MaxLength="11" />
+    <Property Name="CDIRCLI" Type="varchar" MaxLength="100" />
+    <Property Name="Abreviado" Type="varchar" MaxLength="100" />
+    <Property Name="UBIGEO" Type="varchar" MaxLength="12" />
+  </EntityType>
+  <EntityType Name="ESTADO_PROSPECTO">
+    <Key>
+      <PropertyRef Name="id_estadoOportunidad" />
+    </Key>
+    <Property Name="id_estadoOportunidad" Type="int" Nullable="false" />
+    <Property Name="decripcion" Type="varchar" MaxLength="50" />
+    <Property Name="color" Type="varchar" MaxLength="50" />
+    <Property Name="posicion" Type="int" />
+  </EntityType>
+  <EntityType Name="ESTATUS_PROSPECTO">
+    <Key>
+      <PropertyRef Name="id_estatusProspecto" />
+    </Key>
+    <Property Name="id_estatusProspecto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="color" Type="varchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GRUPO_USUARIO">
+    <Key>
+      <PropertyRef Name="id_grupoUuario" />
+    </Key>
+    <Property Name="id_grupoUuario" Type="int" Nullable="false" />
+    <Property Name="id_grupo" Type="int" />
+    <Property Name="int_usuario" Type="int" />
+  </EntityType>
+  <EntityType Name="GRUPOS">
+    <Key>
+      <PropertyRef Name="id_grupo" />
+    </Key>
+    <Property Name="id_grupo" Type="int" Nullable="false" />
+    <Property Name="descripcion" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="HISTORICO">
+    <Key>
+      <PropertyRef Name="id_historico" />
+    </Key>
+    <Property Name="id_historico" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="descripcion" Type="nvarchar" MaxLength="1000" />
+    <Property Name="titulo" Type="nvarchar" MaxLength="100" />
+    <Property Name="fecha" Type="datetime" Nullable="false" />
+    <Property Name="id-estatusOp" Type="int" />
+    <Property Name="id_usuario" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="id_EstadoProspecto" Type="int" />
+    <Property Name="id_oportunidad" Type="varchar" MaxLength="5" />
+  </EntityType>
+  <EntityType Name="MAEART">
+    <Key>
+      <PropertyRef Name="ACODIGO" />
+    </Key>
+    <Property Name="ACODIGO" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="ACODIGO2" Type="varchar" MaxLength="40" />
+    <Property Name="ADESCRI" Type="varchar" MaxLength="200" />
+    <Property Name="ADESCRI2" Type="varchar" MaxLength="200" />
+    <Property Name="AFAMILIA" Type="varchar" MaxLength="8" />
+    <Property Name="AMODELO" Type="varchar" MaxLength="8" />
+    <Property Name="AUNIDAD" Type="varchar" MaxLength="6" />
+    <Property Name="AGRUPO" Type="varchar" MaxLength="11" />
+    <Property Name="ACUENTA" Type="varchar" MaxLength="18" />
+    <Property Name="AFSERIE" Type="varchar" MaxLength="1" />
+    <Property Name="APRECIO" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="ADESCTO" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="APRECOM" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="ACODPRO" Type="varchar" MaxLength="50" />
+    <Property Name="AFECHA" Type="smalldatetime" />
+    <Property Name="ACASILLERO" Type="varchar" MaxLength="12" />
+    <Property Name="AFSTOCK" Type="varchar" MaxLength="1" />
+    <Property Name="AUSER" Type="varchar" MaxLength="8" />
+    <Property Name="AESTADO" Type="varchar" MaxLength="1" />
+    <Property Name="AFECVEN" Type="smalldatetime" />
+    <Property Name="ACODMON" Type="varchar" MaxLength="2" />
+    <Property Name="ATIPO" Type="varchar" MaxLength="2" />
+    <Property Name="ACOMENTA" Type="varchar" MaxLength="2000" />
+    <Property Name="AFLOTE" Type="varchar" MaxLength="1" />
+    <Property Name="AFDECI" Type="varchar" MaxLength="1" />
+    <Property Name="AUNIART" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="APESO" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="AISCPOR" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="AIGVPOR" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="AHORA" Type="smalldatetime" />
+    <Property Name="AFPRELIB" Type="varchar" MaxLength="1" />
+    <Property Name="AFRESTA" Type="varchar" MaxLength="1" />
+    <Property Name="AFUNIREF" Type="varchar" MaxLength="1" />
+    <Property Name="AUNIREF" Type="varchar" MaxLength="2" />
+    <Property Name="AFACREF" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="APDIS" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="APCOM" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="ACODMONC" Type="varchar" MaxLength="2" />
+    <Property Name="AFLAGIGV" Type="bit" Nullable="false" />
+    <Property Name="ACOLOR" Type="varchar" MaxLength="20" />
+    <Property Name="AMARCA" Type="varchar" MaxLength="20" />
+    <Property Name="AFOTO" Type="varchar" MaxLength="255" />
+    <Property Name="ATALLA" Type="varchar" MaxLength="10" />
+    <Property Name="CODAUTO" Type="int" />
+    <Property Name="AFLAGPERC" Type="char" MaxLength="1" />
+    <Property Name="COD_IMAGEN" Type="varchar" MaxLength="30" />
+    <Property Name="UMREFERENCIA" Type="varchar" MaxLength="6" />
+    <Property Name="AMODELO1" Type="varchar" MaxLength="50" />
+    <Property Name="AORIGEN" Type="char" MaxLength="1" />
+    <Property Name="TERCERO" Type="bit" Nullable="false" />
+    <Property Name="MAR_CODIGO" Type="varchar" MaxLength="20" />
+    <Property Name="ZON_CODIGO" Type="varchar" MaxLength="20" />
+    <Property Name="AULTFECCOMP" Type="smalldatetime" />
+    <Property Name="AULTPROV" Type="varchar" MaxLength="50" />
+    <Property Name="AULTPAISPROV" Type="varchar" MaxLength="15" />
+    <Property Name="COD_ARANCEL" Type="varchar" MaxLength="14" />
+    <Property Name="APREFOB" Type="float" />
+    <Property Name="APRECIF" Type="float" />
+    <Property Name="AMONFOB" Type="varchar" MaxLength="14" />
+    <Property Name="AMONCIF" Type="varchar" MaxLength="2" />
+    <Property Name="FLG_EXONERADO_IGV" Type="bit" />
+    <Property Name="CODIGO_SUNAT" Type="varchar" MaxLength="16" />
+    <Property Name="COD_AUDITORIA" Type="varchar" MaxLength="12" />
+  </EntityType>
+  <EntityType Name="MAECLI">
+    <Key>
+      <PropertyRef Name="CCODCLI" />
+    </Key>
+    <Property Name="CCODCLI" Type="varchar" MaxLength="11" Nullable="false" />
+    <Property Name="CNOMCLI" Type="varchar" MaxLength="100" />
+    <Property Name="CDIRCLI" Type="varchar" MaxLength="100" />
+    <Property Name="CTELEFO" Type="varchar" MaxLength="30" />
+    <Property Name="CNUMRUC" Type="varchar" MaxLength="11" />
+    <Property Name="CDOCIDEN" Type="varchar" MaxLength="15" />
+    <Property Name="CFLADES" Type="varchar" MaxLength="1" />
+    <Property Name="NPORDES" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="CTIPVTA" Type="varchar" MaxLength="4" />
+    <Property Name="CESTADO" Type="varchar" MaxLength="1" />
+    <Property Name="DFECINS" Type="smalldatetime" />
+    <Property Name="CNOMREP" Type="varchar" MaxLength="30" />
+    <Property Name="CDISTRI" Type="varchar" MaxLength="8" />
+    <Property Name="CUSUARI" Type="varchar" MaxLength="8" />
+    <Property Name="DFECCRE" Type="smalldatetime" />
+    <Property Name="DFECMOD" Type="smalldatetime" />
+    <Property Name="CTIPPRE" Type="varchar" MaxLength="4" />
+    <Property Name="CVENDE" Type="varchar" MaxLength="2" />
+    <Property Name="CZONVTA" Type="varchar" MaxLength="8" />
+    <Property Name="CPAIS" Type="varchar" MaxLength="30" />
+    <Property Name="CDEPT" Type="varchar" MaxLength="30" />
+    <Property Name="CPROV" Type="varchar" MaxLength="30" />
+    <Property Name="DIRENT" Type="varchar" MaxLength="100" />
+    <Property Name="LOCENT" Type="varchar" MaxLength="3" />
+    <Property Name="LOCCLI" Type="varchar" MaxLength="3" />
+    <Property Name="LOCEST" Type="varchar" MaxLength="2" />
+    <Property Name="ZONVTA" Type="varchar" MaxLength="5" />
+    <Property Name="DIAATE" Type="varchar" MaxLength="1" />
+    <Property Name="SITCLI" Type="varchar" MaxLength="2" />
+    <Property Name="TIPIDE" Type="varchar" MaxLength="2" />
+    <Property Name="REGVTA" Type="varchar" MaxLength="7" />
+    <Property Name="MONCRE" Type="varchar" MaxLength="2" />
+    <Property Name="LMCRUS" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="LMCRMN" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="SALDMN" Type="numeric" Precision="18" Scale="6" />
+    <Property Name="SALDUS" Type="numeric" Precision="18" Scale="6" />
+    <Property Name="LIMFAC" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="TOTFAC" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="TOTLEP" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="TOTCHD" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="FULABO" Type="varchar" MaxLength="6" />
+    <Property Name="FECUFA" Type="varchar" MaxLength="6" />
+    <Property Name="NROSOL" Type="varchar" MaxLength="6" />
+    <Property Name="OBSERV" Type="varchar" MaxLength="30" />
+    <Property Name="DOCVEN" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="DIAVEN" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="NROORD" Type="varchar" MaxLength="10" />
+    <Property Name="MORLET" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="MORFAC" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="CHEDEV" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="LETPRO" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="CTIPCLI" Type="varchar" MaxLength="2" />
+    <Property Name="CGIRNEG" Type="varchar" MaxLength="2" />
+    <Property Name="CTERRIT" Type="varchar" MaxLength="2" />
+    <Property Name="CRUTA" Type="varchar" MaxLength="2" />
+    <Property Name="CSEGMEN" Type="varchar" MaxLength="3" />
+    <Property Name="CUBISEG" Type="varchar" MaxLength="3" />
+    <Property Name="CCODBAN" Type="varchar" MaxLength="3" />
+    <Property Name="CNUMCTA" Type="varchar" MaxLength="16" />
+    <Property Name="CFREVIS" Type="varchar" MaxLength="8" />
+    <Property Name="CHORATE" Type="varchar" MaxLength="20" />
+    <Property Name="CTIPATE" Type="varchar" MaxLength="2" />
+    <Property Name="CNUMFAX" Type="varchar" MaxLength="15" />
+    <Property Name="CEMAIL" Type="varchar" MaxLength="200" />
+    <Property Name="CHOST" Type="varchar" MaxLength="80" />
+    <Property Name="CZONPOS" Type="varchar" MaxLength="5" />
+    <Property Name="COMENTA" Type="varchar" MaxLength="500" />
+    <Property Name="RETEN" Type="bit" />
+    <Property Name="CFLAGPRIN" Type="bit" Nullable="false" />
+    <Property Name="CCODTRANS" Type="varchar" MaxLength="11" Nullable="false" />
+    <Property Name="SIN_CONTROL_LIMCREDITO" Type="bit" />
+    <Property Name="SUBCLA01" Type="varchar" MaxLength="30" />
+    <Property Name="SUBCLA02" Type="varchar" MaxLength="30" />
+    <Property Name="ZON_CODIGO" Type="varchar" MaxLength="20" />
+    <Property Name="CTIPO_DOCUMENTO" Type="varchar" MaxLength="2" />
+    <Property Name="CAPELLIDO_PATERNO" Type="varchar" MaxLength="20" />
+    <Property Name="CAPELLIDO_MATERNO" Type="varchar" MaxLength="20" />
+    <Property Name="CPRIMER_NOMBRE" Type="varchar" MaxLength="20" />
+    <Property Name="CSEGUNDO_NOMBRE" Type="varchar" MaxLength="20" />
+    <Property Name="TCL_CODIGO" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="NRO_AUTORIZACION_DIGEMID" Type="varchar" MaxLength="50" />
+    <Property Name="CONTACTO_COBRANZA" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="CCODCLAS" Type="varchar" MaxLength="8" Nullable="false" />
+    <Property Name="FLGPORTAL_CLIENTES" Type="bit" />
+    <Property Name="ULTIMO_TC_VTA" Type="numeric" Precision="18" Scale="6" />
+    <Property Name="DESCUENTO_ESP" Type="numeric" Precision="18" Scale="6" />
+    <Property Name="CEMAIL_CONTACTO" Type="varchar" MaxLength="120" />
+    <Property Name="UBIGEO" Type="varchar" MaxLength="12" />
+    <Property Name="FEC_INACTIVO_BLOQUEADO" Type="datetime" />
+    <Property Name="COD_AUDITORIA" Type="varchar" MaxLength="12" />
+  </EntityType>
+  <EntityType Name="POTENCIALCLI">
+    <Key>
+      <PropertyRef Name="CCODCLI" />
+    </Key>
+    <Property Name="CCODCLI" Type="varchar" MaxLength="11" Nullable="false" />
+    <Property Name="CNOMCLI" Type="varchar" MaxLength="100" />
+    <Property Name="CDIRCLI" Type="varchar" MaxLength="100" />
+    <Property Name="CTELEFO" Type="varchar" MaxLength="30" />
+    <Property Name="CNUMRUC" Type="varchar" MaxLength="11" />
+    <Property Name="CDOCIDEN" Type="varchar" MaxLength="15" />
+    <Property Name="CFLADES" Type="varchar" MaxLength="1" />
+    <Property Name="NPORDES" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="CTIPVTA" Type="varchar" MaxLength="4" />
+    <Property Name="CESTADO" Type="varchar" MaxLength="1" />
+    <Property Name="DFECINS" Type="smalldatetime" />
+    <Property Name="CNOMREP" Type="varchar" MaxLength="30" />
+    <Property Name="CDISTRI" Type="varchar" MaxLength="8" />
+    <Property Name="CUSUARI" Type="varchar" MaxLength="8" />
+    <Property Name="DFECCRE" Type="smalldatetime" />
+    <Property Name="DFECMOD" Type="smalldatetime" />
+    <Property Name="CTIPPRE" Type="varchar" MaxLength="4" />
+    <Property Name="CVENDE" Type="varchar" MaxLength="2" />
+    <Property Name="CZONVTA" Type="varchar" MaxLength="8" />
+    <Property Name="CPAIS" Type="varchar" MaxLength="30" />
+    <Property Name="CDEPT" Type="varchar" MaxLength="30" />
+    <Property Name="CPROV" Type="varchar" MaxLength="30" />
+    <Property Name="DIRENT" Type="varchar" MaxLength="100" />
+    <Property Name="LOCENT" Type="varchar" MaxLength="3" />
+    <Property Name="LOCCLI" Type="varchar" MaxLength="3" />
+    <Property Name="LOCEST" Type="varchar" MaxLength="2" />
+    <Property Name="ZONVTA" Type="varchar" MaxLength="5" />
+    <Property Name="DIAATE" Type="varchar" MaxLength="1" />
+    <Property Name="SITCLI" Type="varchar" MaxLength="2" />
+    <Property Name="TIPIDE" Type="varchar" MaxLength="2" />
+    <Property Name="REGVTA" Type="varchar" MaxLength="7" />
+    <Property Name="MONCRE" Type="varchar" MaxLength="2" />
+    <Property Name="LMCRUS" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="LMCRMN" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="SALDMN" Type="numeric" Precision="18" Scale="6" />
+    <Property Name="SALDUS" Type="numeric" Precision="18" Scale="6" />
+    <Property Name="LIMFAC" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="TOTFAC" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="TOTLEP" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="TOTCHD" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="FULABO" Type="varchar" MaxLength="6" />
+    <Property Name="FECUFA" Type="varchar" MaxLength="6" />
+    <Property Name="NROSOL" Type="varchar" MaxLength="6" />
+    <Property Name="OBSERV" Type="varchar" MaxLength="30" />
+    <Property Name="DOCVEN" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="DIAVEN" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="NROORD" Type="varchar" MaxLength="10" />
+    <Property Name="MORLET" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="MORFAC" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="CHEDEV" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="LETPRO" Type="numeric" Precision="15" Scale="6" />
+    <Property Name="CTIPCLI" Type="varchar" MaxLength="2" />
+    <Property Name="CGIRNEG" Type="varchar" MaxLength="2" />
+    <Property Name="CTERRIT" Type="varchar" MaxLength="2" />
+    <Property Name="CRUTA" Type="varchar" MaxLength="2" />
+    <Property Name="CSEGMEN" Type="varchar" MaxLength="3" />
+    <Property Name="CUBISEG" Type="varchar" MaxLength="3" />
+    <Property Name="CCODBAN" Type="varchar" MaxLength="3" />
+    <Property Name="CNUMCTA" Type="varchar" MaxLength="16" />
+    <Property Name="CFREVIS" Type="varchar" MaxLength="8" />
+    <Property Name="CHORATE" Type="varchar" MaxLength="20" />
+    <Property Name="CTIPATE" Type="varchar" MaxLength="2" />
+    <Property Name="CNUMFAX" Type="varchar" MaxLength="15" />
+    <Property Name="CEMAIL" Type="varchar" MaxLength="200" />
+    <Property Name="CHOST" Type="varchar" MaxLength="80" />
+    <Property Name="CZONPOS" Type="varchar" MaxLength="5" />
+    <Property Name="COMENTA" Type="varchar" MaxLength="500" />
+    <Property Name="RETEN" Type="bit" />
+    <Property Name="CFLAGPRIN" Type="bit" Nullable="false" />
+    <Property Name="CCODTRANS" Type="varchar" MaxLength="11" Nullable="false" />
+    <Property Name="SIN_CONTROL_LIMCREDITO" Type="bit" />
+    <Property Name="SUBCLA01" Type="varchar" MaxLength="30" />
+    <Property Name="SUBCLA02" Type="varchar" MaxLength="30" />
+    <Property Name="ZON_CODIGO" Type="varchar" MaxLength="20" />
+    <Property Name="CTIPO_DOCUMENTO" Type="varchar" MaxLength="2" />
+    <Property Name="CAPELLIDO_PATERNO" Type="varchar" MaxLength="20" />
+    <Property Name="CAPELLIDO_MATERNO" Type="varchar" MaxLength="20" />
+    <Property Name="CPRIMER_NOMBRE" Type="varchar" MaxLength="20" />
+    <Property Name="CSEGUNDO_NOMBRE" Type="varchar" MaxLength="20" />
+    <Property Name="TCL_CODIGO" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="NRO_AUTORIZACION_DIGEMID" Type="varchar" MaxLength="50" />
+    <Property Name="CONTACTO_COBRANZA" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="CCODCLAS" Type="varchar" MaxLength="8" Nullable="false" />
+    <Property Name="FLGPORTAL_CLIENTES" Type="bit" />
+    <Property Name="ULTIMO_TC_VTA" Type="numeric" Precision="18" Scale="6" />
+    <Property Name="DESCUENTO_ESP" Type="numeric" Precision="18" Scale="6" />
+    <Property Name="CEMAIL_CONTACTO" Type="varchar" MaxLength="120" />
+    <Property Name="UBIGEO" Type="varchar" MaxLength="12" />
+    <Property Name="FEC_INACTIVO_BLOQUEADO" Type="datetime" />
+    <Property Name="COD_AUDITORIA" Type="varchar" MaxLength="12" />
+  </EntityType>
+  <EntityType Name="PRIORIDAD">
+    <Key>
+      <PropertyRef Name="id_prioridad" />
+    </Key>
+    <Property Name="id_prioridad" Type="int" Nullable="false" />
+    <Property Name="descripcion" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="PROSPECTO">
+    <Key>
+      <PropertyRef Name="id_oportunidad" />
+    </Key>
+    <Property Name="id_oportunidad" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+    <Property Name="ingreso" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="id_estadoOporunidad" Type="int" />
+    <Property Name="idCliente" Type="varchar" MaxLength="11" />
+    <Property Name="id_prioridad" Type="int" />
+    <Property Name="color" Type="varchar" MaxLength="10" />
+    <Property Name="id_usuario" Type="varchar" MaxLength="8" />
+    <Property Name="cierre_previsto" Type="varchar" MaxLength="20" />
+    <Property Name="id_categoria" Type="int" />
+    <Property Name="notas" Type="varchar" MaxLength="200" />
+    <Property Name="id_planificacion" Type="int" />
+    <Property Name="tipoCliente" Type="int" />
+    <Property Name="codigo_tipoMon" Type="varchar" MaxLength="2" />
+    <Property Name="porcentajeGanar" Type="int" />
+    <Property Name="id_estatusProspecto" Type="int" Nullable="false" />
+    <Property Name="fecha_inicial" Type="datetime" />
+    <Property Name="fecha_final" Type="datetime" />
+    <Property Name="monto_logrado" Type="decimal" Precision="18" Scale="0" />
+  </EntityType>
+  <EntityType Name="RESPONSABLES">
+    <Key>
+      <PropertyRef Name="id_responsable" />
+    </Key>
+    <Property Name="id_responsable" Type="int" Nullable="false" />
+    <Property Name="id_actividad" Type="int" />
+    <Property Name="id_grupos" Type="int" />
+    <Property Name="id_usuario" Type="int" />
+  </EntityType>
+  <EntityType Name="T_TIPO_CLIENTE">
+    <Key>
+      <PropertyRef Name="TCL_CODIGO" />
+    </Key>
+    <Property Name="TCL_CODIGO" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="TCL_DESCRIPCION" Type="char" MaxLength="25" Nullable="false" />
+    <Property Name="TCL_COD_ORIGEN" Type="varchar" MaxLength="3" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TABAYU">
+    <Key>
+      <PropertyRef Name="TCOD" />
+      <PropertyRef Name="TCLAVE" />
+    </Key>
+    <Property Name="TCOD" Type="varchar" MaxLength="8" Nullable="false" />
+    <Property Name="TCLAVE" Type="varchar" MaxLength="8" Nullable="false" />
+    <Property Name="TDESCRI" Type="varchar" MaxLength="40" />
+    <Property Name="TDIAVEN" Type="varchar" MaxLength="3" />
+    <Property Name="TNIVEL" Type="varchar" MaxLength="2" />
+    <Property Name="TDATE" Type="smalldatetime" />
+    <Property Name="THORA" Type="varchar" MaxLength="6" />
+    <Property Name="TRESTA" Type="bit" Nullable="false" />
+    <Property Name="TADVALOR" Type="bit" Nullable="false" />
+    <Property Name="TNOFOB" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TIPO_ACTIVIDAD">
+    <Key>
+      <PropertyRef Name="id_tipoActividad" />
+    </Key>
+    <Property Name="id_tipoActividad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="descripcion" Type="nvarchar" MaxLength="100" />
+    <Property Name="estado" Type="bit" Nullable="false" />
+    <Property Name="color" Type="nvarchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TIPO_MONEDA">
+    <Key>
+      <PropertyRef Name="TIPOMON_CODIGO" />
+    </Key>
+    <Property Name="TIPOMON_CODIGO" Type="varchar" MaxLength="2" Nullable="false" />
+    <Property Name="TIPOMON_DESCRIPCION" Type="varchar" MaxLength="20" />
+    <Property Name="TIPOMON_NACIONALIDAD" Type="bit" Nullable="false" />
+    <Property Name="TIPOMON_SIMBOLO" Type="varchar" MaxLength="2" />
+  </EntityType>
+  <Association Name="fk_cronograma_prospecto">
+    <End Role="PROSPECTO" Type="Self.PROSPECTO" Multiplicity="1" />
+    <End Role="CRONOGRAMA" Type="Self.CRONOGRAMA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROSPECTO">
+        <PropertyRef Name="id_oportunidad" />
+      </Principal>
+      <Dependent Role="CRONOGRAMA">
+        <PropertyRef Name="id_oportunidad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_cronograma_tipo_actividad">
+    <End Role="TIPO_ACTIVIDAD" Type="Self.TIPO_ACTIVIDAD" Multiplicity="1" />
+    <End Role="CRONOGRAMA" Type="Self.CRONOGRAMA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TIPO_ACTIVIDAD">
+        <PropertyRef Name="id_tipoActividad" />
+      </Principal>
+      <Dependent Role="CRONOGRAMA">
+        <PropertyRef Name="id_tipoActividad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GRUPO_USUARIO_GRUPOS">
+    <End Role="GRUPOS" Type="Self.GRUPOS" Multiplicity="0..1" />
+    <End Role="GRUPO_USUARIO" Type="Self.GRUPO_USUARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GRUPOS">
+        <PropertyRef Name="id_grupo" />
+      </Principal>
+      <Dependent Role="GRUPO_USUARIO">
+        <PropertyRef Name="id_grupo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HISTORICO_OPORTUNIDAD">
+    <End Role="PROSPECTO" Type="Self.PROSPECTO" Multiplicity="0..1" />
+    <End Role="HISTORICO" Type="Self.HISTORICO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROSPECTO">
+        <PropertyRef Name="id_oportunidad" />
+      </Principal>
+      <Dependent Role="HISTORICO">
+        <PropertyRef Name="id_oportunidad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MAECLI_T_TIPO_CLIENTE">
+    <End Role="T_TIPO_CLIENTE" Type="Self.T_TIPO_CLIENTE" Multiplicity="1" />
+    <End Role="MAECLI" Type="Self.MAECLI" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_TIPO_CLIENTE">
+        <PropertyRef Name="TCL_CODIGO" />
+      </Principal>
+      <Dependent Role="MAECLI">
+        <PropertyRef Name="TCL_CODIGO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD">
+    <End Role="ESTADO_PROSPECTO" Type="Self.ESTADO_PROSPECTO" Multiplicity="0..1" />
+    <End Role="PROSPECTO" Type="Self.PROSPECTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ESTADO_PROSPECTO">
+        <PropertyRef Name="id_estadoOportunidad" />
+      </Principal>
+      <Dependent Role="PROSPECTO">
+        <PropertyRef Name="id_estadoOporunidad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OPORTUNIDAD_PRIORIDAD">
+    <End Role="PRIORIDAD" Type="Self.PRIORIDAD" Multiplicity="0..1" />
+    <End Role="PROSPECTO" Type="Self.PROSPECTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRIORIDAD">
+        <PropertyRef Name="id_prioridad" />
+      </Principal>
+      <Dependent Role="PROSPECTO">
+        <PropertyRef Name="id_prioridad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POTENCIALCLI_T_TIPO_CLIENTE">
+    <End Role="T_TIPO_CLIENTE" Type="Self.T_TIPO_CLIENTE" Multiplicity="1" />
+    <End Role="POTENCIALCLI" Type="Self.POTENCIALCLI" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_TIPO_CLIENTE">
+        <PropertyRef Name="TCL_CODIGO" />
+      </Principal>
+      <Dependent Role="POTENCIALCLI">
+        <PropertyRef Name="TCL_CODIGO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PROSPECTO_ESTATUS_PROSPECTO">
+    <End Role="ESTATUS_PROSPECTO" Type="Self.ESTATUS_PROSPECTO" Multiplicity="1" />
+    <End Role="PROSPECTO" Type="Self.PROSPECTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ESTATUS_PROSPECTO">
+        <PropertyRef Name="id_estatusProspecto" />
+      </Principal>
+      <Dependent Role="PROSPECTO">
+        <PropertyRef Name="id_estatusProspecto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PROSPECTO_TIPO_MONEDA">
+    <End Role="TIPO_MONEDA" Type="Self.TIPO_MONEDA" Multiplicity="0..1" />
+    <End Role="PROSPECTO" Type="Self.PROSPECTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TIPO_MONEDA">
+        <PropertyRef Name="TIPOMON_CODIGO" />
+      </Principal>
+      <Dependent Role="PROSPECTO">
+        <PropertyRef Name="codigo_tipoMon" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RESPONSABLES_TAREA_GRUPOS">
+    <End Role="GRUPOS" Type="Self.GRUPOS" Multiplicity="0..1" />
+    <End Role="RESPONSABLES" Type="Self.RESPONSABLES" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GRUPOS">
+        <PropertyRef Name="id_grupo" />
+      </Principal>
+      <Dependent Role="RESPONSABLES">
+        <PropertyRef Name="id_grupos" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CRMmodelStoreContainer">
+    <EntitySet Name="CONTACTO_POTENCIAL" EntityType="Self.CONTACTO_POTENCIAL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CONTACTO_VENTA" EntityType="Self.CONTACTO_VENTA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CRONOGRAMA" EntityType="Self.CRONOGRAMA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ESTADO_PROSPECTO" EntityType="Self.ESTADO_PROSPECTO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ESTATUS_PROSPECTO" EntityType="Self.ESTATUS_PROSPECTO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GRUPO_USUARIO" EntityType="Self.GRUPO_USUARIO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GRUPOS" EntityType="Self.GRUPOS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HISTORICO" EntityType="Self.HISTORICO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MAEART" EntityType="Self.MAEART" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MAECLI" EntityType="Self.MAECLI" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="POTENCIALCLI" EntityType="Self.POTENCIALCLI" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PRIORIDAD" EntityType="Self.PRIORIDAD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PROSPECTO" EntityType="Self.PROSPECTO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RESPONSABLES" EntityType="Self.RESPONSABLES" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="T_TIPO_CLIENTE" EntityType="Self.T_TIPO_CLIENTE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TABAYU" EntityType="Self.TABAYU" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TIPO_ACTIVIDAD" EntityType="Self.TIPO_ACTIVIDAD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TIPO_MONEDA" EntityType="Self.TIPO_MONEDA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DIRE_CLIENTE" EntityType="Self.DIRE_CLIENTE" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [DIRE_CLIENTE].[COD_DIRECCION] AS [COD_DIRECCION], 
+    [DIRE_CLIENTE].[CCODCLI] AS [CCODCLI], 
+    [DIRE_CLIENTE].[CDIRCLI] AS [CDIRCLI], 
+    [DIRE_CLIENTE].[Abreviado] AS [Abreviado], 
+    [DIRE_CLIENTE].[UBIGEO] AS [UBIGEO]
+    FROM [dbo].[DIRE_CLIENTE] AS [DIRE_CLIENTE]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="fk_cronograma_prospecto" Association="Self.fk_cronograma_prospecto">
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+      <End Role="CRONOGRAMA" EntitySet="CRONOGRAMA" />
+    </AssociationSet>
+    <AssociationSet Name="fk_cronograma_tipo_actividad" Association="Self.fk_cronograma_tipo_actividad">
+      <End Role="TIPO_ACTIVIDAD" EntitySet="TIPO_ACTIVIDAD" />
+      <End Role="CRONOGRAMA" EntitySet="CRONOGRAMA" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GRUPO_USUARIO_GRUPOS" Association="Self.FK_GRUPO_USUARIO_GRUPOS">
+      <End Role="GRUPOS" EntitySet="GRUPOS" />
+      <End Role="GRUPO_USUARIO" EntitySet="GRUPO_USUARIO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HISTORICO_OPORTUNIDAD" Association="Self.FK_HISTORICO_OPORTUNIDAD">
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+      <End Role="HISTORICO" EntitySet="HISTORICO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MAECLI_T_TIPO_CLIENTE" Association="Self.FK_MAECLI_T_TIPO_CLIENTE">
+      <End Role="T_TIPO_CLIENTE" EntitySet="T_TIPO_CLIENTE" />
+      <End Role="MAECLI" EntitySet="MAECLI" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD" Association="Self.FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD">
+      <End Role="ESTADO_PROSPECTO" EntitySet="ESTADO_PROSPECTO" />
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OPORTUNIDAD_PRIORIDAD" Association="Self.FK_OPORTUNIDAD_PRIORIDAD">
+      <End Role="PRIORIDAD" EntitySet="PRIORIDAD" />
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POTENCIALCLI_T_TIPO_CLIENTE" Association="Self.FK_POTENCIALCLI_T_TIPO_CLIENTE">
+      <End Role="T_TIPO_CLIENTE" EntitySet="T_TIPO_CLIENTE" />
+      <End Role="POTENCIALCLI" EntitySet="POTENCIALCLI" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PROSPECTO_ESTATUS_PROSPECTO" Association="Self.FK_PROSPECTO_ESTATUS_PROSPECTO">
+      <End Role="ESTATUS_PROSPECTO" EntitySet="ESTATUS_PROSPECTO" />
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PROSPECTO_TIPO_MONEDA" Association="Self.FK_PROSPECTO_TIPO_MONEDA">
+      <End Role="TIPO_MONEDA" EntitySet="TIPO_MONEDA" />
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RESPONSABLES_TAREA_GRUPOS" Association="Self.FK_RESPONSABLES_TAREA_GRUPOS">
+      <End Role="GRUPOS" EntitySet="GRUPOS" />
+      <End Role="RESPONSABLES" EntitySet="RESPONSABLES" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

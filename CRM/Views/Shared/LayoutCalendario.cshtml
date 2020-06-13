@@ -1,0 +1,718 @@
+﻿@using CRM.sp_dinamic
+@{
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal | CRM Ventas</title>
+    <link rel="stylesheet" href="@Url.Content("~/Content/estilos.css")">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/toastr/toastr.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css")">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/fontawesome-free/css/all.min.css") ">
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/css/adminlte.min.css") ">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.css") ">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/select2/css/select2.min.css") ">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css")">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css")">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/css/adminlte.min.css") ">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/DatepikerMaterial/css/bootstrap-material-datetimepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/css/spectrum.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/ion-rangeslider/css/ion.rangeSlider.min.css")">
+    <!--<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">-->
+    <!-- tui calendar -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/bootstrap-datepicker/css/bootstrap-datetimepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/css/tui-time-picker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/css/tui-date-picker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/dist/tui-calendar.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/css/css/default.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/css/icons.css")" />
+    <!-- SweetAlert -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/sweetalert2/sweetalert2.css")" />
+    <!-- Loading -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/loading/jquery.loadingModal.css")" />
+    <!-- Js Principal -->
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/Content/dist/js/adminlte.min.js")"></script>
+    <script src="@Url.Content("~/Content/dist/js/demo.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/ion-rangeslider/js/ion.rangeSlider.min.js") "></script>
+    <style>
+        .tui-full-calendar-near-month-day {
+            cursor: crosshair;
+        }
+
+        .pad {
+                padding: 0px !important;
+            }
+
+        [class*=sidebar-dark] .brand-link {
+            border-bottom: 1px solid #ffffff !important;
+        }
+
+        [class*=sidebar-dark-] .nav-treeview > .nav-item > .nav-link.active, [class*=sidebar-dark-] .nav-treeview > .nav-item > .nav-link.active:focus, [class*=sidebar-dark-] .nav-treeview > .nav-item > .nav-link.active:hover {
+            background-color: #bf360c !important;
+            color: #fff !important;
+        }
+
+        [class*=sidebar-dark-] .sidebar a {
+            color: #ffffff !important;
+        }
+
+        .nav-link {
+            display: block !important;
+            padding: 15px 10px !important;
+        }
+
+        [class*=sidebar-dark] .user-panel {
+            border-bottom: 1px solid #ffffff !important;
+        }
+
+        [class*=sidebar-dark-] {
+            background-color: #870000 !important;
+        }
+
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+            background-color: #bf360c !important;
+            color: #fff;
+        }
+    </style>
+
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        @if (Session["Rol"].ToString() == "VENDEDOR")
+        {
+            <div id="menu_superior" class=" m-0">
+
+
+                <div class="row mb-0">
+                    <div class="col align-self-center  ">
+                        <nav class="ml-0 navbar navbar-expand-md navbar-dark navbar-navy" style="background: -webkit-linear-gradient(93deg, rgb(165, 210, 251), rgb(29, 62, 255));background: linear-gradient(93deg, rgb(165, 210, 251), rgb(29, 62, 255));">
+
+                            <a href="#" class="logo navbar-brand m-0 text-white p-0">
+                                <h1 class="m-0" style="opacity: .8"><i class="far fa-handshake"></i>  PORTAL CRM </h1>
+                            </a>
+                            <div class="menu-movil">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                            </div>
+                            <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse order-3 " id="navbarCollapse">
+                                <!-- Left navbar links -->
+                                <ul class="navbar-nav ml-auto mr-auto">
+                                    <li class="nav-item">
+                                        <a href="#" class="btn text-white nav-link ">
+                                            <h5 class="m-0" style="opacity: .8">VENTAS <i class="fas fa-search-dollar"></i></h5>
+
+                                        </a>
+
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="btn text-white nav-link">
+
+                                            <h5 class="m-0" style="opacity: .8">INFORMES <i class="fas fa-chart-bar"></i></h5>
+                                        </a>
+
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="btn text-white nav-link">
+
+                                            <h5 class="m-0" style="opacity: .8">CONFIGURACIÓN <i class="fas fa-cogs"></i></h5>
+                                        </a>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                            <!-- Right navbar links -->
+                            <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+
+                                @if (Session["EMPRESAS"] != null)
+                                {
+
+                                    <li class="nav-item dropdown">
+
+                                        <a class="nav-item btn nav-link dropdown-toggle mr-md-2 drop" href="#" id="bd-versions2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                            EMPRESA : @if (Session["codigo"] != null)
+                                            {@Session["codigo"].ToString();
+                                        }
+
+
+                                        </a>
+
+                                        <div class="dropdown-menu ">
+                                            @foreach (var i in (List<SP_EMPRESA_USUARIO_CRM_Result>)Session["EMPRESAS"])
+                                            {
+                                                <a href="@Url.Action("Actualizar", "Autentificacion", new { codigo = @i.EMP_CODIGO })" class="registerLink dropdown-item" id="registerLink">
+                                                    <div class="media">
+
+                                                        <img src="~/Content/img/LogoMenu.png" alt="User Avatar" class="img-size-50 mr-2 img-circle" style="width: 20px;">
+                                                        <div class="media-body">
+                                                            <h3 class="dropdown-item-title">
+                                                                @i.EMP_RAZON_NOMBRE
+
+                                                            </h3>
+
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item  ">
+                                        <div class="nav-link active">
+
+                                            EMPRESA ACTIVA: @if (Session["codigo"] != null)
+                                            {@Session["codigo"].ToString();
+                                        }
+
+
+                                        </div>
+                                    </li>
+
+                                }
+                                <li class="nav-item dropdown">
+                                    <a class="nav-item btn nav-link dropdown-toggle mr-md-2 drop" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @Session["Nombreuser"].ToString()
+                                    </a>
+                                    <div class="dropdown-menu   dropdown-menu-right">
+                                        <a data-toggle="modal" data-target="#exampleModal" class="dropdown-item btn">
+                                            Perfil
+                                        </a>
+                                        <a href="@Url.Action("Cerrar", "Autentificacion") " class="dropdown-item">
+                                            Cerrar Sesion
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </nav>
+                        <!-- Navbar -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="a" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header  bg-primary">
+                            <h5 class="modal-title" id="exampleModalLabel">Perfil </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Datos de Usuario</a>
+                                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Editar  Contraseña</a>
+
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <form role="form" class="p-3" id="form1">
+                                        <input type="hidden" value="1" id="accion" />
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Usuario</label>
+                                                    <input type="text" class="form-control" id="usuario" disabled value="@Session["alias"]?.ToString()" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Nombre</label>
+
+                                                    <input type="text" class="form-control" id="nombre" value="@Session["Nombreuser"]?.ToString()" disabled required>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+
+                                                <div class="form-group">
+                                                    <label>Correo</label>
+                                                    <input type="email" class="form-control" id="correo" value="@Session["email"]?.ToString()" disabled>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" onclick="desbloquear(2);" data-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-primary" onclick="desbloquear(1);" id="editar">Editar Datos </button>
+                                        <button type="button" class="btn btn-primary d-none" onclick="grabar(1);" id="guardar">Gruardar </button>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                                    <form role="form" class="p-3">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <!-- text input -->
+                                                <div class="form-group">
+                                                    <label>Contraseña</label>
+                                                    <input type="password" class="form-control" id="password">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Confirmacion de Contraseña</label>
+                                                    <input type="password" class="form-control" id="password_confirma">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-primary " onclick="grabar2();" id="guardar">Gruardar </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+
+            <nav class="main-header navbar navbar-expand navbar-dark navbar-primary">
+                <!-- Left navbar links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link " style="padding: 8px !important;" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+                    </li>
+
+                </ul>
+
+                <ul class="navbar-nav m-auto">
+
+                    <li class="nav-item">
+                        <a href="index3.html" class="nav-link" style="padding: 8px !important;  border: 1px solid #fff; border-radius: 10px;">Ventas</a>
+                    </li>
+                    <li class="nav-item  ">
+                        <a href="#" class="nav-link pad " style="padding: 8px !important;     margin-left: 4px; border: 1px solid #fff; border-radius: 10px;">Informes</a>
+                    </li>
+                </ul>
+                <!-- Right navbar links -->
+                <ul class="navbar-nav ">
+
+                    @if (Session["EMPRESAS"] != null)
+                    {
+
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-item btn nav-link dropdown-toggle mr-md-2 drop" style="padding: 8px !important;     margin-left: 4px;  border: 1px solid #fff; border-radius: 10px;" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                EMPRESA : @if (Session["codigo"] != null)
+                                {@Session["codigo"].ToString();
+                            }
+
+
+                            </a>
+
+                            <div class="dropdown-menu ">
+                                @foreach (var i in (List<SP_EMPRESA_USUARIO_CRM_Result>)Session["EMPRESAS"])
+                                {
+
+                                    if (Session["codigo"] != null && i.EMP_CODIGO != Session["codigo"].ToString())
+                                    {<a href="@Url.Action("Actualizar", "Administrador", new { codigo = @i.EMP_CODIGO })" class="registerLink dropdown-item" id="registerLink">
+                                            <div class="media">
+
+                                                <img src="~/Content/img/LogoMenu.png" alt="User Avatar" class="img-size-50 mr-2 img-circle" style="width: 20px;">
+                                                <div class="media-body">
+                                                    <h3 class="dropdown-item-title">
+                                                        @i.EMP_RAZON_NOMBRE
+
+                                                    </h3>
+
+                                                </div>
+                                            </div>
+                                        </a>}
+
+                                }
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item  ">
+                            <div class="nav-link active" style="padding: 8px !important;     margin-left: 4px;  border: 1px solid #fff; border-radius: 10px;">
+
+                                EMPRESA ACTIVA: @if (Session["codigo"] != null)
+                                {@Session["codigo"].ToString();
+                            }
+
+
+                            </div>
+                        </li>
+
+                    }
+                    <li class="nav-item dropdown">
+                        <a class="nav-item btn nav-link dropdown-toggle mr-md-2 drop" style="padding: 8px !important;     margin-left: 4px;  border: 1px solid #fff; border-radius: 10px;" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                            @if (Session["nombre_admin"] == null)
+                            {
+                                <span>Administrador</span>
+                            }
+                            else
+                            {
+                                <span>@Session["nombre_admin"]</span>
+                            }
+
+                        </a>
+                        <div class="dropdown-menu   dropdown-menu-right">
+
+                            <a href="@Url.Action("Cerrar", "Autentificacion") " class="dropdown-item">
+                                Cerrar Sesion
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+            </nav>
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                <!-- Brand Logo -->
+                <a href="index3.html" class="brand-link" style="background-color: #870000 !important;">
+                    <img src="~/Content/img/LogoMenu.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3">
+                    <span class="brand-text font-weight-bold">Portal | CRM</span>
+                </a>
+                <!-- Sidebar -->
+                <div class="sidebar">
+
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index","Administrador")" class="nav-link @ViewBag.flujo ">
+                                    <i class="nav-icon fas fa-project-diagram"></i>
+                                    <p>
+                                        Flujo de Ventas
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index","Calendario")" class="nav-link">
+                                    <i class="nav-icon fas fa-calendar-alt"></i>
+                                    <p>
+                                        Calendario
+
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Usuarios","Administrador")" class="nav-link @ViewBag.user ">
+                                    <i class="nav-icon fas fa-users-cog"></i>
+                                    <p>
+                                        Usuarios
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item has-treeview @ViewBag.open">
+                                <a href="#" class="nav-link ">
+                                    <i class="nav-icon fas fa-user-friends"></i>
+                                    <p>
+                                        Clientes
+                                        <i class="fas fa-angle-left right" style="margin-top: 7px;"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview" style="margin-left: 15px;">
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Clientes","Administrador")" class="nav-link @ViewBag.cliente">
+                                            <i class="fas fa-user-tie"></i>
+                                            <p>
+                                                Fidelizados
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("ClientesPotenciales","Administrador")" class="nav-link @ViewBag.clientePotenciales">
+                                            <i class="fas fa-user-plus"></i>
+                                            <p>
+                                                Prospectos
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("Oportunidades","Administrador")" class="nav-link @ViewBag.Oportunidad">
+                                            <i class="fas fa-users"></i>
+                                            <p>
+                                                Oportunidades
+                                            </p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a href="pages/gallery.html" class="nav-link">
+                                    <i class="nav-icon fas fa-clipboard-list"></i>
+                                    <p>
+                                        Actividades
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        An&aacute;lisis
+                                        <i class="fas fa-angle-left right" style="margin-top: 7px;"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview" style="margin-left: 15px;">
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("RepPiramide","Flujo")" class="nav-link">
+                                            <i class="nav-icon fas fa-chart-pie"></i>
+                                            <p>
+                                                Embudo de venta
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("RepGanado","Flujo")" class="nav-link">
+                                            <i class="nav-icon fas fa-chart-pie"></i>
+                                            <p>
+                                                Ingresos Reales
+                                            </p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="@Url.Action("RepEstatus","Flujo")" class="nav-link">
+                                            <i class="nav-icon fas fa-chart-pie"></i>
+                                            <p>
+                                                Estatus de Oportunidades
+                                            </p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- /.sidebar-menu -->
+                </div>
+                <!-- /.sidebar -->
+            </aside>
+        }
+
+        @if (Session["Rol"].ToString() == "VENDEDOR")
+
+        {
+
+
+
+
+            <div id="" class="d-flex flex-column page-wrapper">
+                @RenderBody()
+            </div>
+
+
+        }
+        else
+        {
+
+            <div id="" class="d-flex flex-column page-wrapper">
+                @RenderBody()
+            </div>
+
+            <footer class="main-footer text-center mt-5">
+                <strong>
+                    Tecnologia desarrollada por  &nbsp;
+                </strong>
+                <strong><a class="text-danger" href="http://www.starsoft.com.pe" target="_blank">www.starsoft.com.pe</a> </strong>
+
+            </footer>
+        }
+
+    </div>
+
+    @Scripts.Render("~/Content/js")
+
+    @RenderSection("scripts", required: false)
+
+    <!-- DataTables -->
+    <script src="@Url.Content("~/Content/plugins/datatables/jquery.dataTables.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.js") "></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="@Url.Content("~/Content/plugins/select2/js/select2.full.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/moment/moment-with-locales.min.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/DatepikerMaterial/js/bootstrap-material-datetimepicker.js")"></script>
+    <!-- Pluggins -->
+    <script src="@Url.Content("~/Content/dist/js/spectrum.js") "></script>
+    <script src="@Url.Content("~/Scripts/jquery.animateNumber.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/moment/moment.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/moment/locale/es.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/inputmask/min/jquery.inputmask.bundle.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/bs-custom-file-input/bs-custom-file-input.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/toastr/toastr.min.js")"></script>
+    <!-- SweetAlert -->
+    <script src="@Url.Content("~/Content/sweetalert2/sweetalert2.js")"></script>
+    <!-- Loading -->
+    <script src="@Url.Content("~/Content/loading/jquery.loadingModal.js")"></script>
+    <!-- tui calendar -->
+    <script src="@Url.Content("~/Content/tui.calendar/bootstrap-datepicker/js/bootstrap-datetimepicker.js")"></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/popper.min.js")"></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/tui-code-snippet.min.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/tui-time-picker.min.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/tui-date-picker.min.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/chance.min.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/dist/tui-calendar.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/app.js") "></script>
+
+    <script type="text/javascript">
+        //para seleccionar la imagen de los archivos
+        $(document).ready(function () {
+            bsCustomFileInput.init();
+
+            //Initialize Select2 Elements
+            $('.select2').select2();
+            $('[data-mask]').inputmask();
+
+            $(".fecha").inputmask('99-99-9999 99:99 AM', { /*numericInput: true*/ });
+
+            $('.fecha').datetimepicker({
+                locale: 'es',
+                format: 'DD-MM-YYYY hh:mm A',
+                icons: {
+                    time: 'fa fa-clock',
+                    date: 'fa fa-calendar',
+                    up: 'fa fa-chevron-up',
+                    down: 'fa fa-chevron-down',
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-check',
+                    clear: 'fa fa-trash',
+                    close: 'fa fa-times'
+                },
+                tooltips: {
+                    today: 'Hoy',
+                    clear: 'Limpiar selección',
+                    close: 'Cerrar',
+                    selectMonth: 'Seleccionar Mes',
+                    prevMonth: 'Mes Anterior',
+                    nextMonth: 'Mes Siguiente',
+                    selectYear: 'Seleccionar Año',
+                    prevYear: 'Año Anterior',
+                    nextYear: 'Año Siguiente',
+                    selectDecade: 'Seleccione Década',
+                    prevDecade: 'Década Anterior',
+                    nextDecade: 'Década Siguiente',
+                    prevCentury: 'Siglo Anterior',
+                    nextCentury: 'Siglo Siguiente',
+                    pickHour: 'Seleccione Hora',
+                    incrementHour: 'Incrementar Hora',
+                    decrementHour: 'Decrementar Hora',
+                    pickMinute: 'Seleccione Minuto',
+                    incrementMinute: 'Incrementar Minuto',
+                    decrementMinute: 'Decrementar Minuto',
+                    pickSecond: 'Seleccione Segundos',
+                    incrementSecond: 'Incrementar Segundos',
+                    decrementSecond: 'Decrementar SecoSegundosnd',
+                    togglePeriod: 'Cambiar Período',
+                    selectTime: 'Colocar Hora'
+                },
+            });
+        });
+
+        function desbloquear(tip) {
+            var data;
+
+            if (tip == 1) {
+                data = false
+
+                $('#editar').addClass("d-none");
+                $('#guardar').removeClass("d-none");
+            } else {
+                data = true;
+                $('#editar').removeClass("d-none");
+                $('#guardar').addClass("d-none")
+            }
+            $("#nombre")[0].disabled = data;
+            $("#correo")[0].disabled = data;
+
+        }
+
+        function validarEmail(valor) {
+            if (/^(([^<>()[\]\.,;:\s@@\"]+(\.[^<>()[\]\.,;:\s@@\"]+)*)|(\".+\"))@@(([^<>()[\]\.,;:\s@@\"]+\.)+[^<>()[\]\.,;:\s@@\"]{2,})$/i.test(valor) || /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(valor)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function grabar(tip) {
+
+            var datos = [];
+
+            var nombre = $("#nombre").val();
+            var correo = $("#correo").val();
+            if (validarEmail(correo) || correo.lenght == 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Perfil", "Autentificacion")',
+                    data: { 'nombre': nombre, 'email': correo },
+                    success: function (result) {
+                        $("#bd-versions").text(result.CTUNOMUSU);
+                        toastr.success('Datos Modificados con exito.')
+                    },
+                })
+            } else {
+                toastr.warning('Debe ingresar los datos correctamente')
+            }
+        }
+
+        function grabar2() {
+            var password = $("#password").val();
+            var password_confirma = $("#password_confirma").val();
+            if (password == password_confirma) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Perfil_pasword", "Autentificacion")',
+                    data: { 'password': password },
+                    success: function (result) {
+                        $("#bd-versions").text(result.CTUNOMUSU);
+                        toastr.success('Datos Modificados con exito.')
+                    },
+                })
+            } else {
+                toastr.warning('Las contraseñas no coninciden ')
+            }
+
+        }
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

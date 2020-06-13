@@ -1,0 +1,293 @@
+﻿
+@{
+    string t,j,f,i,r;
+    i = Convert.ToString(Session["identificador"] != null ? Session["identificador"] : " ");
+    r = Convert.ToString(Session["Rol"] != null ? Session["Rol"] : " ");
+    if ("VENDEDOR" == r)
+    {
+        t = "hold-transition layout-top-nav";
+        j = "content-wrapper";
+        f = "min-height: unset;background: #001f3f;";
+
+    }
+    else if ("RP"== i) {
+        t = "hold-transition sidebar-mini layout-fixed ";
+        j = "d-flex flex-column page-wrapper";
+        f = "min-height: unset;background-color: #610404;padding: 10px;margin-left: 0px !important;color: aliceblue;";
+
+    }
+    else
+    {
+        t = "hold-transition sidebar-mini layout-fixed layout-navbar-fixed ";
+        j = "d-flex flex-column page-wrapper";
+        f = "min-height: unset; background-color: #043361 ;padding: 10px;";
+    }
+
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal | CRM</title>
+
+    <link rel="shortcut icon" href="~/Content/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/estilos.css")">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/toastr/toastr.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/ion-rangeslider/css/ion.rangeSlider.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css")">
+    <!-- Loading -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/loading/jquery.loadingModal.css")" />
+    <!-- SweetAlert -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/sweetalert2/sweetalert2.css")" />
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/fontawesome-free/css/all.min.css") ">
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/css/adminlte.min.css") ">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.css") ">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/select2/css/select2.min.css") ">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css")">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css")">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/css/adminlte.min.css") ">
+    <link rel="stylesheet" href="@Url.Content("~/Content/plugins/DatepikerMaterial/css/bootstrap-material-datetimepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/dist/css/spectrum.css")" />
+    <!-- tui calendar -->
+    <!-- DataTable -->
+    <link href="@Url.Content("~/Content/plugins/datatables/dataTables.bootstrap4.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/plugins/datatables/dataTables.checkboxes.css")" rel="stylesheet" type="text/css" />
+    <!--<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">-->
+    <!-- Js Principal -->
+    <script src="@Url.Content("~/Scripts/jquery-3.4.1.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js")"></script>
+    <script src="@Url.Content("~/Content/dist/js/adminlte.min.js")"></script>
+    <script src="@Url.Content("~/Content/dist/js/demo.js")"></script>
+    <!-- HighChart -->
+
+    <script src="@Url.Content("~/Content/plugins/highcharts/highcharts.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/highcharts/modules/funnel.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/highcharts/modules/series-label.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/highcharts/modules/exporting.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/highcharts/modules/export-data.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/highcharts/modules/accessibility.js")"></script>
+
+    <!-- DataTable -->
+    <script src="@Url.Content("~/Content/plugins/datatables/dataTables.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/datatables/dataTables.checkboxes.js")"></script>
+    <!-- SweetAlert -->
+    <script src="@Url.Content("~/Content/sweetalert2/sweetalert2.js")"></script>
+    <!-- jquery-validation -->
+    <script src="@Url.Content("~/Content/plugins/jquery-validation/jquery.validate.min.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/jquery-validation/additional-methods.min.js")"></script>
+    <style>
+        .tui-full-calendar-near-month-day {
+            cursor: crosshair;
+        }
+    </style>
+
+</head>
+
+<body class="@t">
+    <div class="wrapper">
+        @if (r == "VENDEDOR")
+        {
+            Html.RenderPartial("_EmpleadoLayout");
+        }
+        else if ("RP" == i)
+
+        {
+            Html.RenderPartial("_RpLayout");
+
+
+        }
+        else
+        {
+ 
+             Html.RenderPartial("_AdministradorLayout");
+        }
+        <div id="" class="@j">
+            @RenderBody()
+        </div>
+
+        <footer class="main-footer text-center " style="@f">
+  
+            <strong>
+                Tecnologia desarrollada por  &nbsp;
+            </strong>
+            <strong><a class="text-danger" href="http://www.starsoft.com.pe" target="_blank">www.starsoft.com.pe</a> </strong>
+
+        </footer>
+    </div>
+
+
+
+    <script src="@Url.Content("~/Content/plugins/moment/moment-with-locales.min.js")"></script>
+    <script src="@Url.Content("~/Content/plugins/DatepikerMaterial/js/bootstrap-material-datetimepicker.js")"></script>
+    <script src="@Url.Content("~/Content/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js")"></script>
+
+    <!-- Loading -->
+    <script src="@Url.Content("~/Content/loading/jquery.loadingModal.js")"></script>
+    <!-- Pluggins -->
+    <script src="@Url.Content("~/Content/dist/js/spectrum.js") "></script>
+    <script src="@Url.Content("~/Scripts/main.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/ion-rangeslider/js/ion.rangeSlider.min.js") "></script>
+    <script src="@Url.Content("~/Content/sly-master/dist/sly.min.js") "></script>
+    <script src="@Url.Content("~/Scripts/jquery.animateNumber.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/select2/js/select2.full.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/moment/moment.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/moment/locale/es.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/inputmask/min/jquery.inputmask.bundle.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/bs-custom-file-input/bs-custom-file-input.min.js") "></script>
+    <script src="@Url.Content("~/Content/plugins/toastr/toastr.min.js")"></script>
+
+
+    <script>
+            //para seleccionar la imagen de los archivos
+            $(document).ready(function () {
+                bsCustomFileInput.init();
+
+                //Initialize Select2 Elements
+                $('.select2').select2();
+                $('[data-mask]').inputmask();
+                $.fn.datepicker.dates['es'] = {
+                    days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+                    daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+                    daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                    monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                    today: "Hoy",
+                    monthsTitle: "Meses",
+                    clear: "Borrar",
+                    weekStart: 1,
+                    format: "dd/mm/yyyy"
+                };
+
+
+
+
+            });
+
+            var lastWidth = $(window).width();
+            console.log(lastWidth);
+     
+
+            $(window).resize(function () {
+                if ($(window).width() != lastWidth) {
+                    //execute code here.
+                    lastWidth = $(window).width();
+ 
+                    if (lastWidth < 743 ) {
+                        $(".aqui").addClass("navbar-collapse");
+                        $(".a").addClass("m-1");
+
+                    } else  {
+                        $(".aqui").removeClass("navbar-collapse");
+                        $(".a").removeClass("m-1");
+                    }
+
+                  
+
+                }
+            })
+            var validar_user_modificar = $('#user_Vsualizador').validate({
+                rules: {
+                    email_visualizador: {
+                        required: true,
+                        email: true,
+                    },
+                    nombre_visualizador: {
+                        required: true,
+
+                    },
+                    alias_visualizador: {
+                        required: true,
+                        maxlength: 8
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "El correo es requerido",
+                        email: "Introduzca un correo valido"
+                    },
+                    alias_visualizador: {
+                        required: "El usuario  es requerido",
+                        maxlength: "El alias no puede contener mas de 8 caracteres"
+
+                    },
+                    nombre_visualizador: {
+                        required: "El nombre del usuario  es requerido",
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+
+            $("#modificar2").on("click", function (event) {
+                va = validar_user_modificar.form()
+                var password = $("#password_visualizador").val();
+                var password_confirmar = $("#password_confirmar_visualizador").val();
+                event.preventDefault();
+                if (password.lenght != 0 || password_confirmar.lenght != 0) {
+                    if (password != password_confirmar) {
+                        toastr.warning('Las contraseñas no coninciden ');
+                        va = false;
+                    }
+
+                }
+                if (va) {
+                    var nombre = $("#nombre_visualizador").val();
+                    var usuario = $("#alias_visualizador").val();
+                    var email = $("#email_visualizador").val();
+                    var rol = "";
+                    var codigo_empresa = "";
+                    var user = [];
+                    var users = {
+                        nombre,
+                        codigo_empresa,
+                        rol,
+                        usuario,
+                        email,
+                        password,
+
+                    };
+                    user.push(users);
+                    var user = JSON.stringify(user);
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("modifict_user", "Administrador")',
+                        data: { 'user': user, 'id': $("#imp").val() , "tip":1 },
+                        success: function (result) {
+                            if (!result.error) {
+                                console.log(result);
+                                $("#nombre").text(" "+ nombre)
+                                toastr.success("El usuario se ha modificado con exito");
+                            }
+                        },
+                    });
+                }
+            });
+
+        $("#password").val(" ");
+
+
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

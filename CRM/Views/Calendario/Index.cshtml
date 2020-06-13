@@ -1,0 +1,2879 @@
+﻿@{
+    ViewBag.Title = "Cronograma";
+    //Layout = "~/Views/Shared/LayoutCalendario.cshtml";
+
+    var jss = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var actividades = jss.Serialize(ViewBag.Actividades);
+    var usuarios = jss.Serialize(ViewBag.ListarUsuarios);
+}
+
+@{
+    //Html.RenderPartial("_Flujo");
+}
+
+    <div id="cuerpo" class="content-wrapper">
+        <div class="modal fade" id="m_central" tabindex="0" role="dialog" aria-labelledby="Modal Central" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document" id="m_tamanio">
+                <div class="modal-content">
+                    <div class="modal-header col-sm-12" id="modal_header">
+                        <h5 class="modal-title w-75">
+                            <i class="fa fa-clock"></i>&nbsp;
+                            <span id="x_titulo">Planificaci&oacute;n de Actividades</span>
+                        </h5>
+                        <span class="w-25 float-right text-center" id="t_usuario"></span>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body h500" id="x_cuerpo">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Título</label>
+                                <input type="text" id="observacion" class="form-control" maxlength="250" onkeypress="solo_alfanumericos(event)" />
+                                <input type="hidden" id="id_tarea" value="0" />
+                            </div>
+                            @if (ViewBag.rol == "ADMINISTRADOR")
+                            {
+                                <div class="col-sm-9">
+                                    <label>Oportunidad</label>
+                                    <select class="form-control select2" id="propuestas"></select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Seleccione Usuario</label>
+                                    <select class="form-control select2" id="usuario_actual"></select>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-12">
+                                    <label>Propuestas</label>
+                                    <select class="form-control select2" id="propuestas"></select>
+                                </div>
+                                <input type="hidden" id="usuario_actual" value="@ViewBag.usuario_actual" />
+                            }
+
+                            <div class="col-sm-6 col-md-3">
+                                <label>Tipo de Actividad</label>
+                                <select class="form-control" id="tipo_actividad" onchange="agregar_ph()"></select>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <label>Fecha Desde</label>
+                                <input type="datetime" id="fecha_desde" class="form-control fecha" onblur="restar_fechas(); validar_fecha();" />
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <label>Fecha Hasta</label>
+                                <input type="datetime" id="fecha_hasta" class="form-control fecha" onblur="restar_fechas(); validar_fecha();" />
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <label>Total Horas</label>
+                                <input id="total_horas" class="form-control" readonly />
+                            </div>
+                            <div class="col-sm-9">
+                                <label>Complemento de Tipo Actividad</label>
+                                <textarea id="actividad" class="form-control" rows="4" onkeyup="textCounter(this.id,'counter_actividad',1000)"></textarea>
+                                <label class="w-md-25 w-sm-50">
+                                    <input id="counter_actividad" class="form-control w-50" value="1000" readonly />
+                                </label>
+                            </div>
+                            <div class="col-sm-3" id="div_estatus">
+                                <label>Estado</label>
+                                <select class="form-control" id="estatus">
+                                    <option value="0">Abierto</option>
+                                    <option value="1">Cerrado</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-12" id="div_respuesta">
+                                <label>Observaciones</label>
+                                <textarea id="respuesta" class="form-control" rows="4" onkeyup="textCounter(this.id,'counter_respuesta',1000)"></textarea>
+                                <label class="w-md-25 w-sm-50">
+                                    <input id="counter_respuesta" class="form-control w-50" value="1000" readonly />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="x_pie">
+                        <a class="btn btn-success d-block" href="javascript:void(0)" onclick="$('#id_tarea').val(0);grabar_tarea(0)" id="btn_grabar">
+                            <i class="fa fa-save"></i>
+                            Grabar
+                        </a>
+                        <a class="btn btn-secondary d-block" href="javascript:void(0)" onclick="$('#id_tarea').val(0);grabar_tarea(1)" id="btn_grabar2">
+                            <i class="fa fa-save"></i>
+                            Grabar,  Prepare el Próximo
+                        </a>
+                        <a class="btn btn-danger d-none" href="javascript:void(0)" id="btn_borrar" onclick="borrar_tarea()">
+                            <i class="fa fa-times"></i>
+                            Borrar
+                        </a>
+                        <a class="btn btn-primary d-none" href="javascript:void(0)" onclick="actualizar_tarea()" id="btn_actualizar">
+                            <i class="fa fa-save"></i>
+                            Actualizar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+            <input type="hidden" id="rol" value="@ViewBag.rol" />
+            @if (ViewBag.rol == "ADMINISTRADOR")
+            {
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row d-flex justify-content-between">
+                            <div class="col-auto">
+                                <h1>Calendario</h1>
+                            </div>
+                            <div class="col-auto">
+                                <ol class="breadcrumb float-right">
+                                    <li class="breadcrumb-item"> <a href="@Url.Action("Index", "Administrador") ">Inicio</a></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            }
+            <!--<div class="row justify-content-around m-0">
+        <div class="col-sm-12">
+            <div id="lnb">
+                <div id="lnb-calendars" class="lnb-calendars">
+                    <div>
+                        <div class="lnb-calendars-item">
+                            <label class="d-none">
+                                <input class="tui-full-calendar-checkbox-square" type="checkbox" value="all" checked>
+                                <span></span>
+                                <strong>Ver Todos</strong>
+                            </label>
+                        </div>
+                    </div>
+        <div id="calendarList" class="lnb-calendars-d1 row justify-content-around mx-0 border rounded my-2"></div>-->
+            <div id="lnb">
+                <div id="lnb-calendars" class="lnb-calendars">
+                    <div class="d-none">
+                        <div class="lnb-calendars-item">
+                            <label class="d-none">
+                                <input class="tui-full-calendar-checkbox-square" type="checkbox" value="all" checked>
+                                <span></span>
+                                <strong>Ver Todos</strong>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="calendarList" class="lnb-calendars-d1 row justify-content-around mx-0 border rounded my-2"></div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div id="right">
+                    <div id="menu" class="mb-2">
+                        <span class="dropdown">
+                            <button id="dropdownMenu-calendarType" class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="true">
+                                <i id="calendarTypeIcon" class="calendar-icon ic_view_month" style="margin-right: 4px;"></i>
+                                <span id="calendarTypeName">Dropdown</span>&nbsp;
+                                <i class="calendar-icon tui-full-calendar-dropdown-arrow"></i>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu-calendarType">
+                                <li role="presentation">
+                                    <a class="dropdown-menu-title" role="menuitem" data-action="toggle-daily">
+                                        <i class="calendar-icon ic_view_day"></i>Diario
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a class="dropdown-menu-title" role="menuitem" data-action="toggle-weekly">
+                                        <i class="calendar-icon ic_view_week"></i>Semanal
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a class="dropdown-menu-title" role="menuitem" data-action="toggle-monthly">
+                                        <i class="calendar-icon ic_view_month"></i>Mensual
+                                    </a>
+                                </li>
+                            </ul>
+                        </span>
+                        <span id="menu-navi">
+                            <button type="button" class="btn btn-default btn-sm move-today" data-action="move-today">Hoy</button>
+                            <button type="button" class="btn btn-default btn-sm move-day" data-action="move-prev">
+                                <i class="calendar-icon ic-arrow-line-left" data-action="move-prev"></i>
+                            </button>
+                            <button type="button" class="btn btn-default btn-sm move-day" data-action="move-next">
+                                <i class="calendar-icon ic-arrow-line-right" data-action="move-next"></i>
+                            </button>
+                        </span>
+                        <span id="renderRange" class="render-range"></span>
+                        <span class="float-right">
+                            <a id="boton_modal_nuevaOp" class="btn btn-xs btn-primary mb-3 text-white text-uppercase text-bold" data-toggle="modal" data-target="#modal_nuevaOp">Nueva Oportunidad</a>
+                        </span>
+                        @if (ViewBag.rol == "ADMINISTRADOR")
+                        {
+                            <span class="float-right w-25 form-inline">
+                                <label>Por Vendedor:&nbsp;</label>
+                                <select class="form-control" id="vendedores" onchange="actividades_vendedor(this.value)"></select>
+                            </span>
+                        }
+                    </div>
+                    <div id="calendar_hl"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="modal_nuevaOp" tabindex="0" role="dialog" aria-labelledby="Modal Central" aria-hidden="true">
+            @using (Html.BeginForm("nuevoProspecto", "flujo", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-dialog modal-md" role="document" id="nueva">
+                    <div class="modal-content">
+                        <div class="modal-header col-sm-12">
+                            <div class="modal-title">
+                                <h1 class="text-primary text-uppercase mb-0"> nueva Oportunidad</h1>
+
+                            </div>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body h500" id="">
+
+                            <div class="row justify-content-around mb-2 ml-0 mr-0 p-2">
+                                <input type="hidden" name="idEstatus" value="1" />
+                                <input type="hidden" name="nombreEstado" value="" />
+                                @if (Session["Rol"].ToString() == "VENDEDOR")
+                                {
+                                    <input type="hidden" name="idUsuario" value="@Session["alias"]" />
+                                }
+
+
+                                <div class="col-12 p-0  mb-2 ">
+
+                                    <label for="Num_Op" class="usuario text-left  w-100 mb-0"> Nombre:</label>
+                                    <input class="w-100 form-control" id="Num_Op" name="nombreOp" required="required" type="text" placeholder="Descripción" />
+
+                                </div>
+                                <div class="col-12 p-0 mb-0 ">
+                                    <label for="Num_Op" class="usuario text-left  w-100  pl-2 mb-0"> Cliente: </label>
+                                    <article class="kanban-entry" draggable="false">
+                                        <div class="kanban-entry-inner">
+                                            <div class="row justify-content-between p-2 mb-2 m-0">
+                                                <div class="col-12  p-0 mb-2  ">
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-6 text-right">
+                                                                <div class="custom-control custom-radio">
+                                                                    <input class="custom-control-input" type="radio" id="ind_radio" name="tipoContacto" required="required" checked>
+                                                                    <label for="ind_radio" class="custom-control-label">Prospecto <i class="far fa-user"></i></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6 text-left">
+                                                                <div class="custom-control custom-radio">
+                                                                    <input class="custom-control-input" type="radio" id="emp_radio" name="tipoContacto" required="required">
+                                                                    <label for="emp_radio" class="custom-control-label">Fidelizado <i class="fas fa-user"></i></label>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-12 " id="contenidoTipo">
+                                                        <input type="hidden" id="tipo" name="tipContacto" value="0">
+                                                        <div id="potencial" class="potencial">
+                                                            <div class="row p-0 d-flex align-items-center">
+
+
+
+                                                                <div class="col-12 p-0">
+                                                                    <div class="form-group">
+
+                                                                        <select class="form-control mw-100 select2" id="clientePot" data-placeholder="Prospecto" required="" name="clientePot"></select>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="p-0 mb-3 pl-3 col-1 hidden" id="editar">
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-append">
+                                                                            <a href="#" id="modeditarClientePot" class="fas fa-edit" data-toggle="modal" data-target="#modal_editarClientePot" value="" name="accion:Editar" style="background: #fff;"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <a href="#" id="modeCrearClientePot" class="btn  btn-contacto w-100 p-0 font-weight-bold" data-toggle="modal" data-target="#modal_crearPotencial"><i class="fas fa-user-plus  pr-2" style="color: #0275d8"></i>Agregar prospecto</a>
+
+                                                            </div>
+                                                        </div>
+                                                        <div id="fidelizado" class="fidelizado hidden">
+                                                            <div class="row p-0 d-flex align-items-center">
+
+
+
+                                                                <div class="col-12 p-0">
+                                                                    <div class="form-group">
+                                                                        <select class="form-control mw-100 select2" id="clienteFi" data-placeholder="Fidelizado" name="clienteFi"></select>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="p-0 mb-3 pl-3 col-1 hidden" id="editar">
+                                                                    <div class="input-group">
+                                                                        <div class="input-group-append">
+                                                                            <a href="#" id="modeditarClienteFi" class="fas fa-edit" data-toggle="modal" data-target="#modal_editarClienteFi" value="" name="accion:Editar" style="background: #fff;"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </article>
+
+                                </div>
+
+
+
+                                <div class="col-12 mb-2">
+                                    <label for="in" class="text-left mb-0">Probabilidad para Convertir: </label>
+                                    <input id="range_5" type="text" name="probabilidad" value="">
+                                </div>
+
+                                <div class="col-12 ">
+                                    <div class="prioridad">
+                                        <label for="in" class="text-left mb-0">Prioridad:</label>
+
+                                        <a href="#" onclick="return false;" title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad_estrella far fa-star" style="color: #000;"></a>
+                                        <a href="#" onclick="return false;" title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad_estrella far fa-star" style="color: #000;"></a>
+                                        <a href="#" onclick="return false;" title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad_estrella far fa-star " style="color: #000;"></a>
+                                        <input type="hidden" id="prioridad" name="prioridadVal" value="0">
+
+                                    </div>
+                                    <div class="row  justify-content-around  p-0">
+
+                                        <div class="col-7 p-0"><label for="in" class="text-left  w-100">Ingreso Estimado</label><input class="w-100 pl-2 form-control" id="in" name="Ingreso" value="0.00" type="number" step="0.01" /></div>
+                                        <div class="col-4 p-0">
+                                            <label for="" class="youpasswd text-left  w-100">Moneda</label>
+                                            <select class="form-control mw-100" id="tipoMoneda" data-placeholder="Tipo" required="required" name="tipoMoneda"></select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col mb-2">
+                                            <label class="d-block mt-2">Etapa Destino</label>
+                                            <select class="form-control mw-100 select2" id="idEstadoOp" data-placeholder="Escoge una Etapa" required="required" name="idEstadoOp"></select>
+                                        </div>
+                                    </div>
+                                    @if (Session["Rol"].ToString() != "VENDEDOR")
+                                    {
+                                        <div class="row">
+                                            <div id="usuarioOP" class="col ">
+
+                                                <label for="" class="moneda text-left  w-100">Usuario Asignado</label>
+                                                <select class="form-control mw-100 select2" id="idUsuario" data-placeholder="Usuario" required="required" name="idUsuario"></select>
+
+
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer" id="x_pie">
+                            <div class="col-12 mt-2">
+                                <div class="form-group">
+                                    <input type="hidden" id="vista" name="vista" value='devuelveCalendario'>
+                                    <input type="submit" id="nuevaOportunidad" class="btn btn-primary" value="Añadir">
+                                    <a class="btn btn-default" data-dismiss="modal" aria-label="Close">Cancelar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="modal fade" id="modal_crearPotencial">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Crear Prospecto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form role="form" class="" id="formCrearpot">
+                        <div class="card card-primary card-tabs">
+                            <div class="card-header navbar navbar-expand p-0 pt-1">
+                                <ul class="navbar-nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="crear-tab" data-toggle="pill" href="#nuevo-cliente" role="tab" aria-controls="nuevo-cliente" aria-selected="true">Datos</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="direccion-tab" data-toggle="pill" href="#nuevo-direccion" role="tab" aria-controls="nuevo-direccion" aria-selected="false">Direcciones</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="contacto-tab" data-toggle="pill" href="#nuevo-contacto" role="tab" aria-controls="nuevo-contacto" aria-selected="false">Contactos</a>
+                                    </li>
+
+                                </ul>
+
+
+                            </div>
+
+                            <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-one-tabContent">
+
+
+                                    <div class="tab-pane fade show active" id="nuevo-cliente" role="tabpanel" aria-labelledby="nuevo-cliente">
+                                        <div class="row ">
+                                            <div class="col-12 ">
+                                                <div class="row text-left  m-0">
+                                                    <div class="col-sm-6  p-0 pr-2 mb-2  ">
+
+
+                                                        <div class="form-group">
+                                                            <label for="">Código del cliente:</label>
+                                                            <input type="text" class="form-control form-control-sm infoCliente text-uppercase" name="CCODCLI" id="codCli">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 pl-2 p-0 mb-2">
+                                                        <label for="">Tipo de Documento:</label>
+                                                        <div class="row ">
+                                                            <div class="col-8 ">
+                                                                <div class="form-group">
+
+                                                                    <select name="tipoDoc" id="tipoDoc" class="form-control infoCliente form-control-sm text-uppercase">
+                                                                        <option value="1">DNI</option>
+                                                                        <option value="2">Carnet de fuerzas policiales</option>
+                                                                        <option value="3">Carnet de fuerzas armadas</option>
+                                                                        <option value="4">Carnet de extrangería</option>
+                                                                        <option value="6" selected>RUC</option>
+                                                                        <option value="7">Pasaporte</option>
+                                                                        <option value="0">Otro tipo de documento</option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div class="form-group">
+                                                                    <input class="form-control form-control-sm infoCliente text-uppercase" id="NroDoc" name="CDOCIDEN" onblur="buscarSunat(this.value)" title="Debe contener solo numeros">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="InfoCLi">
+
+
+                                                            <div>
+                                                                <div class="row">
+                                                                    <div class="col-6">
+
+                                                                        <input type="hidden" class="form-control form-control-sm mb-2 infoCliente text-uppercase" id="apPaterno" name="CAPELLIDO_PATERNO" placeholder="Apellido Paterno">
+
+
+
+                                                                    </div>
+                                                                    <div class="col-6">
+
+                                                                        <input type="hidden" class="form-control form-control-sm mb-2 infoCliente text-uppercase" id="apMaterno" name="CAPELLIDO_MATERNO" placeholder="Apellido Materno">
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-6">
+
+                                                                        <input type="hidden" class="form-control form-control-sm infoCliente text-uppercase" id="pNombre" name="CPRIMER_NOMBRE" placeholder="Primer nombre">
+
+
+
+                                                                    </div>
+                                                                    <div class="col-6">
+
+                                                                        <input type="hidden" class="form-control form-control-sm infoCliente text-uppercase" id="sNombre" name="CSEGUNDO_NOMBRE" placeholder="Segundo nombre">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-12">
+
+                                                                    <input type="text" class="form-control  infoCliente text-uppercase" id="nombreCli" name="CNOMCLI" placeholder="Nombre / Razon social">
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Teléfono:</label>
+                                                    <input type="text" class="form-control infoCliente text-uppercase" id="celularPersona" name="CTELEFO">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Correo:</label>
+                                                    <input type="email" class="form-control infoCliente text-uppercase" name="CEMAIL" id="correoPersona">
+                                                </div>
+
+                                            </div>
+                                            <div class="col-sm-6">
+
+                                                <div class="form-group">
+                                                    <label for="pagina">Página Web:</label>
+                                                    <input type="text" class="form-control infoCliente text-uppercase" name="CHOST" id="paginaPersona">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Tipo de Empresa:</label>
+                                                    <div class="form-group">
+
+                                                        <select name="tipoEmpresa" id="tipoEmpresa" class="form-control infoCliente  text-uppercase" required>
+                                                            <option value="1">Terceros</option>
+                                                            <option value="2">Matriz</option>
+                                                            <option value="3">Subsidiarias</option>
+                                                            <option value="4">Asociadas</option>
+                                                            <option value="6">Sucursal</option>
+                                                            <option value="7">Otros</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade" id="nuevo-direccion" role="tabpanel" aria-labelledby="direccion-tab">
+                                        <div class="form-group">
+                                            <label>Domicilio legal:</label>
+                                            <textarea class="form-control" rows="3" id="Direccion" name="CDIRCLI" onkeyup="textCounter(this.id,'counter_direccion',100)"></textarea>
+                                            <label class="w-md-25 w-sm-50">
+                                                <input id="counter_direccion" class="form-control w-50" value="100" readonly />
+                                            </label>
+
+
+                                            <div class="row mt-2">
+
+                                                <div class="col-5">
+                                                    <input type="text" class="form-control infoCliente text-uppercase" id="CPROV" name="CPROV" placeholder="Provincia">
+                                                </div>
+                                                <div class="col-7">
+                                                    <input type="text" class="form-control infoCliente text-uppercase" id="CPAIS" name="CPAIS" placeholder="País">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Distrito:</label>
+
+                                            <select class="form-control mw-100 select2 infoCliente" id="distrito" data-placeholder="Escoge una Etapa" required="required" name="distrito"></select>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="nuevo-contacto" role="tabpanel" aria-labelledby="contacto-tab">
+                                        <div id="Contacto" class="row text-cente flex-row flex-nowrap ">
+
+                                            <div class="col-12  table-responsive">
+
+                                                <table id="example2" class="table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+
+                                                            <th>
+                                                                Contacto
+                                                            </th>
+                                                            <th>
+                                                                Área
+                                                            </th>
+                                                            <th>
+                                                                Cargo
+                                                            </th>
+                                                            <th>
+                                                                Correo
+                                                            </th>
+                                                            <th>
+                                                                Teléfono
+                                                            </th>
+                                                            <th>
+                                                                Celular
+                                                            </th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+
+
+                                        <a id="agregarContactoPot" class="btn btn-sm btn-success text-white float-right">Agregar</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Descartar</button>
+                            <button type="button" class="btn btn-primary" id="nuevoClientepot">Guardar</button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+@section Scripts {
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/bootstrap-datepicker/css/bootstrap-datetimepicker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/css/tui-time-picker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/css/tui-date-picker.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/dist/tui-calendar.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/Content/tui.calendar/css/icons.css")" />
+
+    <script src="@Url.Content("~/Content/tui.calendar/bootstrap-datepicker/js/bootstrap-datetimepicker.js")"></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/popper.min.js")"></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/chance.min.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/tui-code-snippet.min.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/tui-time-picker.min.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/tui-date-picker.min.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/dist/tui-calendar.js") "></script>
+    <script src="@Url.Content("~/Content/tui.calendar/js/app.js") "></script>
+    <script type="text/javascript">
+
+    var rol = "@Convert.ToString(Session["Rol"])"
+
+    var arr_actividades = JSON.parse('@Html.Raw(actividades)').Data;
+    var arr_usuarios = JSON.parse('@Html.Raw(usuarios)').Data;
+    var colores = [];
+    var arr_actividades2 = new Array();
+    parametro = '@ViewBag.parametro';
+    var xhr = null;
+
+    function CalendarInfo() {
+        this.id = null;
+        this.name = null;
+        this.checked = true;
+        this.color = null;
+        this.bgColor = null;
+        this.borderColor = null;
+        this.dragBgColor = null;
+        this.state = null;
+        this.recurrenceRule = null;
+        this.userid = null;
+   }
+
+    function addCalendar(calendar) {
+        CalendarList.push(calendar);
+    }
+
+    function findCalendar(id) {
+        var found;
+
+        CalendarList.forEach(function (calendar) {
+            if (calendar.id === id) {
+                found = calendar;
+            }
+        });
+
+        return found || CalendarList[0];
+    }
+
+    (function () {
+        $('.select2').select2();
+        $('[data-mask]').inputmask();
+
+        $(".fecha").inputmask('99-99-9999 99:99 AM', { /*numericInput: true*/ });
+
+        $('.fecha').datetimepicker({
+            locale: 'es',
+            format: 'DD-MM-YYYY hh:mm A',
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-check',
+                clear: 'fa fa-trash',
+                close: 'fa fa-times'
+            },
+            tooltips: {
+                today: 'Hoy',
+                clear: 'Limpiar selección',
+                close: 'Cerrar',
+                selectMonth: 'Seleccionar Mes',
+                prevMonth: 'Mes Anterior',
+                nextMonth: 'Mes Siguiente',
+                selectYear: 'Seleccionar Año',
+                prevYear: 'Año Anterior',
+                nextYear: 'Año Siguiente',
+                selectDecade: 'Seleccione Década',
+                prevDecade: 'Década Anterior',
+                nextDecade: 'Década Siguiente',
+                prevCentury: 'Siglo Anterior',
+                nextCentury: 'Siglo Siguiente',
+                pickHour: 'Seleccione Hora',
+                incrementHour: 'Incrementar Hora',
+                decrementHour: 'Decrementar Hora',
+                pickMinute: 'Seleccione Minuto',
+                incrementMinute: 'Incrementar Minuto',
+                decrementMinute: 'Decrementar Minuto',
+                pickSecond: 'Seleccione Segundos',
+                incrementSecond: 'Incrementar Segundos',
+                decrementSecond: 'Decrementar SecoSegundosnd',
+                togglePeriod: 'Cambiar Período',
+                selectTime: 'Colocar Hora'
+            },
+        });
+
+        $.ajax({
+            url: "@Url.Content("~/Calendario/ListarDatos")",
+            dataType: "json",
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                if (data != "") {
+                    var tipo_actividad = $("#tipo_actividad")[0];
+                    tipo_actividad.length = 0;
+                    tipo_actividad[0] = new Option("Seleccione", "", "", "");
+
+                    var propuestas = $("#propuestas")[0];
+                    propuestas.length = 0;
+
+                    for (var i = 0; i < data.tipoActividad.length; i++) {
+                        var calendar = new CalendarInfo();
+                        calendar.id = String(data.tipoActividad[i].id_tipoActividad);
+                        calendar.name = data.tipoActividad[i].descripcion;
+                        calendar.color = '#FFF';
+                        calendar.bgColor = data.tipoActividad[i].color;
+                        calendar.dragBgColor = "#00a9ff";
+                        calendar.borderColor = data.tipoActividad[i].color;
+                        addCalendar(calendar);
+
+                        tipo_actividad[i+1] = new Option(data.tipoActividad[i].descripcion, data.tipoActividad[i].id_tipoActividad, "", "");
+                        tipo_actividad[i + 1].style.color = data.tipoActividad[i].color;
+                        colores[data.tipoActividad[i].id_tipoActividad] = data.tipoActividad[i].color;
+                    }
+
+                    var calendarList = document.getElementById('calendarList');
+                    var html = [];
+                    CalendarList.forEach(function (calendar) {
+                        html.push('<div class="lnb-calendars-item"><label>' +
+                            '<input type="checkbox" data-recorrido="' + calendar.id + '" class="tui-full-calendar-checkbox-round" value="' + calendar.id + '" checked onclick="evaluar_actividades()">' +
+                            '<span class="recorrido" style="border-color: ' + calendar.borderColor + '; background-color: ' + calendar.borderColor + ';"></span>' +
+                            '<span>' + calendar.name + '</span>' +
+                            '</label></div>'
+                        );
+                    });
+                    calendarList.innerHTML = "<div class='col-sm-12 text-center'><b>Tipos de Actividades</b></div>"+html.join('\n');
+
+                    var moneda;
+                    for (i = 0; i < data.propuesta.length; i++) {
+                        if (data.propuesta[i].codigo_tipoMon == "MN") {
+                            moneda = "S/.";
+                        } else {
+                            moneda = "$";
+                        }
+                        propuestas[i + 1] = new Option(data.propuesta[i].nombre + " - " + moneda + " " +data.propuesta[i].ingreso + " - " + data.propuesta[i].notas, data.propuesta[i].id_oportunidad, "", "");
+                    }
+                }
+                carga_inicial();
+            }
+        });
+    })();
+
+    function evaluar_actividades() {
+        var arreglo = new Array();
+        var cadena = "";
+        arr_actividades2.length = 0;
+        $(".tui-full-calendar-checkbox-round").each(function (index) {
+            if ($(this)[0].checked) {
+                arreglo.push(parseInt($(this).attr('data-recorrido')));
+            }
+        });
+
+        arr_actividades.forEach(function (currentValue, index, arr) {
+            cadena = arr_actividades[index].id_tipoActividad;
+            if (arreglo.indexOf(cadena) >= 0) {
+                arr_actividades2.push(arr_actividades[index]);
+            }
+        });
+
+        recorrido_filtrado();
+    }
+
+        function validar_fecha() {
+            var fecha_inicial = fecha_valida($("#fecha_desde").val());
+            var fecha_final = fecha_valida($("#fecha_hasta").val());
+            var usuario = $("#usuario_actual").val();
+            if (xhr != null) {
+                xhr.abort();
+                xhr = null;
+            }
+
+            if ((fecha_inicial != "") && (fecha_final != "") && (usuario != "")) {
+                var parametros = "&fecha_desde=" + fecha_inicial;
+                parametros += "&fecha_hasta=" + fecha_final;
+                parametros += "&usuario=" + usuario;
+                parametros += "&id_cronograma=0";
+
+                xhr = $.ajax({
+                    url: "@Url.Content("~/Calendario/ValidaActividad")",
+                    data: parametros,
+                    type: 'GET',
+                    cache: false,
+                    success: function (data) {
+                        if (data != "True") {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: "Fecha comprometida para el usuario " + usuario,
+                                type: "warning",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        if (data.statusText == 'abort') {
+                            return;
+                        }
+                    }
+                });
+            }
+        }
+
+    function agregar_ph() {
+        var actividad = $("#actividad")[0];
+        var tipo_actividad = $("#tipo_actividad")[0];
+
+        if (tipo_actividad.value == "") {
+            actividad.placeholder = "";
+        } else {
+            actividad.placeholder = tipo_actividad.options[tipo_actividad.selectedIndex].text;
+        }
+    }
+
+    function restar_fechas() {
+        var fecha_inicial = new Date(fecha_valida($("#fecha_desde").val()));
+        var fecha_final = new Date(fecha_valida($("#fecha_hasta").val()));
+
+        let resta = Math.round((fecha_final.getTime() - fecha_inicial.getTime())/(1000*60*60));
+
+        $("#total_horas").val(resta);
+    }
+
+    function FormatoFecha(fecha,bandera) {
+        var month = fecha.getMonth() + 1;
+        var day = fecha.getDate();
+        var hour = fecha.getHours();
+        var minute = fecha.getMinutes();
+        var am = " AM";
+
+        if (parseInt(month) < 10) month = "0" + month;
+        if (parseInt(day) < 10) day = "0" + day;
+        if (parseInt(minute) < 10) minute = "0" + minute;
+
+        if (bandera) {
+            if (parseInt(hour) < 10) {
+                hour = "0" + hour;
+            } else if (parseInt(hour) > 12) {
+                hour = parseInt(hour - 12);
+                if (parseInt(hour) < 10) {
+                    hour = "0" + hour;
+                }
+
+                var am = " PM";
+            }
+        } else {
+            if (parseInt(hour) < 10) hour = "0" + hour;
+            am = "";
+        }
+
+        let formatted_date = day + "-" + month + "-" + fecha.getFullYear() + " " + hour + ":" + minute + am;
+
+        return formatted_date;
+    }
+
+    function abrir_modalp(parametro) {
+        limpiar_campos();
+        $('#propuestas').val(parametro).trigger('change');
+        var fecha = new Date();
+        $("#fecha_desde").val(FormatoFecha(fecha, true));
+        $("#fecha_hasta").val(FormatoFecha(fecha, true));
+        $("#div_estatus").addClass("d-none").removeClass("d-block");
+        $("#div_respuesta").addClass("d-none").removeClass("d-block");
+        $("#btn_actualizar").addClass("d-none").removeClass("d-block");
+        $("#btn_borrar").addClass("d-none").removeClass("d-block");
+        $("#btn_grabar").addClass("d-block").removeClass("d-none");
+        $("#btn_grabar2").addClass("d-block").removeClass("d-none");
+
+        $("#x_titulo").html("Planificación de Actividades");
+
+        $("#m_central").modal("show");
+    }
+
+    function abrirModal(event) {
+        limpiar_campos();
+        $("#fecha_desde").val(FormatoFecha(event.start,true));
+        $("#fecha_hasta").val(FormatoFecha(event.end, true));
+        restar_fechas();
+
+        $("#div_estatus").addClass("d-none").removeClass("d-block");
+        $("#div_respuesta").addClass("d-none").removeClass("d-block");
+        $("#btn_actualizar").addClass("d-none").removeClass("d-block");
+        $("#btn_borrar").addClass("d-none").removeClass("d-block");
+        $("#btn_grabar").addClass("d-block").removeClass("d-none");
+        $("#btn_grabar2").addClass("d-block").removeClass("d-none");
+
+        $("#x_titulo").html("Planificación de Actividades");
+        $("#t_usuario").html("");
+		$("#m_central").modal("show");
+        /*var schedule = {
+            id: String(1),
+            title: "asd",
+            isAllDay: false,
+            start: '2020-05-21 08:00',
+            end: '2020-05-21 19:00',
+            category: 'time',
+            dueDateClass: '',
+            color: '#EEE',
+            bgColor: '#EEE',
+            dragBgColor: '#EEE',
+            borderColor: '#EEE',
+            location: '',
+            state: 0
+        };
+
+        console.log(schedule);
+        cal.createSchedules([schedule]);
+
+        refrescaCalendario();*/
+    }
+
+    function bloquea_campos() {
+        $("#fecha_desde")[0].disabled = true;
+        $("#fecha_hasta")[0].disabled = true;
+        $("#observacion")[0].disabled = true;
+        $("#usuario_actual")[0].disabled = true;
+        $("#actividad")[0].disabled = true;
+        $("#propuestas")[0].disabled = true;
+        $("#respuesta")[0].disabled = true;
+        $("#tipo_actividad")[0].disabled = true;
+        $("#btn_actualizar").addClass("d-none").removeClass("d-block");
+        $("#counter_actividad").addClass("d-none").removeClass("d-block");
+        $("#counter_respuesta").addClass("d-none").removeClass("d-block");
+        $("#btn_borrar").addClass("d-none").removeClass("d-block");
+        $("#btn_grabar").addClass("d-none").removeClass("d-block");
+        $("#btn_grabar2").addClass("d-none").removeClass("d-block");
+        $("#div_estatus").addClass("d-none").removeClass("d-block");
+        $("#div_respuesta").addClass("d-none").removeClass("d-block");
+    }
+
+    function desbloquea_campos() {
+        $("#fecha_desde")[0].disabled = false;
+        $("#usuario_actual")[0].disabled = false;
+        $("#fecha_hasta")[0].disabled = false;
+        $("#observacion")[0].disabled = false;
+        $("#actividad")[0].disabled = false;
+        $("#propuestas")[0].disabled = false;
+        $("#tipo_actividad")[0].disabled = false;
+        $("#div_estatus").addClass("d-block").removeClass("d-none");
+        $("#counter_actividad").addClass("d-block").removeClass("d-none");
+        $("#counter_respuesta").addClass("d-block").removeClass("d-none");
+        $("#div_respuesta").addClass("d-block").removeClass("d-none");
+        $("#respuesta")[0].disabled = false;
+    }
+
+    function verTarea(event) {
+        $("#fecha_desde").val(FormatoFecha(event.schedule.start,true));
+        $("#fecha_hasta").val(FormatoFecha(event.schedule.end, true));
+        restar_fechas();
+        $("#observacion").val(event.schedule.title);
+        $("#actividad").val(event.schedule.body);
+        //$("#propuestas").val(event.schedule.location);
+        //$("#propuestas").select2("val", event.schedule.location);
+        $('#propuestas').val([event.schedule.location]).trigger('change');
+        $("#id_tarea").val(event.schedule.id);
+        $("#tipo_actividad").val(event.schedule.calendarId);
+        $("#t_usuario").html("<b>Usuario: </b>" + event.schedule.raw);
+        $('#usuario_actual').val([event.schedule.raw]).trigger('change');
+
+        if (event.schedule.isReadOnly) {
+            $("#modal_header")[0].style.backgroundColor = event.schedule.bgColor;
+            $("#estatus").val(1);
+            $("#modal_header")[0].style.color = "#FFF";
+            /*if ($("#rol").val() == "ADMINISTRADOR") {
+                desbloquea_campos();
+                $("#btn_actualizar").addClass("d-block").removeClass("d-none");
+                $("#btn_borrar").addClass("d-block").removeClass("d-none");
+                $("#btn_grabar").addClass("d-none").removeClass("d-block");
+                $("#btn_grabar2").addClass("d-none").removeClass("d-block");
+                $("#tipo_actividad")[0].disabled = true;
+            } else {*/
+            bloquea_campos();
+            $("#div_respuesta").addClass("d-block").removeClass("d-none");
+            $("#respuesta")[0].disabled = true;
+            //}
+        } else {
+            $("#estatus").val(0);
+            if (event.schedule.bgColor == "#bf0303") {
+                $("#modal_header")[0].style.backgroundColor = event.schedule.bgColor;
+                $("#modal_header")[0].style.color = "#FFF";
+            } else {
+                $("#modal_header")[0].style.backgroundColor = "#FFF";
+                $("#modal_header")[0].style.color = "#000";
+            }
+            desbloquea_campos();
+            $("#btn_actualizar").addClass("d-block").removeClass("d-none");
+            $("#btn_borrar").addClass("d-block").removeClass("d-none");
+            $("#btn_grabar").addClass("d-none").removeClass("d-block");
+            $("#btn_grabar2").addClass("d-none").removeClass("d-block");
+        }
+        $("#propuestas")[0].disabled = true;
+        $("#tipo_actividad")[0].disabled = true;
+
+        $("#x_titulo").html("Actividad No. "+event.schedule.id);
+        $("#m_central").modal("show");
+    }
+
+    function grabar_tarea(valor) {
+        var tipo_actividad = $("#tipo_actividad").val();
+        var fecha_desde = $("#fecha_desde").val();
+        var fecha_hasta = $("#fecha_hasta").val();
+        var observacion = $("#observacion").val().trim();
+        var actividad = $("#actividad").val().trim();
+        var propuestas = $("#propuestas").val();
+        var id_tarea = $("#id_tarea").val();
+        var respuesta = $("#respuesta").val();
+        var usuario_actual = $("#usuario_actual").val();
+
+        if ((propuestas != "") && (fecha_desde != "") && (fecha_hasta != "") && (tipo_actividad != "") && (actividad != "") && (observacion != "") && (usuario_actual != "")) {
+            var fecha_inicial = fecha_valida(fecha_desde);
+            var fecha_final = fecha_valida(fecha_hasta);
+
+            var bandera = compara_fecha(fecha_inicial, fecha_final);
+
+            if (!bandera) {
+                Swal.fire({
+                    title: "Alerta",
+                    text: "Fechas incorrectas",
+                    type: "warning",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Aceptar",
+                });
+                return false;
+            }
+
+            /*Swal.fire({
+                title: "Grabar",
+                text: "Se grabará la actividad actual, \n¿Desea crear una nueva actividad?",
+                type: "question",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                cancelButtonClass: "btn-secondary",
+                confirmButtonText: "SI",
+                cancelButtonText: "NO",
+            }).then((result) => {*/
+            var parametros = "&tipo_actividad=" + tipo_actividad;
+                parametros += "&propuestas=" + propuestas;
+                parametros += "&fecha_desde=" + fecha_desde;
+                parametros += "&fecha_hasta=" + fecha_hasta;
+                parametros += "&actividad=" + actividad;
+                parametros += "&id_cronograma=" + id_tarea;
+                parametros += "&observacion=" + observacion;
+                parametros += "&usuario=" + usuario_actual;
+                parametros += "&respuesta=" + respuesta;
+                parametros += "&estatus=0";
+                $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    url: "@Url.Content("~/Calendario/Guardar")",
+                    data: parametros,
+                    cache: false,
+                    success: function (datos) {
+                        if (datos.resultado) {
+                            var schedule = {
+                                id: datos.id,
+                                title: observacion,
+                                body: actividad,
+                                calendarId: $("#tipo_actividad").val(),
+                                isAllDay: false,
+                                start: fecha_inicial,
+                                end: fecha_final,
+                                category: 'time',
+                                dueDateClass: '',
+                                color: "#000",
+                                bgColor: colores[tipo_actividad],
+                                dragBgColor: "#123456",
+                                borderColor: colores[tipo_actividad],
+                                location: propuestas,
+                                raw: usuario_actual,
+                                state: 0
+                            };
+
+                            cal.createSchedules([schedule]);
+
+                            refrescaCalendario();
+                            if (valor == 1) {
+                                $("#observacion").val("");
+                                $("#actividad").val("");
+                                $("#observacion")[0].focus();
+                            } else {
+                                limpiar_campos();
+                                $("#m_central").modal("hide");
+                            }
+                        } else {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                            return false;
+                        }
+                    },
+                });
+            //});
+        } else {
+            Swal.fire({
+                title: "Alerta",
+                text: "Faltan campos",
+                type: "info",
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Aceptar",
+            })
+        }
+    }
+
+    function actividades_vendedor(valor) {
+        $.ajax(
+        {
+            type: "GET",
+            dataType: "json",
+            url: "@Url.Content("~/Calendario/ListarActividades")",
+            data: "&user="+valor,
+            cache: false,
+            success: function (datos) {
+                if (datos.resultado) {
+                    arr_actividades.length = 0;
+                    ScheduleList.length = 0;
+                    arr_actividades = datos.calendarios.Data;
+                    carga_inicial();
+                }
+            },
+        });
+    }
+
+    function actualizar_tarea() {
+        var tipo_actividad = $("#tipo_actividad").val();
+        var fecha_desde = $("#fecha_desde").val();
+        var fecha_hasta = $("#fecha_hasta").val();
+        var observacion = $("#observacion").val().trim();
+        var actividad = $("#actividad").val().trim();
+        var propuestas = $("#propuestas").val();
+        var id_tarea = $("#id_tarea").val();
+        var estatus = $("#estatus").val();
+        var respuesta = $("#respuesta").val();
+        var usuario_actual = $("#usuario_actual").val();
+
+        if ((propuestas != "") && (fecha_desde != "") && (fecha_hasta != "") && (tipo_actividad != "") && (actividad != "") && (observacion != "") && (id_tarea != "") && (usuario_actual != "")) {
+            var fecha_inicial = fecha_valida(fecha_desde);
+            var fecha_final = fecha_valida(fecha_hasta);
+
+            var bandera = compara_fecha(fecha_inicial, fecha_final);
+
+            if (!bandera) {
+                Swal.fire({
+                    title: "Alerta",
+                    text: "Fechas incorrectas",
+                    type: "warning",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Aceptar",
+                });
+                return false;
+            }
+
+            Swal.fire({
+                title: "Actualizar",
+                text: "¿Desea actualizar la actividad "+id_tarea+"?",
+                type: "question",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                cancelButtonClass: "btn-secondary",
+                confirmButtonText: "SI",
+                cancelButtonText: "NO",
+            }).then((result) => {
+                if (result.value) {
+                    var parametros = "&tipo_actividad=" + tipo_actividad;
+                    parametros += "&propuestas=" + propuestas;
+                    parametros += "&fecha_desde=" + fecha_desde;
+                    parametros += "&fecha_hasta=" + fecha_hasta;
+                    parametros += "&actividad=" + actividad;
+                    parametros += "&id_cronograma=" + id_tarea;
+                    parametros += "&observacion=" + observacion;
+                    parametros += "&usuario=" + usuario_actual;
+                    parametros += "&respuesta=" + respuesta;
+                    parametros += "&estatus="+estatus;
+
+                    $.ajax(
+                    {
+                        type: "POST",
+                        dataType: "json",
+                        url: "@Url.Content("~/Calendario/Actualizar")",
+                        data: parametros,
+                        cache: false,
+                        success: function (datos) {
+                            if (datos.resultado) {
+                                arr_actividades.length = 0;
+                                ScheduleList.length = 0;
+                                arr_actividades = datos.calendarios.Data;
+                                carga_inicial();
+                                limpiar_campos();
+                                $("#m_central").modal("hide");
+                            } else {
+                                Swal.fire({
+                                    title: "Alerta",
+                                    text: datos.error,
+                                    type: "error",
+                                    confirmButtonClass: "btn-danger",
+                                    confirmButtonText: "Aceptar",
+                                });
+                            }
+                        },
+                    });
+                }
+            });
+        } else {
+            Swal.fire({
+                title: "Alerta",
+                text: "Faltan campos",
+                type: "info",
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Aceptar",
+            })
+        }
+    }
+
+    function borrar_tarea() {
+        var id_tarea = $("#id_tarea").val();
+        var tipo_actividad = $("#tipo_actividad").val();
+        Swal.fire({
+            title: "Eliminar",
+            text: "¿Desea eliminar la actividad "+id_tarea+"?",
+            type: "question",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            cancelButtonClass: "btn-secondary",
+            confirmButtonText: "SI",
+            cancelButtonText: "NO",
+        }).then((result) => {
+            if (result.value) {
+                var parametros = "&id_cronograma="+id_tarea;
+                $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    url: "@Url.Content("~/Calendario/Eliminar")",
+                    data: parametros,
+                    cache: false,
+                    success: function (datos) {
+                        if (datos.resultado) {
+                            arr_actividades.length = 0;
+                            ScheduleList.length = 0;
+                            arr_actividades = datos.calendarios.Data;
+                            carga_inicial();
+                            limpiar_campos();
+                            $("#m_central").modal("hide");
+                        } else {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                        }
+                    },
+                });
+            }
+        });
+    }
+
+    function ActualizarDragado(event) {
+        var parametros = "&tipo_actividad=" + event.schedule.calendarId;
+        parametros += "&propuestas=" + event.schedule.location;
+        parametros += "&fecha_desde=" + FormatoFecha(event.changes.start,false);
+        parametros += "&fecha_hasta=" + FormatoFecha(event.changes.end,false);
+        parametros += "&actividad=" + event.schedule.body;
+        parametros += "&id_cronograma=" + event.schedule.id;
+        parametros += "&observacion=" + event.schedule.title;
+        parametros += "&usuario=0";
+        parametros += "&estatus=0";
+
+        $.ajax(
+        {
+            type: "POST",
+            dataType: "json",
+            url: "@Url.Content("~/Calendario/Actualizar")",
+            data: parametros,
+            cache: false,
+            success: function (datos) {
+                if (datos.resultado) {
+                    //cal.updateSchedule(event.schedule.id, event.schedule.calendarId, event.changes);
+                    arr_actividades.length = 0;
+                    ScheduleList.length = 0;
+                    arr_actividades = datos.calendarios.Data;
+                    carga_inicial();
+                } else {
+                    Swal.fire({
+                        title: "Alerta",
+                        text: datos.error,
+                        type: "error",
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Aceptar",
+                    });
+                }
+            },
+        });
+    }
+
+    function fecha_valida(fecha) {
+        var arr_inicial = fecha.split(" ");
+        var arr2_inicial = arr_inicial[0].split("-");
+        arr2_inicial = arr2_inicial[2] + "-" + arr2_inicial[1] + "-" + arr2_inicial[0];
+        var hora_inicial = arr_inicial[1].split(":");
+        if (arr_inicial[2] == "PM") hora_inicial[0] = parseInt(hora_inicial[0]) + 12;
+        return arr2_inicial + " " + hora_inicial[0] + ":" + hora_inicial[1];
+    }
+
+    function fecha_calendario(fecha) {
+        var arr_inicial = fecha.split(" ");
+        var arr2_inicial = arr_inicial[0].split("/");
+        arr2_inicial = arr2_inicial[2] + "-" + arr2_inicial[1] + "-" + arr2_inicial[0];
+        var hora_inicial = arr_inicial[1].split(":");
+
+        return arr2_inicial + " " + hora_inicial[0] + ":" + hora_inicial[1];
+    }
+
+    function limpiar_campos() {
+        desbloquea_campos();
+        $("#modal_header")[0].style.backgroundColor = "#FFF";
+        $("#modal_header")[0].style.color = "#000";
+        $("#tipo_actividad").val("");
+        $("#respuesta").val("");
+        $("#fecha_desde").val("");
+        $("#fecha_hasta").val("");
+        $("#observacion").val("");
+        $("#actividad").val("");
+        $('#propuestas').val([]).trigger('change');
+        $("#id_tarea").val("0");
+    }
+
+    function refrescaCalendario() {
+        var calendarElements = Array.prototype.slice.call(document.querySelectorAll('#calendarList input'));
+
+        CalendarList.forEach(function(calendar) {
+            cal.toggleSchedules(calendar.id, !calendar.checked, false);
+        });
+
+        cal.render(true);
+
+        calendarElements.forEach(function(input) {
+            var span = input.nextElementSibling;
+            span.style.backgroundColor = input.checked ? span.style.borderColor : 'transparent';
+        });
+    }
+
+    function compara_fecha(f1, f2) {
+        var bandera = false;
+
+        var arr1 = f1.replace(/-| |:/g, "");
+        var arr2 = f2.replace(/-| |:/g, "");
+
+        if (arr2 > arr1) bandera = true;
+
+        if ($("#total_horas").val() <= 0) bandera = false;
+
+        return bandera;
+    }
+
+    function recorrido_filtrado() {
+        cal.clear();
+        ScheduleList.length = 0;
+
+        //console.log(arr_actividades2);
+        for (i = 0; i < arr_actividades2.length; i++) {
+            var schedule = new ScheduleInfo();
+            schedule.id = arr_actividades2[i].id_cronograma;
+            schedule.calendarId = arr_actividades2[i].id_tipoActividad;
+
+            schedule.title = arr_actividades2[i].observacion.substr(0, 30);
+            schedule.body = arr_actividades2[i].descripcion;
+            if (arr_actividades2[i].estatus == "0") {
+                schedule.isReadOnly = true;
+                schedule.bgColor = "#28a745";
+                schedule.borderColor = "#28a745";
+            } else if (arr_actividades2[i].estatus == "2") {
+                schedule.isReadOnly = false;
+                schedule.bgColor = "#bf0303";
+                schedule.borderColor = "#bf0303";
+            } else {
+                schedule.isReadOnly = false;
+                schedule.bgColor = colores[arr_actividades2[i].id_tipoActividad];
+                schedule.borderColor = colores[arr_actividades2[i].id_tipoActividad];
+            }
+
+            var myDate = new Date(parseInt(arr_actividades2[i].fecha_inicial.substr(6)));
+            var fecha1 = myDate;
+            myDate = new Date(parseInt(arr_actividades2[i].fecha_final.substr(6)));
+            var fecha2 = myDate;
+            schedule.start = fecha1;
+            schedule.end = fecha2;
+            schedule.propuesta = arr_actividades2[i].id_oportunidad;
+            schedule.location = arr_actividades2[i].id_oportunidad;
+            schedule.isPrivate = false;
+            schedule.attendees = '';
+            schedule.recurrenceRule = '';
+            schedule.color = "#000";
+            schedule.dragBgColor = "#123456";
+            schedule.state = arr_actividades2[i].estatus;
+
+            schedule.category = 'time';
+            ScheduleList.push(schedule);
+        }
+
+        cal.createSchedules(ScheduleList);
+
+        refrescaCalendario();
+    }
+
+    function carga_inicial() {
+        /*if (typeof  cal == 'undefined') {
+            console.log("error");
+            //location.reload();
+            return false;
+        }*/
+        cal.clear();
+        //generateSchedule(cal.getViewName(), cal.getDateRangeStart(), cal.getDateRangeEnd());
+
+        if ($("#rol").val() == "ADMINISTRADOR") {
+            var usuario_actual = $("#usuario_actual")[0];
+            var vendedores = $("#vendedores")[0];
+            var usuarioOP = $("#idUsuario")[0];
+            usuarioOP.length = 0;            
+
+            usuario_actual.length = 0;
+            usuario_actual[0] = new Option("Seleccione", "", "", "");
+            vendedores.length = 0;
+            vendedores[0] = new Option("Todos", "", "", "");
+            var y = 0;
+            for (var i = 0; i < arr_usuarios.length; i++) {
+                usuario_actual[i + 1] = new Option(arr_usuarios[i].nombreUser + " - " + arr_usuarios[i].Rol, arr_usuarios[i].alias, "", "");
+                usuarioOP[i + 1] = new Option(arr_usuarios[i].alias + " (" + arr_usuarios[i].Rol + ")", arr_usuarios[i].alias, "", "");
+                if (arr_usuarios[i].Rol == "VENDEDOR") {
+                    vendedores[y + 1] = new Option(arr_usuarios[i].nombreUser, arr_usuarios[i].alias, "", "");
+                    y++;
+                }
+            }
+            $("#idUsuario").val("@ViewBag.usuario_actual");
+        }
+
+        for (i = 0; i < arr_actividades.length; i++) {
+            var schedule = new ScheduleInfo();
+            schedule.id = arr_actividades[i].id_cronograma;
+            schedule.calendarId = arr_actividades[i].id_tipoActividad;
+            schedule.Usuario = arr_actividades[i].USU_CODIGO;
+            schedule.title = arr_actividades[i].observacion.substr(0,30);
+            schedule.body = arr_actividades[i].descripcion;
+            if (arr_actividades[i].estatus == "1") {
+                schedule.isReadOnly = true;
+                schedule.bgColor = "#28a745";
+                schedule.color = "#28a745";
+                schedule.borderColor = "#28a745";
+            } else if (arr_actividades[i].estatus == "2") {
+                schedule.isReadOnly = false;
+                schedule.bgColor = "#bf0303";
+                schedule.borderColor = "#bf0303";
+            } else {
+                schedule.isReadOnly = false;
+                schedule.bgColor = colores[arr_actividades[i].id_tipoActividad];
+                schedule.borderColor = colores[arr_actividades[i].id_tipoActividad];
+            }
+
+            var myDate = new Date(parseInt(arr_actividades[i].fecha_inicial.substr(6)));
+            var fecha1 = myDate;
+            myDate = new Date(parseInt(arr_actividades[i].fecha_final.substr(6)));
+            var fecha2 = myDate;
+            schedule.start = fecha1;
+            schedule.end = fecha2;
+            schedule.propuesta = arr_actividades[i].id_oportunidad;
+            schedule.location = arr_actividades[i].id_oportunidad;
+            schedule.isPrivate = false;
+            schedule.attendees = '';
+            schedule.recurrenceRule = '';
+            schedule.color = "#000";
+            schedule.dragBgColor = "#123456";
+            schedule.state = arr_actividades[i].estatus;
+            schedule.raw = arr_actividades[i].USU_CODIGO;
+            schedule.category = 'time';
+            ScheduleList.push(schedule);
+        }
+
+        cal.createSchedules(ScheduleList);
+
+        refrescaCalendario();
+        if (parametro != "") abrir_modalp(parametro);
+    }
+
+    $('#boton_modal_nuevaOp').on('click', function () {
+        cargarPotencial();
+        cargarFidelizado();
+        cargarEstado();
+        cargarMoneda();
+    });
+
+    function cargarPotencial() {
+        $.ajax({
+            url: "@Url.Content("~/Flujo/cargarPotencial")",
+            dataType: "json",
+        type: 'GET',
+        cache: false,
+        success: function (data) {
+
+
+            var potencial = $("#clientePot")[0];
+            potencial.length = 0;
+
+
+            for (i = 0; i < data.potencial.length; i++) {
+                potencial[i + 1] = new Option(data.potencial[i].CNOMCLI, data.potencial[i].CCODCLI, "", "");
+            }}
+        })
+    };
+
+    function cargarFidelizado() {
+        $.ajax({
+            url: "@Url.Content("~/Flujo/cargarFidelizado")",
+            dataType: "json",
+        type: 'GET',
+        cache: false,
+        success: function (data) {
+
+
+            var fidelizado = $("#clienteFi")[0];
+            fidelizado.length = 0;
+
+
+            for (i = 0; i < data.fidelizado.length; i++) {
+                fidelizado[i + 1] = new Option(data.fidelizado[i].CNOMCLI, data.fidelizado[i].CCODCLI, "", "");
+            }}
+        })
+    };
+
+    function cargarEstado() {
+        $.ajax({
+            url: "@Url.Content("~/Flujo/cargarEstado")",
+            dataType: "json",
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+
+
+                var estados = $("#idEstadoOp")[0];
+                estados.length = 0;
+
+
+                for (i = 0; i < data.estados.length; i++) {
+                    estados[i + 1] = new Option(data.estados[i].decripcion, data.estados[i].id_estadoOportunidad, "", "");
+                }
+                $("#idEstadoOp").val('1');
+            }
+        })
+    };
+    function cargarMoneda() {
+        $.ajax({
+            url: "@Url.Content("~/Flujo/cargarMoneda")",
+            dataType: "json",
+        type: 'GET',
+        cache: false,
+        success: function (data) {
+
+
+            var moneda = $("#tipoMoneda")[0];
+            moneda.length = 0;
+
+
+            for (i = 0; i < data.moneda.length; i++) {
+                moneda[i] = new Option(data.moneda[i].TIPOMON_SIMBOLO, data.moneda[i].TIPOMON_CODIGO, "", "");
+            }
+            $("#tipoMoneda").val("MN");
+            }
+
+
+        })
+    };
+
+    $('#modeCrearClientePot').on('click', function () {
+        cargarDistrito();
+    });
+
+    function cargarDistrito() {
+        $.ajax({
+            url: "@Url.Content("~/Flujo/cargarDistrito")",
+            dataType: "json",
+        type: 'GET',
+        cache: false,
+        success: function (data) {
+
+
+            var distrito = $("#distrito")[0];
+            distrito.length = 0;
+
+
+            for (i = 0; i < data.distrito.length; i++) {
+                distrito[i + 1] = new Option(data.distrito[i].TDESCRI, data.distrito[i].TCLAVE, "", "");
+            }}
+    })
+    };
+
+    $('#cancelarNuevaOp').on('click', function () {
+        cargarDistrito();
+    });
+
+    function limpiar_camposOportunidad() {
+
+        $("[name=idEstadoOp]").val("");
+        $("[name=probabilidad]").val("");
+        $("[name=nombreOp]").val("");
+        $("[name=idEstadoOp]").val("");
+        $('[name=clientePot]').val([]).trigger('change');
+        $('[name=tipoMoneda]').val([]).trigger('change');
+        $('[name=clienteFi]').val([]).trigger('change');
+        $("[name=ingreso]").val("0.00");
+    }
+
+    $("#cuerpo").on('click', '.modal .card .card-header li a', function () {
+        $(this).parent().parent().parent().find("a").each(function () {
+            $(this).removeClass('active');
+            $(this).attr("aria-selected", 'false');
+        });
+
+        var objetivo = $(this).attr("href");
+        $(this).addClass('active');
+        $(this).attr("aria-selected", 'true');
+
+        $(this).parent().parent().parent().parent().parent().parent().find('[role=tabpanel]').each(function () {
+
+            $(this).removeClass('active');
+            $(this).removeClass('show');
+
+
+        });
+
+        $(this).parent().parent().parent().parent().parent().parent().find(objetivo).addClass('active');
+        $(this).parent().parent().parent().parent().parent().parent().find(objetivo).addClass('show');
+    });
+
+
+    $('#range_5').ionRangeSlider({
+        min: 0,
+        max: 100,
+        type: 'single',
+        step: 1,
+        postfix: ' %',
+        prettify: false,
+        hasGrid: true
+    });
+
+    $("#modal_nuevaOp").on('mouseenter', ".prioridad_estrella", function () {
+
+
+        $(this).parent().find('#prio1').removeClass("fas fa-star");
+        $(this).parent().find('#prio1').addClass("far fa-star");
+        $(this).parent().find('#prio2').removeClass("fas fa-star");
+        $(this).parent().find('#prio2').addClass("far fa-star");
+        $(this).parent().find('#prio3').removeClass("fas fa-star");
+        $(this).parent().find('#prio3').addClass("far fa-star");
+        $(this).removeClass("fas fa-star");
+        $(this).addClass("far fa-star");
+
+        $(this).attr("style", "color: #000;");
+        $(this).parent().find('#prio1').attr("style", "color: #000;");
+        $(this).parent().find('#prio2').attr("style", "color: #000;");
+        $(this).parent().find('#prio3').attr("style", "color: #000;");
+
+        valor = $(this).attr("data-index");
+        $(this).parent().find('#prioridad').attr("value", '0')
+        if (valor == 1) {
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+        if (valor == 2) {
+            $(this).parent().find('#prio1').removeClass("far fa-star");
+            $(this).parent().find('#prio1').addClass("fas fa-star");
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).parent().find('#prio1').attr("style", "color: rgb(255, 149, 0)");
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+        if (valor == 3) {
+            $(this).parent().find('#prio1').removeClass("far fa-star");
+            $(this).parent().find('#prio1').addClass("fas fa-star");
+            $(this).parent().find('#prio2').removeClass("far fa-star");
+            $(this).parent().find('#prio2').addClass("fas fa-star");
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).parent().find('#prio1').attr("style", "color: rgb(255, 149, 0)");
+            $(this).parent().find('#prio2').attr("style", "color: rgb(255, 149, 0)");
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+    });
+
+    $("#modal_nuevaOp").on('mouseleave', ".prioridad_estrella", function () {
+
+        Prioridad = $(this).parent().find('#prioridad').attr("value");
+        if (Prioridad == 0) {
+            valor = $(this).attr("data-index");
+            if (valor == 1) {
+                $(this).removeClass("fas fa-star");
+                $(this).addClass("far fa-star");
+
+                $(this).attr("style", "color: #000;");
+            }
+            if (valor == 2) {
+                $(this).parent().find('#prio1').removeClass("fas fa-star");
+                $(this).parent().find('#prio1').addClass("far fa-star");
+                $(this).removeClass("fas fa-star");
+                $(this).addClass("far fa-star");
+
+                $(this).attr("style", "color: #000;");
+                $(this).parent().find('#prio1').attr("style", "color: #000;");
+
+            }
+            if (valor == 3) {
+                $(this).parent().find('#prio1').removeClass("fas fa-star");
+                $(this).parent().find('#prio1').addClass("far fa-star");
+                $(this).parent().find('#prio2').removeClass("fas fa-star");
+                $(this).parent().find('#prio2').addClass("far fa-star");
+                $(this).removeClass("fas fa-star");
+                $(this).addClass("far fa-star");
+
+                $(this).attr("style", "color: #000;");
+                $(this).parent().find('#prio1').attr("style", "color: #000;");
+                $(this).parent().find('#prio2').attr("style", "color: #000;");
+            }
+        }
+
+
+    });
+
+
+
+    $("#modal_nuevaOp").on('click', ".prioridad_estrella", function () {
+
+
+        valor = $(this).attr("data-index");
+        $(this).parent().find('#prioridad').attr("value", valor)
+
+        if (valor == 1) {
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+        if (valor == 2) {
+            $(this).parent().find('#prio1').removeClass("far fa-star");
+            $(this).parent().find('#prio1').addClass("fas fa-star");
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).parent().find('#prio1').attr("style", "color: rgb(255, 149, 0)");
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+        if (valor == 3) {
+            $(this).parent().find('#prio1').removeClass("far fa-star");
+            $(this).parent().find('#prio1').addClass("fas fa-star");
+            $(this).parent().find('#prio2').removeClass("far fa-star");
+            $(this).parent().find('#prio2').addClass("fas fa-star");
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).parent().find('#prio1').attr("style", "color: rgb(255, 149, 0)");
+            $(this).parent().find('#prio2').attr("style", "color: rgb(255, 149, 0)");
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+    });
+
+    $('[name=Ingreso]').blur('input', function (event) {
+        event.target.value = event.target.valueAsNumber.toFixed(2)
+    });
+
+    var idEstado = $(this).parent().parent().parent().parent().find(".estado").attr("id");
+    var nomEstado = $(this).parent().parent().parent().parent().find(".card-titulo").html();
+    $('input[name=idEstadoOp]').attr("value", idEstado);
+    $('input[name=nombreEstado]').attr("value", nomEstado);
+
+
+    $("input[name='tipoContacto']").change(function () {
+
+
+        if (this.id == "ind_radio") {
+
+
+            $("#contenidoTipo").find('#tipo').val(0);
+            $("#contenidoTipo").find('#potencial').removeClass('hidden');
+            $("#contenidoTipo").find("#clientePot").attr('required', 'required')
+            $("#contenidoTipo").find("#clienteFi").removeAttr('required')
+            $("#contenidoTipo").find('#fidelizado').addClass('hidden');
+
+
+        } else {
+
+            $("#contenidoTipo").find('#tipo').val(1);
+            $("#contenidoTipo").find('#fidelizado').removeClass('hidden');
+            $("#contenidoTipo").find("#clienteFi").attr('required', 'required')
+            $("#contenidoTipo").find("#clientePot").removeAttr('required')
+            $("#contenidoTipo").find('#potencial').addClass('hidden');
+
+        }
+
+
+    });
+
+    $("#modal_crearPotencial").find('select[name=tipoDoc]').change(function () {
+        var tipoDoc = $(this).val();
+
+
+        if (tipoDoc == 1 || tipoDoc == 2 || tipoDoc == 3) {
+
+            $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "text");
+            $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "text");
+            $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "text");
+            $(this).parent().parent().parent().parent().find('input#sNombre').attr("type", "text");
+            $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "hidden");
+
+        } else {
+
+            $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "hidden");
+            $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "hidden");
+            $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "hidden");
+            $(this).parent().parent().parent().parent().find('input#sNombre').attr("type", "hidden");
+            $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "text");
+
+
+        }
+    });
+
+    //Para crear Contacto nuevo
+    $("#cuerpo").on('click', "[id=agregarContacto]", function () {
+
+        $(this).addClass('disabled')
+        var cadena = `
+                                                     <tr id="Nuevo">
+                                                        <td class="align-middle columnaContacto">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75 infoContacto" id="CONTACTO" name="CONTACTO">
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75 " id="AREA" name="AREA" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CARGO" name="CARGO" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CORREO" name="CORREO" >
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="TELEFONO" name="TELEFONO" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="exampleInputPassword1" name="CELULAR" >
+                                                        </td>
+
+                                                        <td class ="align-middle">
+                                                            <div class ="row justify-content-around text-center">
+                                                                <div class ="col-auto">
+                                                                    <a id="guardarNuevoContacto" class ="btn btn-xs btn-success"><i class ="fas fa-check text-white"></i></a>
+
+                                                                </div>
+                                                                <div class ="col-auto">
+
+                                                                    <a id="removerNuevoContacto" class ="btn btn-xs btn-danger"><i class ="fas fa-times text-white"></i></a>
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                `
+
+        var CodCli = $(this).parent().find("table").attr('id');
+        var tipoCliente = $(this).parent().find("table").attr('tipoCliente');
+        var UltimoCod = $(this).parent().find('table tbody tr#guardado:last [name=COD_CONTACTO]').val();
+        var Codigo = parseInt(UltimoCod) + parseInt("1");
+        if (UltimoCod == null) {
+            Codigo = 1;
+        }
+
+        $(this).parent().find('table tbody').append(cadena);
+
+        $(this).parent().find("#removerNuevoContacto").click(function (event) { $(this).parent().parent().parent().parent().remove(); $("#cuerpo").find("#agregarContacto").removeClass('disabled'); });
+        $(this).parent().find("#guardarNuevoContacto").click(function (event) {
+
+
+            var paso = 1;
+            var Cadena = `<tr id="guardado">`
+
+            var dataNuevoContacto = "{COD_CLIENTE: '" + CodCli + "', COD_CONTACTO: '" + Codigo + "',";
+
+            //recorre todos los input de contacto nuevo
+            $(this).parent().parent().parent().parent().find("td [name]").each(function () {
+                if ($(this).attr("name") == 'CONTACTO' && $(this).val() == '') {
+                    toastr.warning("el campo contacto debe estar lleno");
+                    paso = 0;
+                } else {
+                    //para crear la cadena a mostrar
+                    if ($(this).attr("name") == 'CONTACTO') {
+                        Cadena += `<td class ="align-middle"><p id="infoContacto" class="m-0">` + $(this).val() + `</p><input type="hidden" class ="form-control mw-75" id="COD_CLIENTE" name="COD_CLIENTE" value="` + CodCli + `">`;
+                        Cadena += `<input type="hidden" class ="form-control mw-75 infoCli" id="tipoCli"  name="tipoCli" value="` + tipoCliente + `"><input type="hidden" class ="form-control mw-75" id="COD_CONTACTO" name="COD_CONTACTO" value="` + Codigo + `">`;
+                        Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="exampleInputPassword1" name="CONTACTO" value="` + $(this).val() + `">`;
+                        Cadena += `</td>`
+                    } else {
+                        Cadena += `<td class ="align-middle"><p id="infoContacto" class="m-0">` + $(this).val() + `</p>`;
+
+                        Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="exampleInputPassword1" name="` + $(this).attr('name') + `" value="` + $(this).val() + `"></td>`
+
+                    }
+                    if ($(this).attr("name") == 'CELULAR') {
+                        dataNuevoContacto += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                    } else {
+                        dataNuevoContacto += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                    }
+                }
+
+            });
+
+            dataNuevoContacto += "}";
+
+            if (paso == 1) {
+                if (tipoCliente == 0) {
+                    var urlNuevoContacto = "@Url.Action("nuevoContactoPot", "Flujo")";
+                    var json = eval("(" + dataNuevoContacto + ')');
+
+                    $.post(urlNuevoContacto, json);
+
+
+                    Cadena += `<td class ="align-middle"><div class ="row justify-content-around text-center"><div class ="col-auto"><a id="editarContacto" class="btn btn-xs btn-primary  pl-1 pr-1"><i class="fas fa-user-edit text-white"></i></a><a id="guardarEditado" class="btn btn-xs btn-success hidden"><i class="fas fa-check text-white"></i></a></div><div class ="col-auto"><a id="eliminarContacto" class ="btn btn-xs btn-danger"><i class ="far fa-trash-alt text-white"></i></a></div></div></td></tr>`
+
+
+
+                    $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find('table tbody').append(Cadena);
+                    $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find("#agregarContacto").removeClass('disabled');
+                    $(this).parent().parent().parent().parent().remove();
+
+                } else {
+                    var urlNuevoContacto = "@Url.Action("nuevoContactoFi", "Flujo")";
+                    var json = eval("(" + dataNuevoContacto + ')');
+
+                    $.post(urlNuevoContacto, json);
+
+                    Cadena += `<td class ="align-middle"><div class ="row justify-content-around text-center"><div class ="col-auto"><a id="editarContacto" class="btn btn-xs btn-primary  pl-1 pr-1"><i class="fas fa-user-edit text-white"></i></a><a id="guardarEditado" class="btn btn-xs btn-success hidden"><i class="fas fa-check text-white"></i></a></div><div class ="col-auto"><a id="eliminarContacto" class ="btn btn-xs btn-danger"><i class ="far fa-trash-alt text-white"></i></a></div></div></td></tr>`
+
+
+                    $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find('table tbody').append(Cadena);
+                    $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find("#agregarContacto").removeClass('disabled');
+                    $(this).parent().parent().parent().parent().remove();
+                }
+            }
+        });
+
+    });
+
+    //para editar cada contacto
+
+    $("#cuerpo").on('click', '#formEditarCli tr td [id=guardarEditado]', function () {
+
+        var paso = 1;
+        var Cadena = `<tr id="guardado">`
+        var CodCli = $(this).parent().parent().parent().parent().find("[name=COD_CLIENTE]").val()
+        var Codigo = $(this).parent().parent().parent().parent().find("td [name=COD_CONTACTO]").val();
+        var tipoCliente = $(this).parent().parent().parent().parent().find('[name=tipoCli]').val();
+        var data = "{COD_CLIENTE: '" + CodCli + "', COD_CONTACTO: '" + Codigo + "',";
+
+        //recorre todos los input de contacto nuevo
+        $(this).parent().parent().parent().parent().find("td [name]").each(function () {
+            if ($(this).attr("name") == 'CONTACTO' && $(this).val() == '') {
+                alert("el campo contacto debe estar lleno");
+                paso = 0;
+            } else {
+                //para crear la cadena a mostrar
+                if ($(this).attr("name") == 'COD_CONTACTO' || $(this).attr("name") == 'COD_CLIENTE' || $(this).attr("name") == 'tipoCli') {
+
+                } else {
+                    $(this).parent().find('[id=infoContacto]').html($(this).val())
+                    $(this).parent().find('[id=infoContacto]').removeClass('hidden')
+                    $(this).attr('type', 'hidden');
+                }
+                if ($(this).attr("name") == 'CELULAR') {
+                    data += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                } else {
+                    data += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                }
+            }
+        });
+
+        data += "}";
+
+        if (paso == 1) {
+            if (tipoCliente == 0) {
+                var urlEditarContacto = "@Url.Action("editarContactoPot", "Flujo")";
+                var json = eval("(" + data + ')');
+
+                $.post(urlEditarContacto, json)
+
+
+                $('#modal_editarClientePot').find('[id=guardarEditado]').addClass('hidden');
+                $('#modal_editarClientePot').find('[id=editarContacto]').removeClass('hidden');
+            } else {
+                var urlEditarContacto = "@Url.Action("editarContactoFi", "Flujo")";
+                var json = eval("(" + data + ')');
+
+                $.post(urlEditarContacto, json)
+
+                $('#modal_editarClienteFi').find('[id=guardarEditado]').addClass('hidden');
+                $('#modal_editarClienteFi').find('[id=editarContacto]').removeClass('hidden');
+            }
+
+        }
+    });
+
+    //click al boton editar contacto
+
+    $("#cuerpo").on('click', 'tr td [id=editarContacto]', function () {
+        $(this).addClass('hidden');
+        $(this).parent().find('#guardarEditado').removeClass('hidden');
+        $(this).parent().parent().parent().parent().find("td").each(function () {
+            $(this).find('p').addClass('hidden');
+            if ($(this).find('.infoContacto').attr('name') == 'COD_CLIENTE' || $(this).find('.infoContacto').attr('name') == 'COD_CONTACTO') {
+
+            } else {
+
+                $(this).find('.infoContacto').attr('type', 'text');
+
+            }
+
+        });
+        $(this).parent().parent().parent().parent().find('[name=CONTACTO]').attr('type', 'text');
+    });
+
+
+    //click al boton eliminar contacto
+
+    $("#cuerpo").on('click', '#formEditarCli tr td [id=eliminarContacto]', function () {
+
+        var CodCli = $(this).parent().parent().parent().parent().find("[name=COD_CLIENTE]").val()
+        var Codigo = $(this).parent().parent().parent().parent().find("td [name=COD_CONTACTO]").val();
+        var tipoCliente = $(this).parent().parent().parent().parent().find('[name=tipoCli]').val();
+        var data = "{COD_CLIENTE:'" + CodCli + "', COD_CONTACTO:'" + Codigo + "'}";
+
+        if (tipoCliente == 0) {
+            var urlEliminarContacto = "@Url.Action("EliminarContactoPot", "Flujo")";
+            var json = eval("(" + data + ')');
+            var elemento = $(this);
+            $.ajax({
+                url: urlEliminarContacto,
+                data: json,
+                type: 'POST',
+
+                success: function (datos) {
+
+                    elemento.parent().parent().parent().parent().remove();
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+
+
+
+
+        } else {
+            var urlEliminarContacto = "@Url.Action("EliminarContactoFi", "Flujo")";
+            var json = eval("(" + data + ')');
+            var elemento = $(this);
+            $.ajax({
+                url: urlEliminarContacto,
+                data: json,
+                type: 'POST',
+
+                success: function (datos) {
+
+                    elemento.parent().parent().parent().parent().remove();
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+        }
+
+
+    });
+
+
+    $("#cuerpo").on('change', 'select[name=clienteFi]', function () {
+
+        $("#cuerpo").find("#modal_editarClienteFi").remove();
+        //se agrega el campo de editar con la información del cliente
+        var url = "@Url.Action("infoCliente", "Flujo")";
+        var tipoCli = $("#contenidoTipo").find('#tipo').val();
+        var codCli = $(this).val();
+        var data = { cliente: codCli, tipoCli: tipoCli };
+
+
+
+        $.ajax({
+            url: url,
+            data: data,
+            type: 'POST',
+
+            success: function (datos) {
+
+                $("#cuerpo").append(datos);
+
+            },
+            error: function (error) {
+                toastr.error('Algo salio mal.')
+
+            },
+
+        });
+
+
+        $(this).parent().parent().attr("class", "col-11 p-0");
+        $(this).parent().parent().parent().find("#editar").removeClass('hidden');
+
+
+
+
+
+
+
+    });
+    $("#cuerpo").on('change', 'select[name=clientePot]', function () {
+
+
+        $("#cuerpo").find("#modal_editarClientePot").remove();
+        //se agrega el campo de editar con la información del cliente
+        var url = "@Url.Action("infoCliente", "Flujo")";
+        var tipoCli = $("#contenidoTipo").find('#tipo').val();
+        var codCli = $(this).val();
+        var data = { cliente: codCli, tipoCli: tipoCli };
+
+
+
+        $.ajax({
+            url: url,
+            data: data,
+            type: 'POST',
+
+            success: function (datos) {
+
+                $("#cuerpo").append(datos);
+
+            },
+            error: function (error) {
+                toastr.error('Algo salio mal.')
+
+            },
+
+        });
+
+
+        $(this).parent().parent().attr("class", "col-11 p-0");
+        $(this).parent().parent().parent().find("#editar").removeClass('hidden');
+
+
+
+
+
+
+
+    });
+
+
+    $("#cuerpo").on('click', '#modeditarClientePot', function () {
+
+
+        $("#modal_editarClientePot").find('select[name=tipoDoc]').change(function () {
+            var tipoDoc = $(this).val();
+
+
+            if (tipoDoc == 1 || tipoDoc == 2 || tipoDoc == 3) {
+                console.log('click')
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "text");
+                $('#formCrearpot').find('[name=CSEGUNDO_NOMBRE]').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "hidden");
+                console.log($('#formCrearpot').find('[name=CSEGUNDO_NOMBRE]'))
+            } else {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "hidden");
+                $('#formCrearpot').find('[name=CSEGUNDO_NOMBRE]').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "text");
+
+
+            }
+        });
+        var urlEditarPot = "@Url.Action("editarPot", "Flujo")";
+
+
+        $("#modal_editarClientePot").on('click', '#editarCliente', function () {
+
+
+            var dataEditar = "{";
+            $("#formEditarCli").find(".infoCliente").each(function () {
+
+
+                if ($(this).attr("name") == 'distrito') {
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                } else {
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                }
+
+            });
+
+            dataEditar += "}";
+            console.log(dataEditar);
+            var json = eval("(" + dataEditar + ')');
+
+            $.ajax({
+                url: urlEditarPot,
+                data: json,
+                type: 'POST',
+
+                success: function (datos) {
+
+
+                    toastr.success("se edito el cliente con éxito");
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+
+
+        });
+    });
+
+    $("#cuerpo").on('click', '#modeditarClienteFi', function () {
+
+
+        $("#modal_editarClienteFi").find('select[name=tipoDoc]').change(function () {
+            var tipoDoc = $(this).val();
+
+
+            if (tipoDoc == 1 || tipoDoc == 2 || tipoDoc == 3) {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#sNombre').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "hidden");
+
+            } else {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#sNombre').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "text");
+
+
+            }
+        });
+        var urlEditarFi = "@Url.Action("editarFidelizado", "Flujo")";
+
+
+        $("#modal_editarClienteFi").on('click', '#editarCliente', function () {
+
+
+            var dataEditar = "{";
+            $("#formEditarCli").find(".infoCliente").each(function () {
+
+
+                if ($(this).attr("name") == 'distrito') {
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                } else {
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                }
+
+            });
+
+            dataEditar += "}";
+            console.log(dataEditar);
+            var json = eval("(" + dataEditar + ')');
+            $.ajax({
+                url: urlEditarFi,
+                data: json,
+                type: 'POST',
+
+                success: function (datos) {
+
+
+                    toastr.success("se edito el cliente con éxito");
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+
+
+        });
+    });
+    //nuevo Contacto Cliente
+
+    $("#modal_crearPotencial").find("#agregarContactoPot").click(function (event) {
+        var CodCli = $("#modal_crearPotencial").find("[name=CCODCLI]").val();
+
+        $(this).addClass('disabled')
+        var cadena = `
+                                                     <tr id="Nuevo">
+                                                        <td class="align-middle columnaContacto">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75 infoContacto" id="CONTACTO" name="CONTACTO">
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75 " id="AREA" name="AREA" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CARGO" name="CARGO" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CORREO" name="CORREO" >
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="TELEFONO" name="TELEFONO" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CELULAR" name="CELULAR" >
+                                                        </td>
+
+                                                        <td class ="align-middle">
+                                                            <div class ="row justify-content-around text-center">
+                                                                <div class ="col-auto">
+                                                                    <a id="guardarNuevoContacto" class ="btn btn-xs btn-success"><i class ="fas fa-check text-white"></i></a>
+
+                                                                </div>
+                                                                <div class ="col-auto">
+
+                                                                    <a id="removerNuevoContacto" class ="btn btn-xs btn-danger"><i class ="fas fa-times text-white"></i></a>
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                `
+
+        var CodCli = $("#agregarContactoPot").find("[name=CCODCLI]").val();
+        var UltimoCod = $(this).parent().find('table tbody tr#guardado:last [name=COD_CONTACTO]').val();
+        var Codigo = parseInt(UltimoCod) + parseInt("1");
+        if (UltimoCod == null) {
+            Codigo = 1;
+        }
+
+        $(this).parent().find('table tbody').append(cadena);
+
+
+
+    });
+    $("#modal_crearPotencial").on('click', "#removerNuevoContacto", function (event) { $("#modal_crearPotencial").find('table tbody tr#Nuevo').remove(); $("#modal_crearPotencial").find("#agregarContactoPot").removeClass('disabled'); });
+    $("#modal_crearPotencial").on('click', "#eliminarContacto", function (event) { $(this).parent().parent().parent().parent().remove(); });
+    $("#modal_crearPotencial").on('click', "#guardarNuevoContacto", function (event) {
+        var CodCli = $("#modal_crearPotencial").find("[name=CCODCLI]").val();
+        var UltimoCod = $("#modal_crearPotencial").find('table tbody tr#guardado:last [id=COD_CONTACTO]').val();
+        var Codigo = parseInt(UltimoCod) + parseInt("1");
+        if (UltimoCod == null) {
+            Codigo = 1;
+        }
+
+        var paso = 1;
+        var Cadena = `<tr id="guardado">`
+
+
+
+        //recorre todos los input de contacto nuevo
+        $(this).parent().parent().parent().parent().find("td [name]").each(function () {
+            if ($(this).attr("id") == 'CONTACTO' && $(this).val() == '') {
+                toastr.warning("el campo contacto debe estar lleno");
+                paso = 0;
+            } else {
+                //para crear la cadena a mostrar
+                if ($(this).attr("id") == 'CONTACTO') {
+                    Cadena += `<td class ="align-middle"><p class="m-0" id="infoContacto">` + $(this).val() + `</p><input type="hidden" contacto="` + Codigo + `" class ="form-control mw-75 infoContacto" id="COD_CLIENTE" name="COD_CLIENTE" value="` + CodCli + `">`;
+                    Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="COD_CONTACTO" contacto="` + Codigo + `" name="COD_CONTACTO" value="` + Codigo + `">`;
+                    Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="CONTACTO" contacto="` + Codigo + `" name="CONTACTO" value="` + $(this).val() + `">`;
+                    Cadena += `</td>`
+                } else {
+                    Cadena += `<td class ="align-middle"><p class="m-0" id="infoContacto">` + $(this).val() + `</p>`;
+
+                    Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="` + $(this).attr('name') + `" contacto="` + Codigo + `" name="` + $(this).attr('name') + `" value="` + $(this).val() + `"></td>`
+
+                }
+            }
+
+        });
+        if (paso == 1) {
+
+
+            Cadena += `<td class ="align-middle"><div class ="row justify-content-around text-center"><div class ="col-auto"><a id="editarContacto" class="btn btn-xs btn-primary  pl-1 pr-1"><i class="fas fa-user-edit text-white"></i></a><a id="guardarEditado" class="btn btn-xs btn-success hidden"><i class="fas fa-check text-white"></i></a></div><div class ="col-auto"><a id="eliminarContacto" class ="btn btn-xs btn-danger"><i class ="far fa-trash-alt text-white"></i></a></div></div></td></tr>`
+
+
+
+            $("#modal_crearPotencial").find('table tbody tr#Nuevo').remove();
+            $("#modal_crearPotencial").find('table tbody').append(Cadena);
+            $("#modal_crearPotencial").find("#agregarContactoPot").removeClass('disabled');
+
+
+        }
+    });
+
+    //para editar cada contacto
+    $("#modal_crearPotencial").on('click', 'tr td [id=guardarEditado]', function () {
+        var paso = 1;
+        var Cadena = `<tr id="guardado">`
+        var CodCli = $("#modal_editarCliente").find("[name=CCODCLI]").val()
+        var Codigo = $(this).find("td [name=COD_CONTACTO]").val();
+
+        //recorre todos los input de contacto nuevo
+        $(this).parent().parent().parent().parent().find("td [name]").each(function () {
+            if ($(this).attr("name") == 'CONTACTO' && $(this).val() == '') {
+                toastr.warning("el campo contacto debe estar lleno");
+                paso = 0;
+            } else {
+                //para crear la cadena a mostrar
+                if ($(this).attr("name") == 'COD_CONTACTO' || $(this).attr("name") == 'COD_CLIENTE') {
+
+                } else {
+                    $(this).parent().find('[id=infoContacto]').html($(this).val())
+                    $(this).parent().find('[id=infoContacto]').removeClass('hidden')
+                    $(this).attr('type', 'hidden');
+                }
+            }
+        });
+
+
+        if (paso == 1) {
+
+            $(this).addClass('hidden');
+            $(this).parent().find('#editarContacto').removeClass('hidden')
+        }
+    });
+
+
+    if(rol!="VENDEDOR") {
+
+
+
+
+    };
+    //Validacion de formulario Crear Prospecto
+    var validar = $('#formCrearpot').validate({
+        rules: {
+            CCODCLI: {
+                required: true,
+                maxlength: 11
+            },
+            CDOCIDEN: {
+                required: true,
+                maxlength: 15,
+                number: true
+
+            },
+            CAPELLIDO_PATERNO: {
+                maxlength: 20,
+
+            },
+            CAPELLIDO_MATERNO: {
+                maxlength: 20,
+
+            },
+            CPRIMER_NOMBRE: {
+                maxlength: 20,
+
+            },
+            CSEGUNDO_NOMBRE: {
+                maxlength: 20,
+
+            },
+            CNOMCLI: {
+                maxlength: 100,
+                required: true
+            },
+            CEMAIL: {
+                email: true
+            },
+            CDIRCLI: {
+                maxlength: 100,
+
+            },
+
+        },
+        messages: {
+            CCODCLI: {
+                required: "El codigo del cliente es requerido",
+                maxlength: "El codigo no puede contener mas de 11 caracteres"
+            },
+            CDOCIDEN: {
+                required: "El documento del cliente es requerido",
+                maxlength: "El documento del cliente no puede contener mas de 15 caracteres",
+                number: "El documento del cliente debe ser númerico"
+
+            },
+            CAPELLIDO_PATERNO: {
+                maxlength: "El apellido paterno no puede contener mas de 20 caracteres",
+
+            },
+            CAPELLIDO_MATERNO: {
+                maxlength: "El apellido materno no puede contener mas de 20 caracteres",
+
+            },
+            CPRIMER_NOMBRE: {
+                maxlength: "El primer nombre no puede contener mas de 20 caracteres",
+
+            },
+            CSEGUNDO_NOMBRE: {
+                maxlength: "El segundo nombre no puede contener mas de 20 caracteres",
+
+            },
+            CNOMCLI: {
+                maxlength: "El nombre del cliente no puede contener mas de 100 caracteres",
+                required: "El nombre del cliente o razon social es requerido",
+            },
+            CEMAIL: {
+                email: "Introduzca un correo valido"
+            },
+            CDIRCLI: {
+                maxlength: "La dirección no puede contener mas de 100 caracteres",
+
+            },
+
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+
+    var settings = {
+
+    };
+
+    
+        /*
+    function buscarSunat(ruc) {
+
+            var data = { ruc: ruc };
+            $.ajax({
+                        "url": "http://www.starsoftweb.com/ServicioSunatRuc/api/PostTraerDatosSunat",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InhoYSIsIm5iZiI6MTU4NDEyMDM2OCwiZXhwIjoxNTg0MTIyMTY4LCJpYXQiOjE1ODQxMjAzNjgsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDQzOTgiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ0Mzk4In0.fZ5vZRUkpkI19WMvvCA8qe3F0FTkE7JKccg9hvVaGu0",
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        "data": {
+            "ruc": "20100163471"
+        }
+                url: "http://www.starsoftweb.com/ServicioSunatRuc/api/PostTraerDatosSunat",
+                dataType: "json",
+                type: 'POST',
+
+                data: data,
+                success: function (datos) {
+                    console.log(datos)
+                },
+                error: function (datos) {
+
+                    Swal.fire({
+                        title: "Alerta",
+                        text: "No se encontro el ruc en el Sunat",
+                        type: "error",
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Aceptar",
+                    });
+                }
+            });
+
+
+    };
+    */
+        $("#modal_crearPotencial").on('click', '#nuevoClientepot', function (event) {
+
+        va = validar.form();
+        event.preventDefault();
+
+     if (va) {
+                        var primero = 0;
+        var CodCli = $("#modal_crearPotencial").find("[name=CCODCLI]").val();
+        var tipoDoc = $("#modal_crearPotencial").find('select[name=tipoDoc]').val();
+        if (tipoDoc == 1 || tipoDoc == 2 || tipoDoc == 3) {
+
+            var ApPaterno = $("#modal_crearPotencial").find('input#apPaterno').val();
+            var ApMaterno = $("#modal_crearPotencial").find('input#apMaterno').val();
+            var Snombre = $("#modal_crearPotencial").find('input#sNombre').val();
+            var Pnombre = $("#modal_crearPotencial").find('input#pNombre').val();
+            $("#modal_crearPotencial").find('input#nombreCli').val("" + ApPaterno + " " + ApMaterno + " " + Pnombre + " "+ Snombre + "")
+
+        }
+
+        if (CodCli == "") {
+            toastr.error("Es necesario llenar el campo del Codigo de cliente.")
+        } else {
+
+            var UltimoCod = $("#modal_crearPotencial").find('table tbody tr#guardado:last [id=COD_CONTACTO]').val();
+            var dataEditar = "{CONTACTO_COBRANZA: '', CCODCLAS: '', CCODTRANS: '',CFLAGPRIN: 'True',";
+            $("#formCrearpot").find(".infoCliente").each(function () {
+                if (UltimoCod == null) {
+                    if ($(this).attr("name") == 'distrito') {
+                        dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                    } else {
+                        dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                    }
+
+                } else {
+
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+
+                }
+            });
+            var longitud = 0;
+            $("#formCrearpot").find(".infoContacto").each(function () {
+                longitud = longitud + 1;
+                //para crear la cadena a mostrar
+                if ($(this).attr("contacto") == 1) {
+                    if ($(this).attr("name") == 'COD_CLIENTE') {
+                        dataEditar += "";
+                    } else {
+                        if ($(this).attr("name") == 'COD_CONTACTO') {
+
+                            dataEditar += "ListadoContactoPot:[{COD_CONTACTO:'" + $(this).val() + "',";
+                        } else {
+                            if ($(this).attr("name") == 'CELULAR') {
+                                dataEditar += "CELULAR:'" + $(this).val() + "'}";
+
+                            } else {
+                                dataEditar += "" + $(this).attr("name") + ":'" + $(this).val() + "',";
+                            }
+                        }
+
+                    }
+
+                } else {
+                    if ($(this).attr("name") == 'COD_CLIENTE') {
+                        dataEditar += ",{";
+                    } else {
+                        if ($(this).attr("name") == 'COD_CONTACTO') {
+                            dataEditar += "COD_CONTACTO:'" + $(this).val() + "',";
+                        } else {
+                            if ($(this).attr("name") == 'CELULAR') {
+                                dataEditar += "CELULAR:'" + $(this).val() + "'}";
+                            } else {
+                                dataEditar += "" + $(this).attr("name") + ":'" + $(this).val() + "',";
+                            }
+                        }
+
+                    }
+
+                }
+
+
+            });
+
+            var urlNuevoClientePot = "@Url.Action("crearPotencial", "Flujo")";
+            if (longitud == 0) {
+                dataEditar += "}";
+            } else {
+                dataEditar += "]}";
+            }
+
+
+            var json = eval("(" + dataEditar + ')');
+
+
+            $.ajax({
+                url: urlNuevoClientePot,
+                dataType: "json",
+                type: 'POST',
+
+                data: json,
+                success: function (datos) {
+                    if (datos.jsonData == null) {
+
+                        if (datos.resultado1 == true && datos.resultado2 == true) {
+
+                            var potencial = $("#clientePot")[0];
+
+                            potencial.length = 0;
+
+                            toastr.success("se creó el cliente con éxito");
+
+
+                            for (i = 0; i < datos.potencial.length; i++) {
+
+                                    potencial[i + 1] = new Option(datos.potencial[i].CNOMCLI, datos.potencial[i].CCODCLI, "", "");
+
+
+                            }
+
+                            $("#modal_crearPotencial").modal("hide");
+
+                            $("#clientePot").val(datos.id);
+                        } else if (datos.resultado1 == true && datos.resultado2 == false) {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                            $("#modal_crearPotencial").modal("hide");
+
+                        } else if (datos.resultado1 == false && datos.resultado2 == false) {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+
+                        }
+
+                    } else {
+
+                        if (datos.jsonData.resultado1 == true && datos.jsonData.resultado2 == true) {
+
+                            var potencial = $("#clientePot")[0];
+
+                            potencial.length = 0;
+
+                            toastr.success("se creó el cliente con éxito");
+
+
+                            for (i = 0; i < datos.potencial.length; i++) {
+                                potencial[i + 1] = new Option(datos.potencial[i].CNOMCLI, datos.potencial[i].CCODCLI, "", "");
+                            }
+
+                            $("#modal_crearPotencial").modal("hide");
+
+                            $("#clientePot").val(datos.jsonData.id);
+                        } else if (datos.jsonData.resultado1 == true && datos.jsonData.resultado2 == false) {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.jsonData.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                            $("#modal_crearPotencial").modal("hide");
+
+                        } else if (datos.jsonData.resultado1 == false && datos.jsonData.resultado2 == false) {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.jsonData.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                        }
+                    }
+
+
+
+
+                },
+                error: function (datos) {
+                 if (datos.resultado1 == true && datos.resultado2 == false) {
+                    Swal.fire({
+                        title: "Alerta",
+                        text: datos.error,
+                        type: "error",
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Aceptar",
+                    });
+                    $("#modal_crearPotencial").modal("hide");
+
+                } else if (datos.resultado1 == false && datos.resultado2 == false) {
+                    Swal.fire({
+                        title: "Alerta",
+                        text: datos.error,
+                        type: "error",
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Aceptar",
+                    });
+                }
+                },
+
+            });
+
+
+
+        }
+     }
+
+
+
+    });
+
+    </script>
+}

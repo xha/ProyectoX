@@ -1,0 +1,211 @@
+﻿@{
+    var jss = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var ListadoCronograma = jss.Serialize(ViewBag.ListadoCronograma);
+}
+
+<div class="content-wrapper">
+        <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2 d-flex justify-content-between">
+                <div class="col-auto">
+                    <h1>Administrador  </h1>
+                </div>
+                <div class="col-auto">
+                    <ol class="breadcrumb float-right">
+                        <li class="breadcrumb-item"> <a href="@Url.Action("Index", "Administrador") ">Inicio</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <!-- Info boxes -->
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Vista Global</span>
+                            <span class="info-box-number">
+                                @ViewBag.cron_retraso Retraso(s)
+
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-danger elevation-1"><i class="nav-icon fas fa-calendar-alt"></i></span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Agenda</span>
+                            <span class="info-box-number">A Realizar @ViewBag.cron_pendiente </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <!-- fix for small devices only -->
+                <div class="clearfix hidden-md-up"></div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-warning elevation-1"><strong>S/.</strong> </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Estimaciones</span>
+                            <span class="info-box-number w-100  ">@ViewBag.cron_sumn <strong>S/.</strong> </span>
+ 
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="info-box mb-3">
+                        <span class="info-box-icon bg-success elevation-1"><strong>$</strong> </span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">Estimaciones</span>                             
+                            <span class="info-box-number w-100 ">@ViewBag.cron_sume $</span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+            </div>
+            <!-- /.row -->
+            <div class="card card-info card-outline">
+                <div class="card-header "><h5>Registros Actuales</h5> </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>@ViewBag.vendedores</h3>
+                                    <p>Usuarios</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-users-cog"></i>
+                                </div>
+                                <a href="@Url.Action("Usuarios","Administrador")" class="small-box-footer">Mas Informacion <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+
+                                    <h3 style="margin-bottom: 4px;">@ViewBag.clientes</h3>
+                                    <p style="margin-bottom: 0px;"> <br /> Clientes</p>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <a href="@Url.Action("Clientes","Administrador")" class="small-box-footer">Mas Informacion <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3 style="margin-bottom: 4px;">@ViewBag.potencial_cliente</h3>
+                                    <p style="margin-bottom: 0px;"> <br /> Prospectos</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <a href="@Url.Action("Prospecto","Administrador")" class="small-box-footer">Mas Informacion <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3>@ViewBag.oportunidades</h3>
+                                    <p>Oportunidades</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <a href="@Url.Action("Lista", "Flujo")" class="small-box-footer">Mas Informacion <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                    </div>
+                </div>
+            </div>
+            <div class="card card-info card-outline">
+                <div class="card-header "><h5>Estadisticas de las actividades planificadas</h5> </div>
+                <div class="card-body" id="graficoAC"></div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<script type="text/javascript">
+    var arr_listado = JSON.parse('@Html.Raw(ListadoCronograma)').Data;
+    
+    if (arr_listado.length > 0) {
+        var interno = new Object();
+        var arr_series = new Array(interno);
+        arr_series.length = 0;
+        for (var i = 0; i < arr_listado.length; i++) {
+            interno = { name: arr_listado[i].Descripcion, data: [parseInt(arr_listado[i].Total)] };
+            arr_series.push(interno);
+        }
+
+        Highcharts.chart('graficoAC', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Estatus de las actividades'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: 'Total año en curso'
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            plotOptions: {
+                series: {
+                    borderWidth: 0,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.y:.0f}'
+                    }
+                }
+            },
+
+            tooltip: {
+                headerFormat: '',
+                pointFormat: '<span style="color:{point.color}">Total</span>: <b>{point.y:.0f}</b>'
+            },
+
+            series: arr_series
+        });
+    }
+</script>

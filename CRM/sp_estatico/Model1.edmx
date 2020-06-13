@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CLIENTES_PORTALESModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="SP_CLIENTE_LOGIN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ruc" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="CLIENTES_PORTALESModelStoreContainer">
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CLIENTES_PORTALESModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CLIENTES_PORTALESEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="SP_CLIENTE_LOGIN" ReturnType="Collection(CLIENTES_PORTALESModel.SP_CLIENTE_LOGIN_Result)">
+          <Parameter Name="ruc" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SP_CLIENTE_LOGIN_Result">
+          <Property Type="Int32" Name="ID_Clientes_Portales" Nullable="false" />
+          <Property Type="String" Name="RUC_Cliente" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Servidor" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Base_Datos" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Usuario_Server" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="Contrasenia_Server" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="FechaCreacion" Nullable="true" Precision="23" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CLIENTES_PORTALESModelStoreContainer" CdmEntityContainer="CLIENTES_PORTALESEntities">
+          <FunctionImportMapping FunctionImportName="SP_CLIENTE_LOGIN" FunctionName="CLIENTES_PORTALESModel.Store.SP_CLIENTE_LOGIN">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CLIENTES_PORTALESModel.SP_CLIENTE_LOGIN_Result">
+                <ScalarProperty Name="ID_Clientes_Portales" ColumnName="ID_Clientes_Portales" />
+                <ScalarProperty Name="RUC_Cliente" ColumnName="RUC_Cliente" />
+                <ScalarProperty Name="Servidor" ColumnName="Servidor" />
+                <ScalarProperty Name="Base_Datos" ColumnName="Base_Datos" />
+                <ScalarProperty Name="Usuario_Server" ColumnName="Usuario_Server" />
+                <ScalarProperty Name="Contrasenia_Server" ColumnName="Contrasenia_Server" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

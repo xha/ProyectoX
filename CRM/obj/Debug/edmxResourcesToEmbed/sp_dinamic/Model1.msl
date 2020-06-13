@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BDWENCOModelStoreContainer" CdmEntityContainer="BDWENCOEntities">
+    <FunctionImportMapping FunctionImportName="SP_EMPRESA_CLIENTE_CRM" FunctionName="BDWENCOModel.Store.SP_EMPRESA_CLIENTE_CRM">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="BDWENCOModel.SP_EMPRESA_CLIENTE_CRM_Result">
+          <ScalarProperty Name="CTEMPRESA" ColumnName="CTEMPRESA" />
+          <ScalarProperty Name="CTUALIAS" ColumnName="CTUALIAS" />
+          <ScalarProperty Name="CTUNOMUSU" ColumnName="CTUNOMUSU" />
+          <ScalarProperty Name="CTUPASSWO" ColumnName="CTUPASSWO" />
+          <ScalarProperty Name="CTUPUNVEN" ColumnName="CTUPUNVEN" />
+          <ScalarProperty Name="CTUTIPUSU" ColumnName="CTUTIPUSU" />
+          <ScalarProperty Name="CTUNROALM" ColumnName="CTUNROALM" />
+          <ScalarProperty Name="CTUFECCRE" ColumnName="CTUFECCRE" />
+          <ScalarProperty Name="CTUUSUARI" ColumnName="CTUUSUARI" />
+          <ScalarProperty Name="CTUSERFAC" ColumnName="CTUSERFAC" />
+          <ScalarProperty Name="CTUSERBOL" ColumnName="CTUSERBOL" />
+          <ScalarProperty Name="CTUSERNC" ColumnName="CTUSERNC" />
+          <ScalarProperty Name="CTUSERND" ColumnName="CTUSERND" />
+          <ScalarProperty Name="CTUSERGUI" ColumnName="CTUSERGUI" />
+          <ScalarProperty Name="CTUPEDIDO" ColumnName="CTUPEDIDO" />
+          <ScalarProperty Name="CTUCOTIZA" ColumnName="CTUCOTIZA" />
+          <ScalarProperty Name="CTUVEND" ColumnName="CTUVEND" />
+          <ScalarProperty Name="CTUSERFACE" ColumnName="CTUSERFACE" />
+          <ScalarProperty Name="CTULOCEMI" ColumnName="CTULOCEMI" />
+          <ScalarProperty Name="CTUPERMARG" ColumnName="CTUPERMARG" />
+          <ScalarProperty Name="CTUPERMPED" ColumnName="CTUPERMPED" />
+          <ScalarProperty Name="CTUPRECVTA" ColumnName="CTUPRECVTA" />
+          <ScalarProperty Name="CT_CONFIGURACION" ColumnName="CT_CONFIGURACION" />
+          <ScalarProperty Name="CTMODIFICA_PRECIO_MINIMO" ColumnName="CTMODIFICA_PRECIO_MINIMO" />
+          <ScalarProperty Name="CTACTIVAR_CLIE" ColumnName="CTACTIVAR_CLIE" />
+          <ScalarProperty Name="CTULIMCRED" ColumnName="CTULIMCRED" />
+          <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+          <ScalarProperty Name="USU_ESTADO" ColumnName="USU_ESTADO" />
+          <ScalarProperty Name="USU_FEC_CREA" ColumnName="USU_FEC_CREA" />
+          <ScalarProperty Name="USU_FEC_INACTIVO" ColumnName="USU_FEC_INACTIVO" />
+          <ScalarProperty Name="FLGACTUALIZAR_VENDEDORES" ColumnName="FLGACTUALIZAR_VENDEDORES" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_EMPRESA_USUARIO_CRM" FunctionName="BDWENCOModel.Store.SP_EMPRESA_USUARIO_CRM">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="BDWENCOModel.SP_EMPRESA_USUARIO_CRM_Result">
+          <ScalarProperty Name="EMP_CODIGO" ColumnName="EMP_CODIGO" />
+          <ScalarProperty Name="TIPODOC_CODIGO" ColumnName="TIPODOC_CODIGO" />
+          <ScalarProperty Name="EMP_RAZON_NOMBRE" ColumnName="EMP_RAZON_NOMBRE" />
+          <ScalarProperty Name="EMP_APELLIDOPAT" ColumnName="EMP_APELLIDOPAT" />
+          <ScalarProperty Name="EMP_APELLIDOMAT" ColumnName="EMP_APELLIDOMAT" />
+          <ScalarProperty Name="EMP_DIRECCION" ColumnName="EMP_DIRECCION" />
+          <ScalarProperty Name="EMP_TELEFONO" ColumnName="EMP_TELEFONO" />
+          <ScalarProperty Name="EMP_FAX" ColumnName="EMP_FAX" />
+          <ScalarProperty Name="EMP_RUC_DOCUMENTO" ColumnName="EMP_RUC_DOCUMENTO" />
+          <ScalarProperty Name="EMP_REPRESENTANTE" ColumnName="EMP_REPRESENTANTE" />
+          <ScalarProperty Name="EMP_DOCUMENTO" ColumnName="EMP_DOCUMENTO" />
+          <ScalarProperty Name="EMP_NIVEL" ColumnName="EMP_NIVEL" />
+          <ScalarProperty Name="EMP_NIV01" ColumnName="EMP_NIV01" />
+          <ScalarProperty Name="EMP_NIV02" ColumnName="EMP_NIV02" />
+          <ScalarProperty Name="EMP_NIV03" ColumnName="EMP_NIV03" />
+          <ScalarProperty Name="EMP_NIV04" ColumnName="EMP_NIV04" />
+          <ScalarProperty Name="EMP_NIV05" ColumnName="EMP_NIV05" />
+          <ScalarProperty Name="EMP_NIV06" ColumnName="EMP_NIV06" />
+          <ScalarProperty Name="EMP_PANTALLA" ColumnName="EMP_PANTALLA" />
+          <ScalarProperty Name="EMP_NUMEAUTO" ColumnName="EMP_NUMEAUTO" />
+          <ScalarProperty Name="EMP_NUMECARAC" ColumnName="EMP_NUMECARAC" />
+          <ScalarProperty Name="EMP_REPORTE" ColumnName="EMP_REPORTE" />
+          <ScalarProperty Name="EMP_ACTIVA" ColumnName="EMP_ACTIVA" />
+          <ScalarProperty Name="EMP_NIV07" ColumnName="EMP_NIV07" />
+          <ScalarProperty Name="EMP_NIV08" ColumnName="EMP_NIV08" />
+          <ScalarProperty Name="EMP_PLANILLAS" ColumnName="EMP_PLANILLAS" />
+          <ScalarProperty Name="EMP_PORTAL_RENDICIONCTA" ColumnName="EMP_PORTAL_RENDICIONCTA" />
+          <ScalarProperty Name="EMP_PORTAL_PROVEEDOR" ColumnName="EMP_PORTAL_PROVEEDOR" />
+          <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="ADMINISTRADOR">
+      <EntityTypeMapping TypeName="BDWENCOModel.ADMINISTRADOR">
+        <MappingFragment StoreEntitySet="ADMINISTRADOR">
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+          <ScalarProperty Name="ADM_FECHA_ELIMINACION" ColumnName="ADM_FECHA_ELIMINACION" />
+          <ScalarProperty Name="ADM_FECHA_CREACION" ColumnName="ADM_FECHA_CREACION" />
+          <ScalarProperty Name="ADM_PASSWORD" ColumnName="ADM_PASSWORD" />
+          <ScalarProperty Name="ADM_NOMBRE" ColumnName="ADM_NOMBRE" />
+          <ScalarProperty Name="ADM_CODIGO" ColumnName="ADM_CODIGO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="USUARIO_FAC">
+      <EntityTypeMapping TypeName="BDWENCOModel.USUARIO_FAC">
+        <MappingFragment StoreEntitySet="USUARIO_FAC">
+          <ScalarProperty Name="FLGACTUALIZAR_VENDEDORES" ColumnName="FLGACTUALIZAR_VENDEDORES" />
+          <ScalarProperty Name="USU_FEC_INACTIVO" ColumnName="USU_FEC_INACTIVO" />
+          <ScalarProperty Name="USU_FEC_CREA" ColumnName="USU_FEC_CREA" />
+          <ScalarProperty Name="USU_ESTADO" ColumnName="USU_ESTADO" />
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+          <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+          <ScalarProperty Name="CTULIMCRED" ColumnName="CTULIMCRED" />
+          <ScalarProperty Name="CTACTIVAR_CLIE" ColumnName="CTACTIVAR_CLIE" />
+          <ScalarProperty Name="CTMODIFICA_PRECIO_MINIMO" ColumnName="CTMODIFICA_PRECIO_MINIMO" />
+          <ScalarProperty Name="CT_CONFIGURACION" ColumnName="CT_CONFIGURACION" />
+          <ScalarProperty Name="CTUPRECVTA" ColumnName="CTUPRECVTA" />
+          <ScalarProperty Name="CTUPERMPED" ColumnName="CTUPERMPED" />
+          <ScalarProperty Name="CTUPERMARG" ColumnName="CTUPERMARG" />
+          <ScalarProperty Name="CTULOCEMI" ColumnName="CTULOCEMI" />
+          <ScalarProperty Name="CTUSERFACE" ColumnName="CTUSERFACE" />
+          <ScalarProperty Name="CTUVEND" ColumnName="CTUVEND" />
+          <ScalarProperty Name="CTUCOTIZA" ColumnName="CTUCOTIZA" />
+          <ScalarProperty Name="CTUPEDIDO" ColumnName="CTUPEDIDO" />
+          <ScalarProperty Name="CTUSERGUI" ColumnName="CTUSERGUI" />
+          <ScalarProperty Name="CTUSERND" ColumnName="CTUSERND" />
+          <ScalarProperty Name="CTUSERNC" ColumnName="CTUSERNC" />
+          <ScalarProperty Name="CTUSERBOL" ColumnName="CTUSERBOL" />
+          <ScalarProperty Name="CTUSERFAC" ColumnName="CTUSERFAC" />
+          <ScalarProperty Name="CTUUSUARI" ColumnName="CTUUSUARI" />
+          <ScalarProperty Name="CTUFECCRE" ColumnName="CTUFECCRE" />
+          <ScalarProperty Name="CTUNROALM" ColumnName="CTUNROALM" />
+          <ScalarProperty Name="CTUTIPUSU" ColumnName="CTUTIPUSU" />
+          <ScalarProperty Name="CTUPUNVEN" ColumnName="CTUPUNVEN" />
+          <ScalarProperty Name="CTUPASSWO" ColumnName="CTUPASSWO" />
+          <ScalarProperty Name="CTUNOMUSU" ColumnName="CTUNOMUSU" />
+          <ScalarProperty Name="CTUALIAS" ColumnName="CTUALIAS" />
+          <ScalarProperty Name="CTEMPRESA" ColumnName="CTEMPRESA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="SP_ACTUALIZAR_USUARIO" FunctionName="BDWENCOModel.Store.SP_ACTUALIZAR_USUARIO">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="BDWENCOModel.SP_ACTUALIZAR_USUARIO_R_Result">
+          <ScalarProperty Name="CTEMPRESA" ColumnName="CTEMPRESA" />
+          <ScalarProperty Name="CTUALIAS" ColumnName="CTUALIAS" />
+          <ScalarProperty Name="CTUNOMUSU" ColumnName="CTUNOMUSU" />
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_ACTUALIZAR_USAURIO_PASSWORD" FunctionName="BDWENCOModel.Store.SP_ACTUALIZAR_USAURIO_PASSWORD">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="BDWENCOModel.SP_ACTUALIZAR_USUARIO_R_Result">
+          <ScalarProperty Name="CTEMPRESA" ColumnName="CTEMPRESA" />
+          <ScalarProperty Name="CTUALIAS" ColumnName="CTUALIAS" />
+          <ScalarProperty Name="CTUNOMUSU" ColumnName="CTUNOMUSU" />
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_PORTAL_VERIFICAR_DATABASE1" FunctionName="BDWENCOModel.Store.SP_PORTAL_VERIFICAR_DATABASE">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="BDWENCOModel.SP_PORTAL_VERIFICAR_DATABASE_Result">
+          <ScalarProperty Name="data" ColumnName="data" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="CRM_Usuarios_Rol">
+      <EntityTypeMapping TypeName="BDWENCOModel.CRM_Usuarios_Rol">
+        <MappingFragment StoreEntitySet="CRM_Usuarios_Rol">
+          <ScalarProperty Name="Rol" ColumnName="Rol" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="contrase" ColumnName="contrase" />
+          <ScalarProperty Name="nombreUser" ColumnName="nombreUser" />
+          <ScalarProperty Name="alias" ColumnName="alias" />
+          <ScalarProperty Name="codigoEmpresa" ColumnName="codigoEmpresa" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

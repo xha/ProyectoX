@@ -1,0 +1,374 @@
+﻿
+
+
+@if (Session["Rol"].ToString() == "VENDEDOR")
+{
+    Html.RenderPartial("_Flujo"); 
+    Html.RenderPartial("_flujoVendedor");
+}
+else
+{
+    Html.RenderPartial("_flujoAdministrador");
+
+}
+
+    <script>
+        //Validacion de formulario Crear Prospecto
+    var validar = $('#formCrearpot').validate({
+        rules: {
+            CCODCLI: {
+                required: true,
+                maxlength: 11
+            },
+            CDOCIDEN: {
+                required: true,
+                maxlength: 15,
+                number: true
+
+            },
+            CAPELLIDO_PATERNO: {
+                maxlength: 20,
+
+            },
+            CAPELLIDO_MATERNO: {
+                maxlength: 20,
+
+            },
+            CPRIMER_NOMBRE: {
+                maxlength: 20,
+
+            },
+            CSEGUNDO_NOMBRE: {
+                maxlength: 20,
+
+            },
+            CNOMCLI: {
+                maxlength: 100,
+                required: true
+            },
+            CEMAIL: {
+                email: true
+            },
+            CDIRCLI: {
+                maxlength: 100,
+
+            },
+
+        },
+        messages: {
+            CCODCLI: {
+                required: "El codigo del cliente es requerido",
+                maxlength: "El codigo no puede contener mas de 11 caracteres"
+            },
+            CDOCIDEN: {
+                required: "El documento del cliente es requerido",
+                maxlength: "El documento del cliente no puede contener mas de 15 caracteres",
+                number: "El documento del cliente debe ser númerico"
+
+            },
+            CAPELLIDO_PATERNO: {
+                maxlength: "El apellido paterno no puede contener mas de 20 caracteres",
+
+            },
+            CAPELLIDO_MATERNO: {
+                maxlength: "El apellido materno no puede contener mas de 20 caracteres",
+
+            },
+            CPRIMER_NOMBRE: {
+                maxlength: "El primer nombre no puede contener mas de 20 caracteres",
+
+            },
+            CSEGUNDO_NOMBRE: {
+                maxlength: "El segundo nombre no puede contener mas de 20 caracteres",
+
+            },
+            CNOMCLI: {
+                maxlength: "El nombre del cliente no puede contener mas de 100 caracteres",
+                required: "El nombre del cliente o razon social es requerido",
+            },
+            CEMAIL: {
+                email: "Introduzca un correo valido"
+            },
+            CDIRCLI: {
+                maxlength: "La dirección no puede contener mas de 100 caracteres",
+
+            },
+
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+
+        var settings = {
+
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+        });
+        /*
+        function buscarSunat(ruc) {
+
+                var data = { ruc: ruc };
+                $.ajax({
+                            "url": "http://www.starsoftweb.com/ServicioSunatRuc/api/PostTraerDatosSunat",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InhoYSIsIm5iZiI6MTU4NDEyMDM2OCwiZXhwIjoxNTg0MTIyMTY4LCJpYXQiOjE1ODQxMjAzNjgsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDQzOTgiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQ0Mzk4In0.fZ5vZRUkpkI19WMvvCA8qe3F0FTkE7JKccg9hvVaGu0",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            "data": {
+                "ruc": "20100163471"
+            }
+                    url: "http://www.starsoftweb.com/ServicioSunatRuc/api/PostTraerDatosSunat",
+                    dataType: "json",
+                    type: 'POST',
+
+                    data: data,
+                    success: function (datos) {
+                        console.log(datos)
+                    },
+                    error: function (datos) {
+
+                        Swal.fire({
+                            title: "Alerta",
+                            text: "No se encontro el ruc en el Sunat",
+                            type: "error",
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Aceptar",
+                        });
+                    }
+                });
+
+
+        };
+        */
+
+    $("#modal_crearPotencial").on('click', '#nuevoClientepot', function (event) {
+
+        va = validar.form();
+        event.preventDefault();
+
+     if (va) {
+                        var primero = 0;
+        var CodCli = $("#modal_crearPotencial").find("[name=CCODCLI]").val();
+        var tipoDoc = $("#modal_crearPotencial").find('select[name=tipoDoc]').val();
+        if (tipoDoc == 1 || tipoDoc == 2 || tipoDoc == 3) {
+
+            var ApPaterno = $("#modal_crearPotencial").find('input#apPaterno').val();
+            var ApMaterno = $("#modal_crearPotencial").find('input#apMaterno').val();
+            var Snombre = $("#modal_crearPotencial").find('input#sNombre').val();
+            var Pnombre = $("#modal_crearPotencial").find('input#pNombre').val();
+            $("#modal_crearPotencial").find('input#nombreCli').val("" + ApPaterno + " " + ApMaterno + " " + Pnombre + " "+ Snombre + "")
+
+        }
+
+        if (CodCli == "") {
+            toastr.error("Es necesario llenar el campo del Codigo de cliente.")
+        } else {
+
+            var UltimoCod = $("#modal_crearPotencial").find('table tbody tr#guardado:last [id=COD_CONTACTO]').val();
+            var dataEditar = "{CONTACTO_COBRANZA: '', CCODCLAS: '', CCODTRANS: '',CFLAGPRIN: 'True',";
+            $("#formCrearpot").find(".infoCliente").each(function () {
+                if (UltimoCod == null) {
+                    if ($(this).attr("name") == 'distrito') {
+                        dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                    } else {
+                        dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                    }
+
+                } else {
+
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+
+                }
+            });
+            var longitud = 0;
+            $("#formCrearpot").find(".infoContacto").each(function () {
+                longitud = longitud + 1;
+                //para crear la cadena a mostrar
+                if ($(this).attr("contacto") == 1) {
+                    if ($(this).attr("name") == 'COD_CLIENTE') {
+                        dataEditar += "";
+                    } else {
+                        if ($(this).attr("name") == 'COD_CONTACTO') {
+
+                            dataEditar += "ListadoContactoPot:[{COD_CONTACTO:'" + $(this).val() + "',";
+                        } else {
+                            if ($(this).attr("name") == 'CELULAR') {
+                                dataEditar += "CELULAR:'" + $(this).val() + "'}";
+
+                            } else {
+                                dataEditar += "" + $(this).attr("name") + ":'" + $(this).val() + "',";
+                            }
+                        }
+
+                    }
+
+                } else {
+                    if ($(this).attr("name") == 'COD_CLIENTE') {
+                        dataEditar += ",{";
+                    } else {
+                        if ($(this).attr("name") == 'COD_CONTACTO') {
+                            dataEditar += "COD_CONTACTO:'" + $(this).val() + "',";
+                        } else {
+                            if ($(this).attr("name") == 'CELULAR') {
+                                dataEditar += "CELULAR:'" + $(this).val() + "'}";
+                            } else {
+                                dataEditar += "" + $(this).attr("name") + ":'" + $(this).val() + "',";
+                            }
+                        }
+
+                    }
+
+                }
+
+
+            });
+
+            var urlNuevoClientePot = "@Url.Action("crearPotencial", "Flujo")";
+            if (longitud == 0) {
+                dataEditar += "}";
+            } else {
+                dataEditar += "]}";
+            }
+
+
+            var json = eval("(" + dataEditar + ')');
+
+
+            $.ajax({
+                url: urlNuevoClientePot,
+                dataType: "json",
+                type: 'POST',
+
+                data: json,
+                success: function (datos) {
+                    if (datos.jsonData == null) {
+
+                        if (datos.resultado1 == true && datos.resultado2 == true) {
+
+                            var potencial = $("#clientePot")[0];
+
+                            potencial.length = 0;
+
+                            toastr.success("se creó el cliente con éxito");
+
+
+                            for (i = 0; i < datos.potencial.length; i++) {
+
+                                    potencial[i + 1] = new Option(datos.potencial[i].CNOMCLI, datos.potencial[i].CCODCLI, "", "");
+
+
+                            }
+
+                            $("#modal_crearPotencial").modal("hide");
+
+                            $("#clientePot").val(datos.id);
+                        } else if (datos.resultado1 == true && datos.resultado2 == false) {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                            $("#modal_crearPotencial").modal("hide");
+
+                        } else if (datos.resultado1 == false && datos.resultado2 == false) {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+
+                        }
+
+                    } else {
+
+                        if (datos.jsonData.resultado1 == true && datos.jsonData.resultado2 == true) {
+
+                            var potencial = $("#clientePot")[0];
+
+                            potencial.length = 0;
+
+                            toastr.success("se creó el cliente con éxito");
+
+
+                            for (i = 0; i < datos.potencial.length; i++) {
+                                potencial[i + 1] = new Option(datos.potencial[i].CNOMCLI, datos.potencial[i].CCODCLI, "", "");
+                            }
+
+                            $("#modal_crearPotencial").modal("hide");
+
+                            $("#clientePot").val(datos.jsonData.id);
+                        } else if (datos.jsonData.resultado1 == true && datos.jsonData.resultado2 == false) {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.jsonData.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                            $("#modal_crearPotencial").modal("hide");
+
+                        } else if (datos.jsonData.resultado1 == false && datos.jsonData.resultado2 == false) {
+                            Swal.fire({
+                                title: "Alerta",
+                                text: datos.jsonData.error,
+                                type: "error",
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Aceptar",
+                            });
+                        }
+                    }
+
+
+
+
+                },
+                error: function (datos) {
+                 if (datos.resultado1 == true && datos.resultado2 == false) {
+                    Swal.fire({
+                        title: "Alerta",
+                        text: datos.error,
+                        type: "error",
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Aceptar",
+                    });
+                    $("#modal_crearPotencial").modal("hide");
+
+                } else if (datos.resultado1 == false && datos.resultado2 == false) {
+                    Swal.fire({
+                        title: "Alerta",
+                        text: datos.error,
+                        type: "error",
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Aceptar",
+                    });
+                }
+                },
+
+            });
+
+
+
+        }
+     }
+
+
+
+    });
+    </script>

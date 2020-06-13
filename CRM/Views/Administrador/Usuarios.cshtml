@@ -1,0 +1,337 @@
+﻿
+@using CRM.sp_dinamic
+@{
+    var jss = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var EMP = jss.Serialize((List<SP_EMPRESA_USUARIO_CRM_Result>)Session["EMPRESAS"]);
+
+    var emp = jss.Serialize((SP_EMPRESA_USUARIO_CRM_Result)Session["empresa"]);
+    var user = jss.Serialize(ViewBag.Usuarios);
+   string  codigo  = Convert.ToString(Session["codigo"] != null ? Session["codigo"] : " ");
+}   
+
+ @{  Html.RenderPartial("_Usuarios");
+   }         
+@section Scripts {
+    <script>
+        var lang = {
+
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+
+        var user_json = JSON.parse('@Html.Raw(user)');
+        var EMP_json = JSON.parse('@Html.Raw(EMP)');
+        var EMP_json2 = JSON.parse('@Html.Raw(emp)');
+
+        var datas;
+        if (EMP_json != null) {
+
+            $.each(EMP_json, function (i, item) {
+                if (item.EMP_CODIGO == "@Html.Raw(codigo)") {
+                    $('.empresa').prepend("<option value='" + item.EMP_CODIGO + "'>    " + item.EMP_RAZON_NOMBRE + " : " + item.EMP_CODIGO + "</option>");
+                }
+                $(".empresa").attr('disabled', true)
+
+            });
+        } else {
+
+            $('.empresa').prepend("<option value='" + EMP_json2.EMP_CODIGO + "'> " + EMP_json2.EMP_RAZON_NOMBRE + "</option>");
+        }
+
+
+        $('.rol').prepend("<option value='ADMINISTRADOR' data-title=1 > Administrador </option>");
+        $('.rol').prepend("<option value='VENDEDOR' data-title=2 > Vendedor </option>");
+        var table = $('#user').DataTable({
+
+            data: user_json,
+
+            columns: [
+                  { "data": "codigoEmpresa", "defaultContent": "" },
+                  { "data": "alias", "defaultContent": "" },
+                  { "data": "nombreUser", "defaultContent": "" },
+                  { "data": "email", "defaultContent": "" },
+                  { "data": "Rol", "defaultContent": "" },
+                 {
+                     "render": function (data, type, row) {
+                         return '  <a class="btn btn-danger  eliminar btn-md" ><i class="fas fa-user-times" style="color: #fafafa;"></i></a> <a class="btn btn-info btn-md  editar" data-toggle="modal" data-target=".MODIFICAR_USER" ><i class="fas fa-user-edit" style="color: #fafafa;"></i></a>';
+                     }
+                 }
+            ],
+            "order": [],
+            "lengthChange": false,
+            "info": false,
+            "autoWidth": false,
+            "language": lang
+        });
+        var pas = true;
+        var validar = $('#quickForm').validate({
+            rules: {
+                email: {
+                    required: true,
+                    email: true,
+                },
+                password: {
+                    required: pas,
+
+
+                },
+                nombre_usuario: {
+                    required: true,
+
+                },
+                texto: {
+                    required: true,
+                    maxlength: 8
+                }
+            },
+            messages: {
+                email: {
+                    required: "El correo es requerido",
+                    email: "Introduzca un correo valido"
+                },
+                password: {
+                    required: "La contraseña es requerida"
+
+                },
+                texto: {
+                    required: "El usuario  es requerido",
+                    maxlength:"El alias no puede contener mas de 8 caracteres"
+
+                },
+                nombre_usuario: {
+                    required: "El nombre del usuario  es requerido",
+                }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+        var validar_modificar = $('#quickForm').validate({
+            rules: {
+                email_modificar: {
+                    required: true,
+                    email: true,
+                },
+                nombre_usuario_modificar: {
+                    required: true,
+
+                },
+                texto_modificar: {
+                    required: true,
+                    maxlength: 8
+                }
+            },
+            messages: {
+                email: {
+                    required: "El correo es requerido",
+                    email: "Introduzca un correo valido"
+                },
+                texto: {
+                    required: "El usuario  es requerido",
+                    maxlength: "El alias no puede contener mas de 8 caracteres"
+
+                },
+                nombre_usuario: {
+                    required: "El nombre del usuario  es requerido",
+                }
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+        var va;
+
+        var user_delete = function (tbody, table) {
+            $(tbody).on("click", "a.eliminar", function () {
+                var data = table.row($(this).parents("tr")).data();
+
+                Swal.fire({
+                    title: '¿Desea eliminar el usuario ' + data.nombreUser + '?',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si!'
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: '@Url.Action("eliminar_usuario", "Vendedor")',
+                            data: { 'id': data.ID },
+                            success: function (result) {
+                                if (!result.error) {
+                                    toastr.success(result.mensaje);
+                                    user_json = JSON.parse(result.users);
+                                    $('#user').DataTable().clear();
+                                    $('#user').DataTable().rows.add(user_json);
+                                    $('#user').DataTable().draw();
+
+
+                                }
+                            }
+
+                        })
+                    }
+                })
+
+
+            });
+        }
+        var id;
+        var user_edit = function (tbody, table) {
+            $(tbody).on("click", "a.editar", function () {
+                var data = table.row($(this).parents("tr")).data();
+                datas = data;
+                id = data.ID;
+                $("#nombre_usuario_modificar").val(data.nombreUser);
+                $("#texto_modificar").val(data.alias);
+                $("#email_modificar").val(data.email);
+                $("#password_modific").val("");
+                $("#password_confi").val("");
+                $("#rol_modificar option").attr("selected", false);
+                $("#rol_modificar option[value=" + data.Rol + "]").attr("selected", true);
+                $("#empresa_modificar option").attr("selected", false);
+                $("#empresa_modificar option[value=" + data.codigoEmpresa + "]").attr("selected", true);
+            });
+        }
+
+        user_edit("#user tbody", table);
+
+        user_delete("#user tbody", table);
+        $("#agregar").on("click", function (event) {
+            $("#titulos").text('Agregar Usuario');
+            limpiar();
+               })
+
+
+        $("#modificar").on("click", function (event) {
+            va = validar_modificar.form()
+            var password = $("#password_modific").val();
+            var password_confirmar = $("#password_confi").val();
+            event.preventDefault();
+            if (password.lenght != 0 || password_confirmar.lenght != 0) {
+                if (password != password_confirmar) {
+                    toastr.warning('Las contraseñas no coninciden ');
+                    va = false;
+                }
+
+            }
+
+
+            if (va) {
+                var nombre = $("#nombre_usuario_modificar").val();
+                var usuario = $("#texto_modificar").val();
+                var rol = $('option:selected', $("#rol_modificar")).attr('value')
+                var email = $("#email_modificar").val();
+                var codigo_empresa = $('option:selected', $("#empresa_modificar")).attr('value')
+                var user = [];
+                var users = {
+                    nombre,
+                    usuario,
+                    rol,
+                    email,
+                    password,
+                    codigo_empresa
+                };
+                user.push(users);
+                var user = JSON.stringify(user);
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("modifict_user", "Vendedor")',
+                    data: { 'user': user, 'id': id, "tip": 0 },
+                    success: function (result) {
+                        if (!result.error) {
+                            toastr.success(result.mensaje);
+                            user_json = JSON.parse(result.users);
+                            $('#user').DataTable().clear();
+                            $('#user').DataTable().rows.add(user_json);
+                            $('#user').DataTable().draw();
+                        }
+                    },
+                });
+            }
+        });
+
+
+
+        $("#guardar").on("click", function (event) {
+            pas = true;
+            va = validar.form()
+            event.preventDefault();
+            if (va) {
+                var nombre = $("#nombre_usuario").val();
+                var usuario = $("#texto").val();
+                var rol = $('option:selected', $("#rol")).attr('value')
+                var email = $("#email").val();
+                var password = $("#password").val();
+                var codigo_empresa = $('option:selected', $("#empresa")).attr('value')
+                var user = [];
+                var users = {
+                    nombre,
+                    usuario,
+                    rol,
+                    email,
+                    password,
+                    codigo_empresa
+                };
+                user.push(users);
+                var user = JSON.stringify(user);
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("save_user", "Vendedor")',
+                    data: { 'user': user },
+                    success: function (result) {
+                        if (!result.error) {
+                            limpiar();
+                            toastr.success(result.mensaje);
+                            user_json = JSON.parse(result.users);
+                            $('#user').DataTable().clear();
+                            $('#user').DataTable().rows.add(user_json);
+                            $('#user').DataTable().draw();
+
+                        }
+                    },
+                });
+            }
+
+        });
+        function limpiar() {
+            $('.limpiar').val("");
+        }
+    </script>
+
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3ec482a8516c4717abf4b2011795da3e" Name="Diagram1">
+        <EntityTypeShape EntityType="CRMmodel.CONTACTO_POTENCIAL" Width="1.5" PointX="5.75" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.CONTACTO_VENTA" Width="1.5" PointX="12.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.CRONOGRAMA" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.ESTADO_PROSPECTO" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.GRUPO_USUARIO" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.GRUPOS" Width="1.5" PointX="0.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.MAEART" Width="1.5" PointX="12.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.MAECLI" Width="1.5" PointX="10" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.POTENCIALCLI" Width="1.5" PointX="10" PointY="23.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.PRIORIDAD" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.RESPONSABLES" Width="1.5" PointX="3" PointY="14.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.T_TIPO_CLIENTE" Width="1.5" PointX="7.75" PointY="21.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.TIPO_ACTIVIDAD" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CRMmodel.DIRE_CLIENTE" Width="1.5" PointX="14.75" PointY="2" IsExpanded="true" />
+        <AssociationConnector Association="CRMmodel.fk_cronograma_tipo_actividad" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMmodel.FK_GRUPO_USUARIO_GRUPOS" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMmodel.FK_RESPONSABLES_TAREA_GRUPOS" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMmodel.FK_MAECLI_T_TIPO_CLIENTE" ManuallyRouted="false" />
+        <AssociationConnector Association="CRMmodel.FK_POTENCIALCLI_T_TIPO_CLIENTE" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CRMmodel.TIPO_MONEDA" Width="1.5" PointX="0.75" PointY="8.25" />
+        <EntityTypeShape EntityType="CRMmodel.TABAYU" Width="1.5" PointX="15.375" PointY="4.75" />
+        <EntityTypeShape EntityType="CRMmodel.ESTATUS_PROSPECTO" Width="1.5" PointX="0.75" PointY="16.5" />
+        <EntityTypeShape EntityType="CRMmodel.HISTORICO" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="CRMmodel.PROSPECTO" Width="1.5" PointX="3" PointY="6.25" />
+        <AssociationConnector Association="CRMmodel.fk_cronograma_prospecto" />
+        <AssociationConnector Association="CRMmodel.FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD" />
+        <AssociationConnector Association="CRMmodel.FK_PROSPECTO_ESTATUS_PROSPECTO" />
+        <AssociationConnector Association="CRMmodel.FK_HISTORICO_OPORTUNIDAD" />
+        <AssociationConnector Association="CRMmodel.FK_OPORTUNIDAD_PRIORIDAD" />
+        <AssociationConnector Association="CRMmodel.FK_PROSPECTO_TIPO_MONEDA" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BDWENCOModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'BDWENCO.dbo.ADMINISTRADOR' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="ADMINISTRADOR">
+          <Key>
+            <PropertyRef Name="ADM_PASSWORD" />
+          </Key>
+          <Property Name="ADM_CODIGO" Type="varchar" MaxLength="5" />
+          <Property Name="ADM_NOMBRE" Type="varchar" MaxLength="10" />
+          <Property Name="ADM_PASSWORD" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="ADM_FECHA_CREACION" Type="smalldatetime" />
+          <Property Name="ADM_FECHA_ELIMINACION" Type="smalldatetime" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CRM_Usuarios_Rol">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="codigoEmpresa" Type="varchar" MaxLength="6" />
+          <Property Name="alias" Type="varchar" MaxLength="20" />
+          <Property Name="nombreUser" Type="varchar" MaxLength="20" />
+          <Property Name="contrase" Type="varchar" MaxLength="20" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="Rol" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'BDWENCO.dbo.USUARIO_FAC' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="USUARIO_FAC">
+          <Key>
+            <PropertyRef Name="CTUPERMARG" />
+            <PropertyRef Name="CTUPERMPED" />
+            <PropertyRef Name="USU_ESTADO" />
+          </Key>
+          <Property Name="CTEMPRESA" Type="varchar" MaxLength="3" />
+          <Property Name="CTUALIAS" Type="varchar" MaxLength="8" />
+          <Property Name="CTUNOMUSU" Type="varchar" MaxLength="50" />
+          <Property Name="CTUPASSWO" Type="varchar" MaxLength="8" />
+          <Property Name="CTUPUNVEN" Type="varchar" MaxLength="2" />
+          <Property Name="CTUTIPUSU" Type="varchar" MaxLength="1" />
+          <Property Name="CTUNROALM" Type="varchar" MaxLength="2" />
+          <Property Name="CTUFECCRE" Type="smalldatetime" />
+          <Property Name="CTUUSUARI" Type="varchar" MaxLength="8" />
+          <Property Name="CTUSERFAC" Type="varchar" MaxLength="3" />
+          <Property Name="CTUSERBOL" Type="varchar" MaxLength="3" />
+          <Property Name="CTUSERNC" Type="varchar" MaxLength="3" />
+          <Property Name="CTUSERND" Type="varchar" MaxLength="3" />
+          <Property Name="CTUSERGUI" Type="varchar" MaxLength="3" />
+          <Property Name="CTUPEDIDO" Type="varchar" MaxLength="1" />
+          <Property Name="CTUCOTIZA" Type="varchar" MaxLength="1" />
+          <Property Name="CTUVEND" Type="varchar" MaxLength="2" />
+          <Property Name="CTUSERFACE" Type="varchar" MaxLength="3" />
+          <Property Name="CTULOCEMI" Type="varchar" MaxLength="2" />
+          <Property Name="CTUPERMARG" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="CTUPERMPED" Type="bit" Nullable="false" />
+          <Property Name="CTUPRECVTA" Type="bit" />
+          <Property Name="CT_CONFIGURACION" Type="bit" />
+          <Property Name="CTMODIFICA_PRECIO_MINIMO" Type="bit" />
+          <Property Name="CTACTIVAR_CLIE" Type="bit" />
+          <Property Name="CTULIMCRED" Type="bit" />
+          <Property Name="rol_id" Type="int" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="50" />
+          <Property Name="USU_ESTADO" Type="bit" Nullable="false" />
+          <Property Name="USU_FEC_CREA" Type="datetime" />
+          <Property Name="USU_FEC_INACTIVO" Type="datetime" />
+          <Property Name="FLGACTUALIZAR_VENDEDORES" Type="bit" />
+        </EntityType>
+        <Function Name="SP_ACTUALIZAR_USAURIO_PASSWORD" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PASSWORD" Type="varchar" Mode="In" />
+          <Parameter Name="EMPRESA" Type="varchar" Mode="In" />
+          <Parameter Name="ALIAS" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_ACTUALIZAR_USUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+          <Parameter Name="EMAIL" Type="varchar" Mode="In" />
+          <Parameter Name="EMPRESA" Type="varchar" Mode="In" />
+          <Parameter Name="ALIAS" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_EMPRESA_CLIENTE_CRM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_EMPRESA_USUARIO_CRM" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_PORTAL_VERIFICAR_DATABASE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BASEDATOS" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_PORTAL_VERIFICAR_DATABASERE" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="BDWENCOModelStoreContainer">
+          <EntitySet Name="CRM_Usuarios_Rol" EntityType="Self.CRM_Usuarios_Rol" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ADMINISTRADOR].[ADM_CODIGO] AS [ADM_CODIGO], 
+    [ADMINISTRADOR].[ADM_NOMBRE] AS [ADM_NOMBRE], 
+    [ADMINISTRADOR].[ADM_PASSWORD] AS [ADM_PASSWORD], 
+    [ADMINISTRADOR].[ADM_FECHA_CREACION] AS [ADM_FECHA_CREACION], 
+    [ADMINISTRADOR].[ADM_FECHA_ELIMINACION] AS [ADM_FECHA_ELIMINACION], 
+    [ADMINISTRADOR].[EMAIL] AS [EMAIL]
+    FROM [dbo].[ADMINISTRADOR] AS [ADMINISTRADOR]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="USUARIO_FAC" EntityType="Self.USUARIO_FAC" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [USUARIO_FAC].[CTEMPRESA] AS [CTEMPRESA], 
+    [USUARIO_FAC].[CTUALIAS] AS [CTUALIAS], 
+    [USUARIO_FAC].[CTUNOMUSU] AS [CTUNOMUSU], 
+    [USUARIO_FAC].[CTUPASSWO] AS [CTUPASSWO], 
+    [USUARIO_FAC].[CTUPUNVEN] AS [CTUPUNVEN], 
+    [USUARIO_FAC].[CTUTIPUSU] AS [CTUTIPUSU], 
+    [USUARIO_FAC].[CTUNROALM] AS [CTUNROALM], 
+    [USUARIO_FAC].[CTUFECCRE] AS [CTUFECCRE], 
+    [USUARIO_FAC].[CTUUSUARI] AS [CTUUSUARI], 
+    [USUARIO_FAC].[CTUSERFAC] AS [CTUSERFAC], 
+    [USUARIO_FAC].[CTUSERBOL] AS [CTUSERBOL], 
+    [USUARIO_FAC].[CTUSERNC] AS [CTUSERNC], 
+    [USUARIO_FAC].[CTUSERND] AS [CTUSERND], 
+    [USUARIO_FAC].[CTUSERGUI] AS [CTUSERGUI], 
+    [USUARIO_FAC].[CTUPEDIDO] AS [CTUPEDIDO], 
+    [USUARIO_FAC].[CTUCOTIZA] AS [CTUCOTIZA], 
+    [USUARIO_FAC].[CTUVEND] AS [CTUVEND], 
+    [USUARIO_FAC].[CTUSERFACE] AS [CTUSERFACE], 
+    [USUARIO_FAC].[CTULOCEMI] AS [CTULOCEMI], 
+    [USUARIO_FAC].[CTUPERMARG] AS [CTUPERMARG], 
+    [USUARIO_FAC].[CTUPERMPED] AS [CTUPERMPED], 
+    [USUARIO_FAC].[CTUPRECVTA] AS [CTUPRECVTA], 
+    [USUARIO_FAC].[CT_CONFIGURACION] AS [CT_CONFIGURACION], 
+    [USUARIO_FAC].[CTMODIFICA_PRECIO_MINIMO] AS [CTMODIFICA_PRECIO_MINIMO], 
+    [USUARIO_FAC].[CTACTIVAR_CLIE] AS [CTACTIVAR_CLIE], 
+    [USUARIO_FAC].[CTULIMCRED] AS [CTULIMCRED], 
+    [USUARIO_FAC].[rol_id] AS [rol_id], 
+    [USUARIO_FAC].[EMAIL] AS [EMAIL], 
+    [USUARIO_FAC].[USU_ESTADO] AS [USU_ESTADO], 
+    [USUARIO_FAC].[USU_FEC_CREA] AS [USU_FEC_CREA], 
+    [USUARIO_FAC].[USU_FEC_INACTIVO] AS [USU_FEC_INACTIVO], 
+    [USUARIO_FAC].[FLGACTUALIZAR_VENDEDORES] AS [FLGACTUALIZAR_VENDEDORES]
+    FROM [dbo].[USUARIO_FAC] AS [USUARIO_FAC]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BDWENCOModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BDWENCOEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="SP_EMPRESA_CLIENTE_CRM" ReturnType="Collection(BDWENCOModel.SP_EMPRESA_CLIENTE_CRM_Result)" />
+          <FunctionImport Name="SP_EMPRESA_USUARIO_CRM" ReturnType="Collection(BDWENCOModel.SP_EMPRESA_USUARIO_CRM_Result)" />
+          <EntitySet Name="ADMINISTRADOR" EntityType="BDWENCOModel.ADMINISTRADOR" />
+          <EntitySet Name="USUARIO_FAC" EntityType="BDWENCOModel.USUARIO_FAC" />
+          <FunctionImport Name="SP_ACTUALIZAR_USUARIO" ReturnType="Collection(BDWENCOModel.SP_ACTUALIZAR_USUARIO_R_Result)">
+            <Parameter Name="NOMBRE" Mode="In" Type="String" />
+            <Parameter Name="EMAIL" Mode="In" Type="String" />
+            <Parameter Name="EMPRESA" Mode="In" Type="String" />
+            <Parameter Name="ALIAS" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_ACTUALIZAR_USAURIO_PASSWORD" ReturnType="Collection(BDWENCOModel.SP_ACTUALIZAR_USUARIO_R_Result)">
+            <Parameter Name="PASSWORD" Mode="In" Type="String" />
+            <Parameter Name="EMPRESA" Mode="In" Type="String" />
+            <Parameter Name="ALIAS" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_PORTAL_VERIFICAR_DATABASE1" ReturnType="Collection(BDWENCOModel.SP_PORTAL_VERIFICAR_DATABASE_Result)">
+          <Parameter Name="BASEDATOS" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="CRM_Usuarios_Rol" EntityType="BDWENCOModel.CRM_Usuarios_Rol" />
+        </EntityContainer>
+        <ComplexType Name="SP_EMPRESA_CLIENTE_CRM_Result">
+          <Property Type="String" Name="CTEMPRESA" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="CTUALIAS" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="CTUNOMUSU" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="CTUPASSWO" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="CTUPUNVEN" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="CTUTIPUSU" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="CTUNROALM" Nullable="true" MaxLength="2" />
+          <Property Type="DateTime" Name="CTUFECCRE" Nullable="true" Precision="16" />
+          <Property Type="String" Name="CTUUSUARI" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="CTUSERFAC" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="CTUSERBOL" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="CTUSERNC" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="CTUSERND" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="CTUSERGUI" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="CTUPEDIDO" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="CTUCOTIZA" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="CTUVEND" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="CTUSERFACE" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="CTULOCEMI" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="CTUPERMARG" Nullable="false" MaxLength="1" />
+          <Property Type="Boolean" Name="CTUPERMPED" Nullable="false" />
+          <Property Type="Boolean" Name="CTUPRECVTA" Nullable="true" />
+          <Property Type="Boolean" Name="CT_CONFIGURACION" Nullable="true" />
+          <Property Type="Boolean" Name="CTMODIFICA_PRECIO_MINIMO" Nullable="true" />
+          <Property Type="Boolean" Name="CTACTIVAR_CLIE" Nullable="true" />
+          <Property Type="Boolean" Name="CTULIMCRED" Nullable="true" />
+          <Property Type="Int32" Name="rol_id" Nullable="true" />
+          <Property Type="String" Name="EMAIL" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="USU_ESTADO" Nullable="false" />
+          <Property Type="DateTime" Name="USU_FEC_CREA" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="USU_FEC_INACTIVO" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="FLGACTUALIZAR_VENDEDORES" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SP_EMPRESA_USUARIO_CRM_Result">
+          <Property Type="String" Name="EMP_CODIGO" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="TIPODOC_CODIGO" Nullable="true" MaxLength="2" />
+          <Property Type="String" Name="EMP_RAZON_NOMBRE" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="EMP_APELLIDOPAT" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EMP_APELLIDOMAT" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EMP_DIRECCION" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EMP_TELEFONO" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="EMP_FAX" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="EMP_RUC_DOCUMENTO" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="EMP_REPRESENTANTE" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="EMP_DOCUMENTO" Nullable="true" MaxLength="15" />
+          <Property Type="Int16" Name="EMP_NIVEL" Nullable="true" />
+          <Property Type="Int16" Name="EMP_NIV01" Nullable="true" />
+          <Property Type="Int16" Name="EMP_NIV02" Nullable="true" />
+          <Property Type="Int16" Name="EMP_NIV03" Nullable="true" />
+          <Property Type="Int16" Name="EMP_NIV04" Nullable="true" />
+          <Property Type="Int16" Name="EMP_NIV05" Nullable="true" />
+          <Property Type="Int16" Name="EMP_NIV06" Nullable="true" />
+          <Property Type="String" Name="EMP_PANTALLA" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="EMP_NUMEAUTO" Nullable="false" />
+          <Property Type="Decimal" Name="EMP_NUMECARAC" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="String" Name="EMP_REPORTE" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="EMP_ACTIVA" Nullable="false" />
+          <Property Type="Int16" Name="EMP_NIV07" Nullable="true" />
+          <Property Type="Int16" Name="EMP_NIV08" Nullable="true" />
+          <Property Type="String" Name="EMP_PLANILLAS" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="EMP_PORTAL_RENDICIONCTA" Nullable="true" />
+          <Property Type="Boolean" Name="EMP_PORTAL_PROVEEDOR" Nullable="true" />
+          <Property Type="Binary" Name="LOGO" Nullable="true" MaxLength="Max" />
+        </ComplexType>
+        <EntityType Name="ADMINISTRADOR">
+          <Key>
+            <PropertyRef Name="ADM_PASSWORD" />
+          </Key>
+          <Property Name="ADM_CODIGO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="ADM_NOMBRE" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ADM_PASSWORD" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="ADM_FECHA_CREACION" Type="DateTime" Precision="0" />
+          <Property Name="ADM_FECHA_ELIMINACION" Type="DateTime" Precision="0" />
+          <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="USUARIO_FAC">
+          <Key>
+            <PropertyRef Name="CTUPERMARG" />
+            <PropertyRef Name="CTUPERMPED" />
+            <PropertyRef Name="USU_ESTADO" />
+          </Key>
+          <Property Name="CTEMPRESA" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CTUALIAS" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="CTUNOMUSU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CTUPASSWO" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="CTUPUNVEN" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="CTUTIPUSU" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CTUNROALM" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="CTUFECCRE" Type="DateTime" Precision="0" />
+          <Property Name="CTUUSUARI" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="CTUSERFAC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CTUSERBOL" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CTUSERNC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CTUSERND" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CTUSERGUI" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CTUPEDIDO" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CTUCOTIZA" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CTUVEND" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="CTUSERFACE" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="CTULOCEMI" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="CTUPERMARG" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="CTUPERMPED" Type="Boolean" Nullable="false" />
+          <Property Name="CTUPRECVTA" Type="Boolean" />
+          <Property Name="CT_CONFIGURACION" Type="Boolean" />
+          <Property Name="CTMODIFICA_PRECIO_MINIMO" Type="Boolean" />
+          <Property Name="CTACTIVAR_CLIE" Type="Boolean" />
+          <Property Name="CTULIMCRED" Type="Boolean" />
+          <Property Name="rol_id" Type="Int32" />
+          <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="USU_ESTADO" Type="Boolean" Nullable="false" />
+          <Property Name="USU_FEC_CREA" Type="DateTime" Precision="3" />
+          <Property Name="USU_FEC_INACTIVO" Type="DateTime" Precision="3" />
+          <Property Name="FLGACTUALIZAR_VENDEDORES" Type="Boolean" />
+        </EntityType>
+        <ComplexType Name="SP_ACTUALIZAR_USUARIO_R_Result">
+          <Property Type="String" Name="CTEMPRESA" Nullable="true" MaxLength="3" />
+          <Property Type="String" Name="CTUALIAS" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="CTUNOMUSU" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="EMAIL" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_PORTAL_VERIFICAR_DATABASE_Result">
+          <Property Type="String" Name="data" Nullable="true" MaxLength="13" />
+        </ComplexType>
+        <EntityType Name="CRM_Usuarios_Rol">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="codigoEmpresa" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+          <Property Name="alias" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="nombreUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="contrase" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BDWENCOModelStoreContainer" CdmEntityContainer="BDWENCOEntities" >
+          <FunctionImportMapping FunctionImportName="SP_EMPRESA_CLIENTE_CRM" FunctionName="BDWENCOModel.Store.SP_EMPRESA_CLIENTE_CRM">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDWENCOModel.SP_EMPRESA_CLIENTE_CRM_Result">
+                <ScalarProperty Name="CTEMPRESA" ColumnName="CTEMPRESA" />
+                <ScalarProperty Name="CTUALIAS" ColumnName="CTUALIAS" />
+                <ScalarProperty Name="CTUNOMUSU" ColumnName="CTUNOMUSU" />
+                <ScalarProperty Name="CTUPASSWO" ColumnName="CTUPASSWO" />
+                <ScalarProperty Name="CTUPUNVEN" ColumnName="CTUPUNVEN" />
+                <ScalarProperty Name="CTUTIPUSU" ColumnName="CTUTIPUSU" />
+                <ScalarProperty Name="CTUNROALM" ColumnName="CTUNROALM" />
+                <ScalarProperty Name="CTUFECCRE" ColumnName="CTUFECCRE" />
+                <ScalarProperty Name="CTUUSUARI" ColumnName="CTUUSUARI" />
+                <ScalarProperty Name="CTUSERFAC" ColumnName="CTUSERFAC" />
+                <ScalarProperty Name="CTUSERBOL" ColumnName="CTUSERBOL" />
+                <ScalarProperty Name="CTUSERNC" ColumnName="CTUSERNC" />
+                <ScalarProperty Name="CTUSERND" ColumnName="CTUSERND" />
+                <ScalarProperty Name="CTUSERGUI" ColumnName="CTUSERGUI" />
+                <ScalarProperty Name="CTUPEDIDO" ColumnName="CTUPEDIDO" />
+                <ScalarProperty Name="CTUCOTIZA" ColumnName="CTUCOTIZA" />
+                <ScalarProperty Name="CTUVEND" ColumnName="CTUVEND" />
+                <ScalarProperty Name="CTUSERFACE" ColumnName="CTUSERFACE" />
+                <ScalarProperty Name="CTULOCEMI" ColumnName="CTULOCEMI" />
+                <ScalarProperty Name="CTUPERMARG" ColumnName="CTUPERMARG" />
+                <ScalarProperty Name="CTUPERMPED" ColumnName="CTUPERMPED" />
+                <ScalarProperty Name="CTUPRECVTA" ColumnName="CTUPRECVTA" />
+                <ScalarProperty Name="CT_CONFIGURACION" ColumnName="CT_CONFIGURACION" />
+                <ScalarProperty Name="CTMODIFICA_PRECIO_MINIMO" ColumnName="CTMODIFICA_PRECIO_MINIMO" />
+                <ScalarProperty Name="CTACTIVAR_CLIE" ColumnName="CTACTIVAR_CLIE" />
+                <ScalarProperty Name="CTULIMCRED" ColumnName="CTULIMCRED" />
+                <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="USU_ESTADO" ColumnName="USU_ESTADO" />
+                <ScalarProperty Name="USU_FEC_CREA" ColumnName="USU_FEC_CREA" />
+                <ScalarProperty Name="USU_FEC_INACTIVO" ColumnName="USU_FEC_INACTIVO" />
+                <ScalarProperty Name="FLGACTUALIZAR_VENDEDORES" ColumnName="FLGACTUALIZAR_VENDEDORES" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_EMPRESA_USUARIO_CRM" FunctionName="BDWENCOModel.Store.SP_EMPRESA_USUARIO_CRM">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDWENCOModel.SP_EMPRESA_USUARIO_CRM_Result">
+                <ScalarProperty Name="EMP_CODIGO" ColumnName="EMP_CODIGO" />
+                <ScalarProperty Name="TIPODOC_CODIGO" ColumnName="TIPODOC_CODIGO" />
+                <ScalarProperty Name="EMP_RAZON_NOMBRE" ColumnName="EMP_RAZON_NOMBRE" />
+                <ScalarProperty Name="EMP_APELLIDOPAT" ColumnName="EMP_APELLIDOPAT" />
+                <ScalarProperty Name="EMP_APELLIDOMAT" ColumnName="EMP_APELLIDOMAT" />
+                <ScalarProperty Name="EMP_DIRECCION" ColumnName="EMP_DIRECCION" />
+                <ScalarProperty Name="EMP_TELEFONO" ColumnName="EMP_TELEFONO" />
+                <ScalarProperty Name="EMP_FAX" ColumnName="EMP_FAX" />
+                <ScalarProperty Name="EMP_RUC_DOCUMENTO" ColumnName="EMP_RUC_DOCUMENTO" />
+                <ScalarProperty Name="EMP_REPRESENTANTE" ColumnName="EMP_REPRESENTANTE" />
+                <ScalarProperty Name="EMP_DOCUMENTO" ColumnName="EMP_DOCUMENTO" />
+                <ScalarProperty Name="EMP_NIVEL" ColumnName="EMP_NIVEL" />
+                <ScalarProperty Name="EMP_NIV01" ColumnName="EMP_NIV01" />
+                <ScalarProperty Name="EMP_NIV02" ColumnName="EMP_NIV02" />
+                <ScalarProperty Name="EMP_NIV03" ColumnName="EMP_NIV03" />
+                <ScalarProperty Name="EMP_NIV04" ColumnName="EMP_NIV04" />
+                <ScalarProperty Name="EMP_NIV05" ColumnName="EMP_NIV05" />
+                <ScalarProperty Name="EMP_NIV06" ColumnName="EMP_NIV06" />
+                <ScalarProperty Name="EMP_PANTALLA" ColumnName="EMP_PANTALLA" />
+                <ScalarProperty Name="EMP_NUMEAUTO" ColumnName="EMP_NUMEAUTO" />
+                <ScalarProperty Name="EMP_NUMECARAC" ColumnName="EMP_NUMECARAC" />
+                <ScalarProperty Name="EMP_REPORTE" ColumnName="EMP_REPORTE" />
+                <ScalarProperty Name="EMP_ACTIVA" ColumnName="EMP_ACTIVA" />
+                <ScalarProperty Name="EMP_NIV07" ColumnName="EMP_NIV07" />
+                <ScalarProperty Name="EMP_NIV08" ColumnName="EMP_NIV08" />
+                <ScalarProperty Name="EMP_PLANILLAS" ColumnName="EMP_PLANILLAS" />
+                <ScalarProperty Name="EMP_PORTAL_RENDICIONCTA" ColumnName="EMP_PORTAL_RENDICIONCTA" />
+                <ScalarProperty Name="EMP_PORTAL_PROVEEDOR" ColumnName="EMP_PORTAL_PROVEEDOR" />
+                <ScalarProperty Name="LOGO" ColumnName="LOGO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="ADMINISTRADOR">
+            <EntityTypeMapping TypeName="BDWENCOModel.ADMINISTRADOR">
+              <MappingFragment StoreEntitySet="ADMINISTRADOR">
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="ADM_FECHA_ELIMINACION" ColumnName="ADM_FECHA_ELIMINACION" />
+                <ScalarProperty Name="ADM_FECHA_CREACION" ColumnName="ADM_FECHA_CREACION" />
+                <ScalarProperty Name="ADM_PASSWORD" ColumnName="ADM_PASSWORD" />
+                <ScalarProperty Name="ADM_NOMBRE" ColumnName="ADM_NOMBRE" />
+                <ScalarProperty Name="ADM_CODIGO" ColumnName="ADM_CODIGO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USUARIO_FAC">
+            <EntityTypeMapping TypeName="BDWENCOModel.USUARIO_FAC">
+              <MappingFragment StoreEntitySet="USUARIO_FAC">
+                <ScalarProperty Name="FLGACTUALIZAR_VENDEDORES" ColumnName="FLGACTUALIZAR_VENDEDORES" />
+                <ScalarProperty Name="USU_FEC_INACTIVO" ColumnName="USU_FEC_INACTIVO" />
+                <ScalarProperty Name="USU_FEC_CREA" ColumnName="USU_FEC_CREA" />
+                <ScalarProperty Name="USU_ESTADO" ColumnName="USU_ESTADO" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+                <ScalarProperty Name="CTULIMCRED" ColumnName="CTULIMCRED" />
+                <ScalarProperty Name="CTACTIVAR_CLIE" ColumnName="CTACTIVAR_CLIE" />
+                <ScalarProperty Name="CTMODIFICA_PRECIO_MINIMO" ColumnName="CTMODIFICA_PRECIO_MINIMO" />
+                <ScalarProperty Name="CT_CONFIGURACION" ColumnName="CT_CONFIGURACION" />
+                <ScalarProperty Name="CTUPRECVTA" ColumnName="CTUPRECVTA" />
+                <ScalarProperty Name="CTUPERMPED" ColumnName="CTUPERMPED" />
+                <ScalarProperty Name="CTUPERMARG" ColumnName="CTUPERMARG" />
+                <ScalarProperty Name="CTULOCEMI" ColumnName="CTULOCEMI" />
+                <ScalarProperty Name="CTUSERFACE" ColumnName="CTUSERFACE" />
+                <ScalarProperty Name="CTUVEND" ColumnName="CTUVEND" />
+                <ScalarProperty Name="CTUCOTIZA" ColumnName="CTUCOTIZA" />
+                <ScalarProperty Name="CTUPEDIDO" ColumnName="CTUPEDIDO" />
+                <ScalarProperty Name="CTUSERGUI" ColumnName="CTUSERGUI" />
+                <ScalarProperty Name="CTUSERND" ColumnName="CTUSERND" />
+                <ScalarProperty Name="CTUSERNC" ColumnName="CTUSERNC" />
+                <ScalarProperty Name="CTUSERBOL" ColumnName="CTUSERBOL" />
+                <ScalarProperty Name="CTUSERFAC" ColumnName="CTUSERFAC" />
+                <ScalarProperty Name="CTUUSUARI" ColumnName="CTUUSUARI" />
+                <ScalarProperty Name="CTUFECCRE" ColumnName="CTUFECCRE" />
+                <ScalarProperty Name="CTUNROALM" ColumnName="CTUNROALM" />
+                <ScalarProperty Name="CTUTIPUSU" ColumnName="CTUTIPUSU" />
+                <ScalarProperty Name="CTUPUNVEN" ColumnName="CTUPUNVEN" />
+                <ScalarProperty Name="CTUPASSWO" ColumnName="CTUPASSWO" />
+                <ScalarProperty Name="CTUNOMUSU" ColumnName="CTUNOMUSU" />
+                <ScalarProperty Name="CTUALIAS" ColumnName="CTUALIAS" />
+                <ScalarProperty Name="CTEMPRESA" ColumnName="CTEMPRESA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_ACTUALIZAR_USUARIO" FunctionName="BDWENCOModel.Store.SP_ACTUALIZAR_USUARIO">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDWENCOModel.SP_ACTUALIZAR_USUARIO_R_Result">
+                <ScalarProperty Name="CTEMPRESA" ColumnName="CTEMPRESA" />
+                <ScalarProperty Name="CTUALIAS" ColumnName="CTUALIAS" />
+                <ScalarProperty Name="CTUNOMUSU" ColumnName="CTUNOMUSU" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_ACTUALIZAR_USAURIO_PASSWORD" FunctionName="BDWENCOModel.Store.SP_ACTUALIZAR_USAURIO_PASSWORD">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDWENCOModel.SP_ACTUALIZAR_USUARIO_R_Result">
+                <ScalarProperty Name="CTEMPRESA" ColumnName="CTEMPRESA" />
+                <ScalarProperty Name="CTUALIAS" ColumnName="CTUALIAS" />
+                <ScalarProperty Name="CTUNOMUSU" ColumnName="CTUNOMUSU" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_PORTAL_VERIFICAR_DATABASE1" FunctionName="BDWENCOModel.Store.SP_PORTAL_VERIFICAR_DATABASE">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BDWENCOModel.SP_PORTAL_VERIFICAR_DATABASE_Result">
+                <ScalarProperty Name="data" ColumnName="data" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CRM_Usuarios_Rol">
+            <EntityTypeMapping TypeName="BDWENCOModel.CRM_Usuarios_Rol">
+              <MappingFragment StoreEntitySet="CRM_Usuarios_Rol">
+                <ScalarProperty Name="Rol" ColumnName="Rol" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="contrase" ColumnName="contrase" />
+                <ScalarProperty Name="nombreUser" ColumnName="nombreUser" />
+                <ScalarProperty Name="alias" ColumnName="alias" />
+                <ScalarProperty Name="codigoEmpresa" ColumnName="codigoEmpresa" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
