@@ -12,7 +12,7 @@
 
  </style>
 <div class="wrapper wrapper-full-page">
-    <div class="full-page login-page" filter-color="black" data-image="@Url.Content("~/Content/dist/img/escritorio.jpg")">
+    <div class="full-page login-page" filter-color="black" data-image="@Url.Content("~/Content/dist/img/fondo.jpg")">
         <div class="content" style="padding-top: 5vh;">
             <div class="container">
                 <div class="row">
@@ -20,11 +20,11 @@
                         @using (Html.BeginForm("Login", "Autentificacion", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
                        { 
                             <div class="card card-login card-hidden" style="margin-bottom: 4px;">
-                                <div class="card-header text-center" data-background-color="blue" style="background: -webkit-linear-gradient(91deg, rgb(0, 215, 255), rgb(74, 60, 252));background: linear-gradient(91deg, rgb(0, 215, 255), rgb(74, 60, 252));">
+                                <div class="card-header text-center" data-background-color="blue" style="background: linear-gradient(0deg, rgb(18, 87, 142), rgb(14, 20, 60));">
                                     <h4 class="card-title">Portal CRM </h4>
                                 </div>
                                 <p class="category text-center">
-                                    Tu informacion al alcance
+                                 Construyendo el Futuro
                                 </p>
                                 <div style="padding: 10px;padding-bottom: 0px;">
                                     <div class="card-content" style="border-radius: 4px 4px 4px 4px;    border: thin solid #dedcdc; padding: 0px 10px 10px 30px;">
@@ -39,12 +39,12 @@
 
                                         <div class="input-group">
                                             <div class="form-group label-floating it">
-                                                @Html.LabelFor(model => model.RUC, new { @class = "control-label " })
+                                                @Html.Label( "Rif",new { @class = "control-label " })
                                                 @Html.TextBoxFor(model => model.RUC, new { @class = "form-control imput", @id = "RUC" })
                                                 @Html.ValidationMessageFor(model => model.RUC)
                                             </div>
                                             <span class="input-group-addon ">
-                                                <i class="fas fa-building" style="color: #f9fafb;border: thin solid #b9b7b7;border: thin solid #b9b7b7;border-radius: 50%;background: -webkit-linear-gradient(91deg, rgb(0, 215, 255), rgb(74, 60, 252));background: linear-gradient(91deg, rgb(0, 215, 255), rgb(74, 60, 252));padding: .5em;"></i>
+                                                <i class="fas fa-building" style="color: #f9fafb;border: thin solid #b9b7b7;border: thin solid #b9b7b7;border-radius: 50%;    background: linear-gradient(0deg, rgb(22, 23, 23), rgb(71, 78, 109));padding: .5em;"></i>
                                             </span>
                                         </div>
                                         <div class="input-group">
@@ -54,7 +54,7 @@
                                                 @Html.ValidationMessageFor(model => model.Usuario)
                                             </div>
                                             <span class="input-group-addon" >
-                                                <i class="fas fa-user-alt" style="color: #f9fafb;border: thin solid #b9b7b7;border: thin solid #b9b7b7;border-radius: 50%;background: -webkit-linear-gradient(91deg, rgb(0, 215, 255), rgb(74, 60, 252));background: linear-gradient(91deg, rgb(0, 215, 255), rgb(74, 60, 252));padding: .5em;"></i>
+                                                <i class="fas fa-user-alt" style="color: #f9fafb;border: thin solid #b9b7b7;border: thin solid #b9b7b7;border-radius: 50%;    background: linear-gradient(0deg, rgb(22, 23, 23), rgb(71, 78, 109));padding: .5em;"></i>
                                             </span>
                                         </div>
                                         <div class="input-group">
@@ -64,7 +64,7 @@
                                                 @Html.ValidationMessageFor(model => model.Password)
                                             </div>
                                             <span class="input-group-addon">
-                                                <i class="fas fa-address-book" style="color: #f9fafb;border: thin solid #b9b7b7;border: thin solid #b9b7b7;border-radius: 50%;background: -webkit-linear-gradient(91deg, rgb(0, 215, 255), rgb(74, 60, 252));background: linear-gradient(91deg, rgb(0, 215, 255), rgb(74, 60, 252)); padding: .5em;"></i>
+                                                <i class="fas fa-address-book" style="color: #f9fafb;border: thin solid #b9b7b7;border: thin solid #b9b7b7;border-radius: 50%;    background: linear-gradient(0deg, rgb(22, 23, 23), rgb(71, 78, 109));padding: .5em;"></i>
                                             </span>
                                         </div>
                                         <div class="text-center checkbox">
@@ -87,9 +87,11 @@
             <footer class="footer" style="padding-top: 0px;padding-bottom: 2px;">
                 <div class="container text-center">
                     <strong>
-                        Tecnologia desarrollada por  &nbsp;
+                        Tecnologia desarrollada para &nbsp;
                     </strong>
-                    <strong><a class="text-danger" href="http://www.starsoft.com.pe" target="_blank">www.starsoft.com.pe</a> </strong>
+                      
+     
+            <strong><a class="text-danger" href="" target="_blank">Gestionar la calidad</a> </strong>
                 </div>
             </footer>
      </div> 
