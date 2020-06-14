@@ -22,8 +22,8 @@ namespace CRM.Controllers
                 BDWENCOEntities BD = new BDWENCOEntities(CD.ConexDinamica(Session["datasour"].ToString(), Session["catalog"].ToString(), Session["user"].ToString(), Session["password"].ToString()));
                 Entidades db = new Entidades(CD.ConexDinamicaEntidades(Session["datasour"].ToString(), Session["catalog_user"].ToString(), Session["user"].ToString(), Session["password"].ToString()));
                 ViewBag.oportunidades = (from num in db.PROSPECTO select num).Count();
-                ViewBag.clientes = (from num in db.MAECLI select num).Count();
-                ViewBag.potencial_cliente = (from num in db.POTENCIALCLI select num).Count();
+                ViewBag.clientes = (from num in db.POTENCIALCLI where num.CFLAGPRIN == false select num).Count();
+                ViewBag.potencial_cliente = (from num in db.POTENCIALCLI where num.CFLAGPRIN == true select num).Count();
                 string codigo = Session["codigo"].ToString();
                 ViewBag.vendedores = BD.CRM_Usuarios_Rol.Where(x => x.codigoEmpresa == codigo).Count();
                 int cron_retraso = (from num in db.CRONOGRAMA where num.estatus == 2 select num).Count();
@@ -69,8 +69,9 @@ namespace CRM.Controllers
             string replacement = "";
             string input = "$16.32 12.19 £16.29 €18.29  €18,29";
             string result = Regex.Replace(input, pattern, replacement);
-          
-            var cliente2 = BD.MAECLI.OrderByDescending(x => x.CCODCLI).Select(x => new { x.CCODCLI, x.CNOMCLI, x.CDIRCLI, x.CTELEFO, x.CNUMRUC, x.CEMAIL }).ToList();
+
+            //var cliente2 = BD.MAECLI.OrderByDescending(x => x.CCODCLI).Select(x => new { x.CCODCLI, x.CNOMCLI, x.CDIRCLI, x.CTELEFO, x.CNUMRUC, x.CEMAIL }).ToList();
+            var cliente2 = BD.POTENCIALCLI.Where(x => x.CFLAGPRIN == false).OrderByDescending(x => x.CCODCLI).Select(x => new { x.CCODCLI, x.CNOMCLI, x.CDIRCLI, x.CTELEFO, x.CNUMRUC, x.CEMAIL }).ToList();
             var cliente = (from e in cliente2
                            select new
                                 {
@@ -104,7 +105,7 @@ namespace CRM.Controllers
             Entidades BD = new Entidades(CD.ConexDinamicaEntidades(Session["datasour"].ToString(), Session["catalog_user"].ToString(), Session["user"].ToString(), Session["password"].ToString()));
             ViewBag.Oportunidad = "active";
             ViewBag.open = "menu-open";
-            var p = BD.POTENCIALCLI.OrderByDescending(x => x.CCODCLI).Select(x => new { x.CNOMCLI, x.CDIRCLI, x.CTELEFO });
+            var p = BD.POTENCIALCLI.Where(x => x.CFLAGPRIN == true).OrderByDescending(x => x.CCODCLI).Select(x => new { x.CNOMCLI, x.CDIRCLI, x.CTELEFO });
             ViewBag.Oportunidades = p;
             return View();
         }

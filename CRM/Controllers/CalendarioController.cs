@@ -39,7 +39,7 @@ namespace CRM.Controllers
 
             if (rol == "ADMINISTRADOR")
             {
-                var propuesta = db.PROSPECTO.SqlQuery("select p.id_oportunidad,p.nombre,p.ingreso,p.id_estadoOporunidad,p.idCliente,p.id_prioridad,p.color,p.id_usuario,p.cierre_previsto,p.id_categoria,p.id_planificacion,p.tipoCliente,p.codigo_tipoMon,p.porcentajeGanar,(case when p.tipoCliente = 1 then i.CNOMCLI else pt.CNOMCLI end) as 'notas',p.id_estatusProspecto, p.fecha_inicial, p.fecha_final, p.monto_logrado from PROSPECTO p left join MAECLI i on p.idCliente = i.CCODCLI left join POTENCIALCLI pt on p.idCliente = pt.CCODCLI").ToList();
+                var propuesta = db.PROSPECTO.SqlQuery("select p.id_oportunidad,p.nombre,p.ingreso,p.id_estadoOporunidad,p.idCliente,p.id_prioridad,p.color,p.id_usuario,p.cierre_previsto,p.id_categoria,p.id_planificacion,p.tipoCliente,p.codigo_tipoMon,p.porcentajeGanar,pt.CNOMCLI as 'notas',p.id_estatusProspecto, p.fecha_inicial, p.fecha_final, p.monto_logrado from PROSPECTO p left join POTENCIALCLI pt on p.idCliente = pt.CCODCLI").ToList();
                 var jsonData = new
                 {
                     tipoActividad,
@@ -49,7 +49,7 @@ namespace CRM.Controllers
             }
             else
             {
-                var propuesta = db.PROSPECTO.SqlQuery("select p.id_oportunidad,p.nombre,p.ingreso,p.id_estadoOporunidad,p.idCliente,p.id_prioridad,p.color,p.id_usuario,p.cierre_previsto,p.id_categoria,p.id_planificacion,p.tipoCliente,p.codigo_tipoMon,p.porcentajeGanar,(case when p.tipoCliente = 1 then i.CNOMCLI else pt.CNOMCLI end) as 'notas',p.id_estatusProspecto, p.fecha_inicial, p.fecha_final, p.monto_logrado from PROSPECTO p left join MAECLI i on p.idCliente = i.CCODCLI left join POTENCIALCLI pt on p.idCliente = pt.CCODCLI WHERE id_usuario='" + usuario + "'").ToList();
+                var propuesta = db.PROSPECTO.SqlQuery("select p.id_oportunidad,p.nombre,p.ingreso,p.id_estadoOporunidad,p.idCliente,p.id_prioridad,p.color,p.id_usuario,p.cierre_previsto,p.id_categoria,p.id_planificacion,p.tipoCliente,p.codigo_tipoMon,p.porcentajeGanar,pt.CNOMCLI as 'notas',p.id_estatusProspecto, p.fecha_inicial, p.fecha_final, p.monto_logrado from PROSPECTO p left join POTENCIALCLI pt on p.idCliente = pt.CCODCLI WHERE id_usuario='" + usuario + "'").ToList();
                 var jsonData = new
                 {
                     tipoActividad,
@@ -70,7 +70,7 @@ namespace CRM.Controllers
             DateTime fecha_desde = Convert.ToDateTime("01/01/" + anio);
             DateTime fecha_hasta = Convert.ToDateTime("31/12/" + anio);
 
-            var propuesta = db.PROSPECTO.SqlQuery("select p.id_oportunidad,p.nombre,p.ingreso,p.id_estadoOporunidad,p.idCliente,p.id_prioridad,p.color,p.id_usuario,p.cierre_previsto,p.id_categoria,p.id_planificacion,p.tipoCliente,p.codigo_tipoMon,p.porcentajeGanar,(case when p.tipoCliente = 1 then i.CNOMCLI else pt.CNOMCLI end) as 'notas',p.id_estatusProspecto, p.fecha_inicial, p.fecha_final, p.monto_logrado from PROSPECTO p left join MAECLI i on p.idCliente = i.CCODCLI left join POTENCIALCLI pt on p.idCliente = pt.CCODCLI").ToList();
+            var propuesta = db.PROSPECTO.SqlQuery("select p.id_oportunidad,p.nombre,p.ingreso,p.id_estadoOporunidad,p.idCliente,p.id_prioridad,p.color,p.id_usuario,p.cierre_previsto,p.id_categoria,p.id_planificacion,p.tipoCliente,p.codigo_tipoMon,p.porcentajeGanar,pt.CNOMCLI as 'notas',p.id_estatusProspecto, p.fecha_inicial, p.fecha_final, p.monto_logrado from PROSPECTO p left join POTENCIALCLI pt on p.idCliente = pt.CCODCLI").ToList();
             var tipoActividad = db.TIPO_ACTIVIDAD.Where(m => m.estado == true).OrderBy(m => m.descripcion).ToList();
             var cronograma = db.CRONOGRAMA.Where(m => m.fecha_inicial >= fecha_desde && m.fecha_final <= fecha_hasta).ToList();
 
