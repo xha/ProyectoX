@@ -42,12 +42,12 @@ namespace CRM.Controllers
                         {*/
                             /*Session["ruc"] = model.Desencriptar(dataBase.RUC_Cliente);
                             Session["datasour"] = model.Desencriptar(dataBase.Servidor);
-                            Session["catalog"] = "CRM";
+                            Session["catalog"] = WebConfigurationManager.AppSettings["catalog"].ToString();
                             Session["user"] = model.Desencriptar(dataBase.Usuario_Server);
                             Session["password"] = model.Desencriptar(dataBase.Contrasenia_Server);*/
                             Session["ruc"] = model.RUC;
                             Session["datasour"] = WebConfigurationManager.AppSettings["datasour"].ToString();
-                            Session["catalog"] = "CRM";
+                            Session["catalog"] = WebConfigurationManager.AppSettings["catalog"].ToString();
                             Session["user"] = WebConfigurationManager.AppSettings["user"].ToString();
                             Session["password"] = WebConfigurationManager.AppSettings["password"].ToString();
                             BDWENCOEntities BD = new BDWENCOEntities(CD.ConexDinamica(Session["datasour"].ToString(), Session["catalog"].ToString(), Session["user"].ToString(), Session["password"].ToString()));
@@ -63,7 +63,7 @@ namespace CRM.Controllers
                                 //string codigo_momentaeio = BD.SP_EMPRESA_USUARIO_CRM().Where(b => b.EMP_RUC_DOCUMENTO == Session["ruc"].ToString()).First().EMP_CODIGO;
                                 string codigo_momentaeio = usuario_rol.codigoEmpresa;
 
-                                Session["catalog_user"] = "CRM";
+                                Session["catalog_user"] = WebConfigurationManager.AppSettings["catalog"].ToString();
 
                                 /*SP_PORTAL_VERIFICAR_DATABASE_Result validacion = BD.SP_PORTAL_VERIFICAR_DATABASE1(usuario_rol.codigoEmpresa + "BDCOMUN").First();
                                 if (validacion.data == "0")
@@ -81,8 +81,8 @@ namespace CRM.Controllers
 
                                 if (usuario_rol.Rol == "ADMINISTRADOR")
                                 {
-                                    Session["identificador"] = "CRM";
-                                    model.tipo = "CRM";
+                                    Session["identificador"] = WebConfigurationManager.AppSettings["catalog"].ToString();
+                                    model.tipo = WebConfigurationManager.AppSettings["catalog"].ToString();
                                     Session["nombre_admin"] = usuario_rol.nombreUser;
                                     Session["cliente"] = model;
                                     return RedirectToAction("Index", "Administrador");
@@ -155,7 +155,7 @@ namespace CRM.Controllers
             empresas_asociadas = BD.SP_EMPRESA_USUARIO_CRM().ToList();
             foreach (var i in empresas_asociadas)
             {
-                string base_datos = "CRM";
+                string base_datos = WebConfigurationManager.AppSettings["catalog"].ToString();
                 /*SP_PORTAL_VERIFICAR_DATABASE_Result validacion = BD.SP_PORTAL_VERIFICAR_DATABASE1(base_datos).First();
                 if (validacion.data != "0")
                 {*/
@@ -198,7 +198,7 @@ namespace CRM.Controllers
 
             foreach (var i in empresas_asociadas)
             {
-                string base_datos = "CRM";
+                string base_datos = WebConfigurationManager.AppSettings["catalog"].ToString();
                 /*SP_PORTAL_VERIFICAR_DATABASE_Result validacion2 = BD.SP_PORTAL_VERIFICAR_DATABASE1(base_datos).First();
                 if (validacion2.data != "0")
                 {*/
