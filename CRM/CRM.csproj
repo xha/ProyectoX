@@ -535,6 +535,7 @@
     <Content Include="Content\dist\js\pages\dashboard3.js" />
     <Content Include="Content\dist\js\spectrum.js" />
     <Content Include="Content\estilos.css" />
+    <Content Include="Content\img\CRM.jpg" />
     <Content Include="Content\Multinivel.css" />
     <Content Include="Content\plugins\fontawesome-free\webfonts\fa-brands-400.eot" />
     <Content Include="Content\plugins\fontawesome-free\webfonts\fa-brands-400.woff" />
