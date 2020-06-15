@@ -1,0 +1,660 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CRMmodel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CONTACTO_POTENCIAL">
+    <Key>
+      <PropertyRef Name="COD_CLIENTE" />
+      <PropertyRef Name="COD_CONTACTO" />
+    </Key>
+    <Property Name="COD_CLIENTE" Type="String" MaxLength="22" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="COD_CONTACTO" Type="Decimal" Precision="9" Scale="0" Nullable="false" />
+    <Property Name="CONTACTO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TELEFONO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CORREO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="AREA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CARGO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CELULAR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="CONTACTO_VENTA">
+    <Key>
+      <PropertyRef Name="COD_CLIENTE" />
+      <PropertyRef Name="COD_CONTACTO" />
+    </Key>
+    <Property Name="COD_CLIENTE" Type="String" MaxLength="22" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="COD_CONTACTO" Type="Decimal" Precision="9" Scale="0" Nullable="false" />
+    <Property Name="CONTACTO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TELEFONO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CORREO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="AREA" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CARGO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CELULAR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="CRONOGRAMA">
+    <Key>
+      <PropertyRef Name="id_cronograma" />
+    </Key>
+    <Property Name="id_cronograma" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="observacion" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="id_tipoActividad" Type="Int32" Nullable="false" />
+    <Property Name="descripcion" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="id_oportunidad" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="fecha_inicial" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="fecha_final" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="estatus" Type="Int32" Nullable="false" />
+    <Property Name="USU_CODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="respuesta" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="TIPO_ACTIVIDAD" Relationship="Self.fk_cronograma_tipo_actividad" FromRole="CRONOGRAMA" ToRole="TIPO_ACTIVIDAD" />
+    <NavigationProperty Name="PROSPECTO" Relationship="CRMmodel.fk_cronograma_prospecto" FromRole="CRONOGRAMA" ToRole="PROSPECTO" />
+  </EntityType>
+  <EntityType Name="ESTADO_PROSPECTO">
+    <Key>
+      <PropertyRef Name="id_estadoOportunidad" />
+    </Key>
+    <Property Name="id_estadoOportunidad" Type="Int32" Nullable="false" />
+    <Property Name="decripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="color" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="posicion" Type="Int32" />
+    <NavigationProperty Name="PROSPECTO" Relationship="CRMmodel.FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD" FromRole="ESTADO_PROSPECTO" ToRole="PROSPECTO" />
+  </EntityType>
+  <EntityType Name="GRUPO_USUARIO">
+    <Key>
+      <PropertyRef Name="id_grupoUuario" />
+    </Key>
+    <Property Name="id_grupoUuario" Type="Int32" Nullable="false" />
+    <Property Name="id_grupo" Type="Int32" />
+    <Property Name="int_usuario" Type="Int32" />
+    <NavigationProperty Name="GRUPOS" Relationship="Self.FK_GRUPO_USUARIO_GRUPOS" FromRole="GRUPO_USUARIO" ToRole="GRUPOS" />
+  </EntityType>
+  <EntityType Name="GRUPOS">
+    <Key>
+      <PropertyRef Name="id_grupo" />
+    </Key>
+    <Property Name="id_grupo" Type="Int32" Nullable="false" />
+    <Property Name="descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="GRUPO_USUARIO" Relationship="Self.FK_GRUPO_USUARIO_GRUPOS" FromRole="GRUPOS" ToRole="GRUPO_USUARIO" />
+    <NavigationProperty Name="RESPONSABLES" Relationship="Self.FK_RESPONSABLES_TAREA_GRUPOS" FromRole="GRUPOS" ToRole="RESPONSABLES" />
+  </EntityType>
+  <EntityType Name="MAEART">
+    <Key>
+      <PropertyRef Name="ACODIGO" />
+    </Key>
+    <Property Name="ACODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ACODIGO2" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="ADESCRI" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ADESCRI2" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="AFAMILIA" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="AMODELO" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="AUNIDAD" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="AGRUPO" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="ACUENTA" Type="String" MaxLength="18" FixedLength="false" Unicode="false" />
+    <Property Name="AFSERIE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="APRECIO" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="ADESCTO" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="APRECOM" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="ACODPRO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AFECHA" Type="DateTime" Precision="0" />
+    <Property Name="ACASILLERO" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="AFSTOCK" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AUSER" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="AESTADO" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AFECVEN" Type="DateTime" Precision="0" />
+    <Property Name="ACODMON" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="ATIPO" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="ACOMENTA" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+    <Property Name="AFLOTE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AFDECI" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AUNIART" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="APESO" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="AISCPOR" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="AIGVPOR" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="AHORA" Type="DateTime" Precision="0" />
+    <Property Name="AFPRELIB" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AFRESTA" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AFUNIREF" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="AUNIREF" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="AFACREF" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="APDIS" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="APCOM" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="ACODMONC" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="AFLAGIGV" Type="Boolean" Nullable="false" />
+    <Property Name="ACOLOR" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="AMARCA" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="AFOTO" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="ATALLA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CODAUTO" Type="Int32" />
+    <Property Name="AFLAGPERC" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="COD_IMAGEN" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="UMREFERENCIA" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="AMODELO1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AORIGEN" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="TERCERO" Type="Boolean" Nullable="false" />
+    <Property Name="MAR_CODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ZON_CODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="AULTFECCOMP" Type="DateTime" Precision="0" />
+    <Property Name="AULTPROV" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AULTPAISPROV" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="COD_ARANCEL" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+    <Property Name="APREFOB" Type="Double" />
+    <Property Name="APRECIF" Type="Double" />
+    <Property Name="AMONFOB" Type="String" MaxLength="14" FixedLength="false" Unicode="false" />
+    <Property Name="AMONCIF" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="FLG_EXONERADO_IGV" Type="Boolean" />
+    <Property Name="CODIGO_SUNAT" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+    <Property Name="COD_AUDITORIA" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="MAECLI">
+    <Key>
+      <PropertyRef Name="CCODCLI" />
+    </Key>
+    <Property Name="CCODCLI" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CNOMCLI" MaxLength="100" FixedLength="false" Unicode="false" Type="String" />
+    <Property Name="CDIRCLI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CTELEFO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CNUMRUC" MaxLength="11" FixedLength="false" Unicode="false" Type="String" />
+    <Property Name="CDOCIDEN" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CFLADES" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="NPORDES" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="CTIPVTA" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+    <Property Name="CESTADO" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="DFECINS" Type="DateTime" Precision="0" />
+    <Property Name="CNOMREP" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CDISTRI" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CUSUARI" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="DFECCRE" Type="DateTime" Precision="0" />
+    <Property Name="DFECMOD" Type="DateTime" Precision="0" />
+    <Property Name="CTIPPRE" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+    <Property Name="CVENDE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CZONVTA" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CPAIS" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CDEPT" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CPROV" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="DIRENT" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="LOCENT" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="LOCCLI" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="LOCEST" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="ZONVTA" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="DIAATE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="SITCLI" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="TIPIDE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="REGVTA" Type="String" MaxLength="7" FixedLength="false" Unicode="false" />
+    <Property Name="MONCRE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="LMCRUS" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="LMCRMN" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="SALDMN" Type="Decimal" Precision="18" Scale="6" />
+    <Property Name="SALDUS" Type="Decimal" Precision="18" Scale="6" />
+    <Property Name="LIMFAC" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="TOTFAC" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="TOTLEP" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="TOTCHD" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="FULABO" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="FECUFA" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="NROSOL" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="OBSERV" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="DOCVEN" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="DIAVEN" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="NROORD" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="MORLET" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="MORFAC" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="CHEDEV" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="LETPRO" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="CTIPCLI" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CGIRNEG" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CTERRIT" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CRUTA" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CSEGMEN" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CUBISEG" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CCODBAN" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CNUMCTA" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+    <Property Name="CFREVIS" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CHORATE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CTIPATE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CNUMFAX" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CEMAIL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CHOST" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="CZONPOS" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="COMENTA" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="RETEN" Type="Boolean" />
+    <Property Name="CFLAGPRIN" Type="Boolean" Nullable="false" />
+    <Property Name="CCODTRANS" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SIN_CONTROL_LIMCREDITO" Type="Boolean" />
+    <Property Name="SUBCLA01" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="SUBCLA02" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="ZON_CODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CTIPO_DOCUMENTO" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CAPELLIDO_PATERNO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CAPELLIDO_MATERNO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CPRIMER_NOMBRE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CSEGUNDO_NOMBRE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="TCL_CODIGO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NRO_AUTORIZACION_DIGEMID" MaxLength="50" FixedLength="false" Unicode="false" Type="String" />
+    <Property Name="CONTACTO_COBRANZA" Nullable="false" MaxLength="40" FixedLength="false" Unicode="false" Type="String" />
+    <Property Name="CCODCLAS" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FLGPORTAL_CLIENTES" Type="Boolean" />
+    <Property Name="ULTIMO_TC_VTA" Precision="18" Scale="6" Type="Decimal" />
+    <Property Name="DESCUENTO_ESP" Precision="18" Scale="6" Type="Decimal" />
+    <Property Name="CEMAIL_CONTACTO" MaxLength="120" FixedLength="false" Unicode="false" Type="String" />
+    <Property Name="UBIGEO" MaxLength="12" FixedLength="false" Unicode="false" Type="String" />
+    <Property Name="FEC_INACTIVO_BLOQUEADO" Precision="3" Type="DateTime" />
+    <Property Name="COD_AUDITORIA" MaxLength="12" FixedLength="false" Unicode="false" Type="String" />
+    <NavigationProperty Name="T_TIPO_CLIENTE" Relationship="Self.FK_MAECLI_T_TIPO_CLIENTE" FromRole="MAECLI" ToRole="T_TIPO_CLIENTE" />
+  </EntityType>
+  <EntityType Name="POTENCIALCLI">
+    <Key>
+      <PropertyRef Name="CCODCLI" />
+    </Key>
+    <Property Name="CCODCLI" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CNOMCLI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CDIRCLI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CTELEFO" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CNUMRUC" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="CDOCIDEN" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CFLADES" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="NPORDES" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="CTIPVTA" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+    <Property Name="CESTADO" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="DFECINS" Type="DateTime" Precision="0" />
+    <Property Name="CNOMREP" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CDISTRI" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CUSUARI" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="DFECCRE" Type="DateTime" Precision="0" />
+    <Property Name="DFECMOD" Type="DateTime" Precision="0" />
+    <Property Name="CTIPPRE" Type="String" MaxLength="4" FixedLength="false" Unicode="false" />
+    <Property Name="CVENDE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CZONVTA" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CPAIS" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CDEPT" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CPROV" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="DIRENT" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="LOCENT" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="LOCCLI" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="LOCEST" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="ZONVTA" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="DIAATE" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="SITCLI" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="TIPIDE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="REGVTA" Type="String" MaxLength="7" FixedLength="false" Unicode="false" />
+    <Property Name="MONCRE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="LMCRUS" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="LMCRMN" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="SALDMN" Type="Decimal" Precision="18" Scale="6" />
+    <Property Name="SALDUS" Type="Decimal" Precision="18" Scale="6" />
+    <Property Name="LIMFAC" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="TOTFAC" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="TOTLEP" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="TOTCHD" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="FULABO" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="FECUFA" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="NROSOL" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="OBSERV" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="DOCVEN" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="DIAVEN" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="NROORD" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="MORLET" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="MORFAC" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="CHEDEV" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="LETPRO" Type="Decimal" Precision="15" Scale="6" />
+    <Property Name="CTIPCLI" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CGIRNEG" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CTERRIT" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CRUTA" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CSEGMEN" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CUBISEG" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CCODBAN" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CNUMCTA" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+    <Property Name="CFREVIS" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CHORATE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CTIPATE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CNUMFAX" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CEMAIL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CHOST" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="CZONPOS" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="COMENTA" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="RETEN" Type="Boolean" />
+    <Property Name="CFLAGPRIN" Type="Boolean" Nullable="false" />
+    <Property Name="CCODTRANS" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SIN_CONTROL_LIMCREDITO" Type="Boolean" />
+    <Property Name="SUBCLA01" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="SUBCLA02" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="ZON_CODIGO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CTIPO_DOCUMENTO" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CAPELLIDO_PATERNO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CAPELLIDO_MATERNO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CPRIMER_NOMBRE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CSEGUNDO_NOMBRE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="TCL_CODIGO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NRO_AUTORIZACION_DIGEMID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CONTACTO_COBRANZA" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CCODCLAS" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FLGPORTAL_CLIENTES" Type="Boolean" />
+    <Property Name="ULTIMO_TC_VTA" Type="Decimal" Precision="18" Scale="6" />
+    <Property Name="DESCUENTO_ESP" Type="Decimal" Precision="18" Scale="6" />
+    <Property Name="CEMAIL_CONTACTO" Type="String" MaxLength="120" FixedLength="false" Unicode="false" />
+    <Property Name="UBIGEO" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="FEC_INACTIVO_BLOQUEADO" Type="DateTime" Precision="3" />
+    <Property Name="COD_AUDITORIA" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="T_TIPO_CLIENTE" Relationship="Self.FK_POTENCIALCLI_T_TIPO_CLIENTE" FromRole="POTENCIALCLI" ToRole="T_TIPO_CLIENTE" />
+  </EntityType>
+  <EntityType Name="PRIORIDAD">
+    <Key>
+      <PropertyRef Name="id_prioridad" />
+    </Key>
+    <Property Name="id_prioridad" Type="Int32" Nullable="false" />
+    <Property Name="descripcion" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PROSPECTO" Relationship="CRMmodel.FK_OPORTUNIDAD_PRIORIDAD" FromRole="PRIORIDAD" ToRole="PROSPECTO" />
+  </EntityType>
+  <EntityType Name="RESPONSABLES">
+    <Key>
+      <PropertyRef Name="id_responsable" />
+    </Key>
+    <Property Name="id_responsable" Type="Int32" Nullable="false" />
+    <Property Name="id_actividad" Type="Int32" />
+    <Property Name="id_grupos" Type="Int32" />
+    <Property Name="id_usuario" Type="Int32" />
+    <NavigationProperty Name="GRUPOS" Relationship="Self.FK_RESPONSABLES_TAREA_GRUPOS" FromRole="RESPONSABLES" ToRole="GRUPOS" />
+  </EntityType>
+  <EntityType Name="T_TIPO_CLIENTE">
+    <Key>
+      <PropertyRef Name="TCL_CODIGO" />
+    </Key>
+    <Property Name="TCL_CODIGO" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TCL_DESCRIPCION" Type="String" MaxLength="25" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="TCL_COD_ORIGEN" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="MAECLI" Relationship="Self.FK_MAECLI_T_TIPO_CLIENTE" FromRole="T_TIPO_CLIENTE" ToRole="MAECLI" />
+    <NavigationProperty Name="POTENCIALCLI" Relationship="Self.FK_POTENCIALCLI_T_TIPO_CLIENTE" FromRole="T_TIPO_CLIENTE" ToRole="POTENCIALCLI" />
+  </EntityType>
+  <EntityType Name="TIPO_ACTIVIDAD">
+    <Key>
+      <PropertyRef Name="id_tipoActividad" />
+    </Key>
+    <Property Name="id_tipoActividad" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="estado" Type="Boolean" Nullable="false" />
+    <Property Name="color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="CRONOGRAMA" Relationship="Self.fk_cronograma_tipo_actividad" FromRole="TIPO_ACTIVIDAD" ToRole="CRONOGRAMA" />
+  </EntityType>
+  <EntityType Name="DIRE_CLIENTE">
+    <Key>
+      <PropertyRef Name="COD_DIRECCION" />
+    </Key>
+    <Property Name="COD_DIRECCION" Type="Decimal" Precision="9" Scale="0" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CCODCLI" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="CDIRCLI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Abreviado" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="UBIGEO" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="fk_cronograma_tipo_actividad">
+    <End Role="TIPO_ACTIVIDAD" Type="Self.TIPO_ACTIVIDAD" Multiplicity="1" />
+    <End Role="CRONOGRAMA" Type="Self.CRONOGRAMA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TIPO_ACTIVIDAD">
+        <PropertyRef Name="id_tipoActividad" />
+      </Principal>
+      <Dependent Role="CRONOGRAMA">
+        <PropertyRef Name="id_tipoActividad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GRUPO_USUARIO_GRUPOS">
+    <End Role="GRUPOS" Type="Self.GRUPOS" Multiplicity="0..1" />
+    <End Role="GRUPO_USUARIO" Type="Self.GRUPO_USUARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GRUPOS">
+        <PropertyRef Name="id_grupo" />
+      </Principal>
+      <Dependent Role="GRUPO_USUARIO">
+        <PropertyRef Name="id_grupo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RESPONSABLES_TAREA_GRUPOS">
+    <End Role="GRUPOS" Type="Self.GRUPOS" Multiplicity="0..1" />
+    <End Role="RESPONSABLES" Type="Self.RESPONSABLES" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GRUPOS">
+        <PropertyRef Name="id_grupo" />
+      </Principal>
+      <Dependent Role="RESPONSABLES">
+        <PropertyRef Name="id_grupos" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MAECLI_T_TIPO_CLIENTE">
+    <End Role="T_TIPO_CLIENTE" Type="Self.T_TIPO_CLIENTE" Multiplicity="1" />
+    <End Role="MAECLI" Type="Self.MAECLI" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_TIPO_CLIENTE">
+        <PropertyRef Name="TCL_CODIGO" />
+      </Principal>
+      <Dependent Role="MAECLI">
+        <PropertyRef Name="TCL_CODIGO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_POTENCIALCLI_T_TIPO_CLIENTE">
+    <End Role="T_TIPO_CLIENTE" Type="Self.T_TIPO_CLIENTE" Multiplicity="1" />
+    <End Role="POTENCIALCLI" Type="Self.POTENCIALCLI" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_TIPO_CLIENTE">
+        <PropertyRef Name="TCL_CODIGO" />
+      </Principal>
+      <Dependent Role="POTENCIALCLI">
+        <PropertyRef Name="TCL_CODIGO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entidades" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CONTACTO_POTENCIAL" EntityType="Self.CONTACTO_POTENCIAL" />
+    <EntitySet Name="CONTACTO_VENTA" EntityType="Self.CONTACTO_VENTA" />
+    <EntitySet Name="CRONOGRAMA" EntityType="Self.CRONOGRAMA" />
+    <EntitySet Name="ESTADO_PROSPECTO" EntityType="Self.ESTADO_PROSPECTO" />
+    <EntitySet Name="GRUPO_USUARIO" EntityType="Self.GRUPO_USUARIO" />
+    <EntitySet Name="GRUPOS" EntityType="Self.GRUPOS" />
+    <EntitySet Name="MAEART" EntityType="Self.MAEART" />
+    <EntitySet Name="MAECLI" EntityType="Self.MAECLI" />
+    <EntitySet Name="POTENCIALCLI" EntityType="Self.POTENCIALCLI" />
+    <EntitySet Name="PRIORIDAD" EntityType="Self.PRIORIDAD" />
+    <EntitySet Name="RESPONSABLES" EntityType="Self.RESPONSABLES" />
+    <EntitySet Name="T_TIPO_CLIENTE" EntityType="Self.T_TIPO_CLIENTE" />
+    <EntitySet Name="TIPO_ACTIVIDAD" EntityType="Self.TIPO_ACTIVIDAD" />
+    <EntitySet Name="DIRE_CLIENTE" EntityType="Self.DIRE_CLIENTE" />
+    <AssociationSet Name="fk_cronograma_tipo_actividad" Association="Self.fk_cronograma_tipo_actividad">
+      <End Role="TIPO_ACTIVIDAD" EntitySet="TIPO_ACTIVIDAD" />
+      <End Role="CRONOGRAMA" EntitySet="CRONOGRAMA" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GRUPO_USUARIO_GRUPOS" Association="Self.FK_GRUPO_USUARIO_GRUPOS">
+      <End Role="GRUPOS" EntitySet="GRUPOS" />
+      <End Role="GRUPO_USUARIO" EntitySet="GRUPO_USUARIO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RESPONSABLES_TAREA_GRUPOS" Association="Self.FK_RESPONSABLES_TAREA_GRUPOS">
+      <End Role="GRUPOS" EntitySet="GRUPOS" />
+      <End Role="RESPONSABLES" EntitySet="RESPONSABLES" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MAECLI_T_TIPO_CLIENTE" Association="Self.FK_MAECLI_T_TIPO_CLIENTE">
+      <End Role="T_TIPO_CLIENTE" EntitySet="T_TIPO_CLIENTE" />
+      <End Role="MAECLI" EntitySet="MAECLI" />
+    </AssociationSet>
+    <AssociationSet Name="FK_POTENCIALCLI_T_TIPO_CLIENTE" Association="Self.FK_POTENCIALCLI_T_TIPO_CLIENTE">
+      <End Role="T_TIPO_CLIENTE" EntitySet="T_TIPO_CLIENTE" />
+      <End Role="POTENCIALCLI" EntitySet="POTENCIALCLI" />
+    </AssociationSet>
+    <EntitySet Name="TIPO_MONEDA" EntityType="CRMmodel.TIPO_MONEDA" />
+    <EntitySet Name="TABAYU" EntityType="CRMmodel.TABAYU" />
+    <EntitySet Name="ESTATUS_PROSPECTO" EntityType="CRMmodel.ESTATUS_PROSPECTO" />
+    <EntitySet Name="HISTORICO" EntityType="CRMmodel.HISTORICO" />
+    <EntitySet Name="PROSPECTO" EntityType="CRMmodel.PROSPECTO" />
+    <AssociationSet Name="fk_cronograma_prospecto" Association="CRMmodel.fk_cronograma_prospecto">
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+      <End Role="CRONOGRAMA" EntitySet="CRONOGRAMA" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD" Association="CRMmodel.FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD">
+      <End Role="ESTADO_PROSPECTO" EntitySet="ESTADO_PROSPECTO" />
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PROSPECTO_ESTATUS_PROSPECTO" Association="CRMmodel.FK_PROSPECTO_ESTATUS_PROSPECTO">
+      <End Role="ESTATUS_PROSPECTO" EntitySet="ESTATUS_PROSPECTO" />
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HISTORICO_OPORTUNIDAD" Association="CRMmodel.FK_HISTORICO_OPORTUNIDAD">
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+      <End Role="HISTORICO" EntitySet="HISTORICO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OPORTUNIDAD_PRIORIDAD" Association="CRMmodel.FK_OPORTUNIDAD_PRIORIDAD">
+      <End Role="PRIORIDAD" EntitySet="PRIORIDAD" />
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PROSPECTO_TIPO_MONEDA" Association="CRMmodel.FK_PROSPECTO_TIPO_MONEDA">
+      <End Role="TIPO_MONEDA" EntitySet="TIPO_MONEDA" />
+      <End Role="PROSPECTO" EntitySet="PROSPECTO" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="TIPO_MONEDA">
+    <Key>
+      <PropertyRef Name="TIPOMON_CODIGO" />
+    </Key>
+    <Property Name="TIPOMON_CODIGO" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="TIPOMON_DESCRIPCION" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="TIPOMON_NACIONALIDAD" Type="Boolean" Nullable="false" />
+    <Property Name="TIPOMON_SIMBOLO" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PROSPECTO" Relationship="CRMmodel.FK_PROSPECTO_TIPO_MONEDA" FromRole="TIPO_MONEDA" ToRole="PROSPECTO" />
+  </EntityType>
+  <EntityType Name="TABAYU">
+    <Key>
+      <PropertyRef Name="TCOD" />
+      <PropertyRef Name="TCLAVE" />
+    </Key>
+    <Property Name="TCOD" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="TCLAVE" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="TDESCRI" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="TDIAVEN" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="TNIVEL" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="TDATE" Type="DateTime" Precision="0" />
+    <Property Name="THORA" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="TRESTA" Type="Boolean" Nullable="false" />
+    <Property Name="TADVALOR" Type="Boolean" Nullable="false" />
+    <Property Name="TNOFOB" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ESTATUS_PROSPECTO">
+    <Key>
+      <PropertyRef Name="id_estatusProspecto" />
+    </Key>
+    <Property Name="id_estatusProspecto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="color" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PROSPECTO" Relationship="CRMmodel.FK_PROSPECTO_ESTATUS_PROSPECTO" FromRole="ESTATUS_PROSPECTO" ToRole="PROSPECTO" />
+  </EntityType>
+  <EntityType Name="HISTORICO">
+    <Key>
+      <PropertyRef Name="id_historico" />
+    </Key>
+    <Property Name="id_historico" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descripcion" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <Property Name="titulo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="fecha" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="id_estatusOp" Type="Int32" />
+    <Property Name="id_usuario" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="id_EstadoProspecto" Type="Int32" />
+    <Property Name="id_oportunidad" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PROSPECTO" Relationship="CRMmodel.FK_HISTORICO_OPORTUNIDAD" FromRole="HISTORICO" ToRole="PROSPECTO" />
+  </EntityType>
+  <EntityType Name="PROSPECTO">
+    <Key>
+      <PropertyRef Name="id_oportunidad" />
+    </Key>
+    <Property Name="id_oportunidad" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ingreso" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="id_estadoOporunidad" Type="Int32" />
+    <Property Name="idCliente" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="id_prioridad" Type="Int32" />
+    <Property Name="color" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="id_usuario" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="cierre_previsto" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="id_categoria" Type="Int32" />
+    <Property Name="notas" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="id_planificacion" Type="Int32" />
+    <Property Name="tipoCliente" Type="Int32" />
+    <Property Name="codigo_tipoMon" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="porcentajeGanar" Type="Int32" />
+    <Property Name="id_estatusProspecto" Type="Int32" Nullable="false" />
+    <Property Name="fecha_inicial" Type="DateTime" Precision="3" />
+    <Property Name="fecha_final" Type="DateTime" Precision="3" />
+    <Property Name="monto_logrado" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="CRONOGRAMA" Relationship="CRMmodel.fk_cronograma_prospecto" FromRole="PROSPECTO" ToRole="CRONOGRAMA" />
+    <NavigationProperty Name="ESTADO_PROSPECTO" Relationship="CRMmodel.FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD" FromRole="PROSPECTO" ToRole="ESTADO_PROSPECTO" />
+    <NavigationProperty Name="ESTATUS_PROSPECTO" Relationship="CRMmodel.FK_PROSPECTO_ESTATUS_PROSPECTO" FromRole="PROSPECTO" ToRole="ESTATUS_PROSPECTO" />
+    <NavigationProperty Name="HISTORICO" Relationship="CRMmodel.FK_HISTORICO_OPORTUNIDAD" FromRole="PROSPECTO" ToRole="HISTORICO" />
+    <NavigationProperty Name="PRIORIDAD" Relationship="CRMmodel.FK_OPORTUNIDAD_PRIORIDAD" FromRole="PROSPECTO" ToRole="PRIORIDAD" />
+    <NavigationProperty Name="TIPO_MONEDA" Relationship="CRMmodel.FK_PROSPECTO_TIPO_MONEDA" FromRole="PROSPECTO" ToRole="TIPO_MONEDA" />
+  </EntityType>
+  <Association Name="fk_cronograma_prospecto">
+    <End Type="CRMmodel.PROSPECTO" Role="PROSPECTO" Multiplicity="1" />
+    <End Type="CRMmodel.CRONOGRAMA" Role="CRONOGRAMA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROSPECTO">
+        <PropertyRef Name="id_oportunidad" />
+      </Principal>
+      <Dependent Role="CRONOGRAMA">
+        <PropertyRef Name="id_oportunidad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OPORTUNIDAD_ESTADO_OPORTUNIDAD">
+    <End Type="CRMmodel.ESTADO_PROSPECTO" Role="ESTADO_PROSPECTO" Multiplicity="0..1" />
+    <End Type="CRMmodel.PROSPECTO" Role="PROSPECTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ESTADO_PROSPECTO">
+        <PropertyRef Name="id_estadoOportunidad" />
+      </Principal>
+      <Dependent Role="PROSPECTO">
+        <PropertyRef Name="id_estadoOporunidad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PROSPECTO_ESTATUS_PROSPECTO">
+    <End Type="CRMmodel.ESTATUS_PROSPECTO" Role="ESTATUS_PROSPECTO" Multiplicity="1" />
+    <End Type="CRMmodel.PROSPECTO" Role="PROSPECTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ESTATUS_PROSPECTO">
+        <PropertyRef Name="id_estatusProspecto" />
+      </Principal>
+      <Dependent Role="PROSPECTO">
+        <PropertyRef Name="id_estatusProspecto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HISTORICO_OPORTUNIDAD">
+    <End Type="CRMmodel.PROSPECTO" Role="PROSPECTO" Multiplicity="0..1" />
+    <End Type="CRMmodel.HISTORICO" Role="HISTORICO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROSPECTO">
+        <PropertyRef Name="id_oportunidad" />
+      </Principal>
+      <Dependent Role="HISTORICO">
+        <PropertyRef Name="id_oportunidad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OPORTUNIDAD_PRIORIDAD">
+    <End Type="CRMmodel.PRIORIDAD" Role="PRIORIDAD" Multiplicity="0..1" />
+    <End Type="CRMmodel.PROSPECTO" Role="PROSPECTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PRIORIDAD">
+        <PropertyRef Name="id_prioridad" />
+      </Principal>
+      <Dependent Role="PROSPECTO">
+        <PropertyRef Name="id_prioridad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PROSPECTO_TIPO_MONEDA">
+    <End Type="CRMmodel.TIPO_MONEDA" Role="TIPO_MONEDA" Multiplicity="0..1" />
+    <End Type="CRMmodel.PROSPECTO" Role="PROSPECTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TIPO_MONEDA">
+        <PropertyRef Name="TIPOMON_CODIGO" />
+      </Principal>
+      <Dependent Role="PROSPECTO">
+        <PropertyRef Name="codigo_tipoMon" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

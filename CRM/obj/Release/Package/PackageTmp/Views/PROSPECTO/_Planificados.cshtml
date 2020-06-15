@@ -1,0 +1,354 @@
+﻿@model CRM.Models.PROSPECTO
+
+@{
+    List<CRM.Models.TIPO_ACTIVIDAD> tIPO_ACTIVIDAD = ViewBag.tIPO_ACTIVIDAD;
+    int Posicion = 0;
+    DateTime fechaFinalAnt = DateTime.Now;
+    TimeSpan cantTotal = DateTime.Now - DateTime.Now;
+}
+
+
+    <div class="card">
+        <div class="card-header">
+
+            <h1 class="text-primary">
+                <i class="fas fa-project-diagram"></i> Planificación
+                <a href="javascript:void(0)" onclick="abrir_calendario('@Model.id_oportunidad')" class="btn btn-primary mb-3 text-white text-uppercase text-bold float-right">Planificar actividad <i class="far fa-calendar-alt"></i></a>
+            </h1>
+
+        </div>
+        <div class="card-body pb-0">
+            <div class="container-fluid overflow-auto">
+
+
+                <div id="Planificacion" class="row flex-row flex-nowrap text-center text-lg">
+
+                    @foreach (var Plan in Model.CRONOGRAMA.Where(p => p.estatus < 3 ).OrderBy(p => p.fecha_inicial))
+                    {
+
+                        Posicion = Posicion + 1;
+                        TimeSpan duracion = Plan.fecha_final - Plan.fecha_inicial;
+
+                        if (Posicion <= Model.CRONOGRAMA.Count())
+                        {
+                            if (Posicion == 1)
+                            {
+                                fechaFinalAnt = Plan.fecha_final;
+
+                            }
+                            else
+                            {
+                                TimeSpan espera = Plan.fecha_inicial - fechaFinalAnt;
+                                <div class="col-auto ">
+                                    <div class="columna mt-4 mb-4">
+                                        <p class="text-black-50 text-bold" style="position: relative">
+
+
+                                            <small class="d-block text-sm text-bold text-primary ">
+
+                                                @if (espera.Hours != 0 && espera.Days != 0 && espera.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@espera.Days Dias @espera.Hours Horas y @espera.Minutes Minutos.</span>
+
+                                                }
+
+                                                else if (espera.Days == 0 && espera.Hours != 0 && espera.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@espera.Hours Horas y @espera.Minutes Minutos.</span>
+
+                                                }
+
+                                                else if (espera.Hours != 0 && espera.Days != 0 && espera.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@espera.Days Dias y @espera.Hours Horas.</span>
+                                                }
+
+                                                else if (espera.Hours != 0 && espera.Days == 0 && espera.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@espera.Hours Horas.</span>
+                                                }
+
+                                                else if (espera.Hours == 0 && espera.Days != 0 && espera.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@espera.Days Dias.</span>
+                                                }
+
+                                                else if (espera.Days == 0 && espera.Hours == 0 && espera.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@espera.Minutes Minutos.</span>
+                                                }
+
+
+
+                                            </small>
+                                            <i class="fas fa-caret-right fa-4x fixedHeader-floating"></i>
+                                        </p>
+
+                                    </div>
+                                </div>
+                                fechaFinalAnt = Plan.fecha_final;
+
+                                cantTotal = cantTotal + espera;
+                            }
+                        }
+
+                        cantTotal = cantTotal + duracion;
+                        <div class="col-auto " data-toggle="tooltip" data-placement="top" title="@Plan.fecha_inicial.ToString("dd/MM/yyyy HH:mm") a @Plan.fecha_final.ToString("dd/MM/yyyy HH:mm")">
+                            <div class="columna mt-4 mb-4">
+                                @if (Plan.estatus == 1)
+                                {
+                                    <a id="actividad" href="#" onclick="return false;" estatus="@Plan.estatus" tipo="@Plan.id_tipoActividad" id_cronograma="@Plan.id_cronograma" idOportunidad="@Plan.id_oportunidad" data-toggle="modal" data-target="#modal_actividad">
+                                        <p class="info-box-icon elevation-3  p-2  text-black-50 text-bold bg-gradient-olive" style="border-radius: 6px;">
+                                            @Plan.TIPO_ACTIVIDAD.descripcion
+
+                                            <small class="d-block">
+
+                                                @if (duracion.Hours != 0 && duracion.Days != 0 && duracion.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Days Dias @duracion.Hours Horas y @duracion.Minutes Minutos.</span>
+
+                                                }
+
+
+                                                else if (duracion.Hours != 0 && duracion.Days != 0 && duracion.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Days Dias y @duracion.Hours Horas.</span>
+                                                }
+
+
+                                                else if (duracion.Hours != 0 && duracion.Days == 0 && duracion.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Hours Horas y @duracion.Minutes Minutos.</span>
+                                                }
+
+                                                else if (duracion.Hours != 0 && duracion.Days == 0 && duracion.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Hours Horas.</span>
+                                                }
+
+
+                                                else if (duracion.Hours == 0 && duracion.Days != 0 && duracion.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Days Dias.</span>
+                                                }
+
+                                                else if (duracion.Hours == 0 && duracion.Days == 0 && duracion.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Minutes Minutos.</span>
+                                                }
+
+
+                                            </small>
+
+                                        </p>
+                                    </a>
+                                }
+                                else if (Plan.estatus == 2)
+                                {
+                                    <a id="actividad" href="#" onclick="return false;" estatus="@Plan.estatus" tipo="@Plan.id_tipoActividad" id_cronograma="@Plan.id_cronograma" idOportunidad="@Plan.id_oportunidad" data-toggle="modal" data-target="#modal_actividad">
+                                    <p class="info-box-icon elevation-3  p-2  text-black-50 text-bold bg-gradient-red" style="border-radius: 6px;">
+                                        @Plan.TIPO_ACTIVIDAD.descripcion
+
+                                        <small class="d-block">
+
+                                            @if (duracion.Hours != 0 && duracion.Days != 0 && duracion.Minutes != 0)
+                                            {
+                                                <span class="font-italic">@duracion.Days Dias @duracion.Hours Horas y @duracion.Minutes Minutos.</span>
+
+                                            }
+
+
+                                            else if (duracion.Hours != 0 && duracion.Days != 0 && duracion.Minutes == 0)
+                                            {
+                                                <span class="font-italic">@duracion.Days Dias y @duracion.Hours Horas.</span>
+                                            }
+
+
+                                            else if (duracion.Hours != 0 && duracion.Days == 0 && duracion.Minutes != 0)
+                                            {
+                                                <span class="font-italic">@duracion.Hours Horas y @duracion.Minutes Minutos.</span>
+                                            }
+
+                                            else if (duracion.Hours != 0 && duracion.Days == 0 && duracion.Minutes == 0)
+                                            {
+                                                <span class="font-italic">@duracion.Hours Horas.</span>
+                                            }
+
+
+                                            else if (duracion.Hours == 0 && duracion.Days != 0 && duracion.Minutes == 0)
+                                            {
+                                                <span class="font-italic">@duracion.Days Dias.</span>
+                                            }
+
+                                            else if (duracion.Hours == 0 && duracion.Days == 0 && duracion.Minutes != 0)
+                                            {
+                                                <span class="font-italic">@duracion.Minutes Minutos.</span>
+                                            }
+
+
+                                        </small>
+
+                                    </p>
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a id="actividad" href="#" onclick="return false;" estatus="@Plan.estatus" tipo="@Plan.id_tipoActividad" id_cronograma="@Plan.id_cronograma" idOportunidad="@Plan.id_oportunidad" data-toggle="modal" data-target="#modal_actividad">
+                                        <p class="info-box-icon elevation-3  p-2  text-black-50 text-bold bg-gradient-white" style="border-radius: 6px;">
+                                            @Plan.TIPO_ACTIVIDAD.descripcion
+
+                                            <small class="d-block">
+
+                                                @if (duracion.Hours != 0 && duracion.Days != 0 && duracion.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Days Dias @duracion.Hours Horas y @duracion.Minutes Minutos.</span>
+
+                                                }
+
+
+                                                else if (duracion.Hours != 0 && duracion.Days != 0 && duracion.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Days Dias y @duracion.Hours Horas.</span>
+                                                }
+
+
+                                                else if (duracion.Hours != 0 && duracion.Days == 0 && duracion.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Hours Horas y @duracion.Minutes Minutos.</span>
+                                                }
+
+                                                else if (duracion.Hours != 0 && duracion.Days == 0 && duracion.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Hours Horas.</span>
+                                                }
+
+
+                                                else if (duracion.Hours == 0 && duracion.Days != 0 && duracion.Minutes == 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Days Dias.</span>
+                                                }
+
+                                                else if (duracion.Hours == 0 && duracion.Days == 0 && duracion.Minutes != 0)
+                                                {
+                                                    <span class="font-italic">@duracion.Minutes Minutos.</span>
+                                                }
+
+
+                                            </small>
+
+                                        </p>
+                                    </a>
+                                }
+
+                            </div>
+                        </div>
+
+
+                    }
+
+
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer bg-white border-top">
+            @{Posicion = 0; }
+            <div class="row">
+
+                @foreach (var Plan in Model.CRONOGRAMA.OrderBy(p => p.fecha_inicial))
+                {
+                    Posicion = Posicion + 1;
+                    if (Posicion <= Model.CRONOGRAMA.Count())
+                    {
+
+                        if (Posicion == 1)
+                        {
+                            <div class="col float-right text-center">
+                                <p class="text-black-50 text-bold">
+                                    Fecha Inicial:
+                                    <b class="d-block">
+                                        @Plan.fecha_inicial.ToString("dd/MM/yyyy HH:mm")
+                                    </b>
+
+                                </p>
+                            </div>
+
+                        }
+                        if (Posicion == Model.CRONOGRAMA.Count())
+                        {
+                            <div class="col float-left text-center">
+                                <p id="finalTotal" class="text-black-50 text-bold">
+                                    Fecha Final:
+                                    <b class="d-block">
+                                        @Plan.fecha_final.ToString("dd/MM/yyyy HH:mm")
+                                    </b>
+
+                                </p>
+                            </div>
+
+
+                        }
+                    }
+
+
+                }
+
+                <div class="col text-center">
+                    @if (Model.CRONOGRAMA.Count() == 0)
+                    {
+                        <h3>No tienes activivades Planificadas</h3>
+                    }
+                    else
+                    {
+                        <p class="text-black-50 text-bold">
+                            Duración total aproximada:
+                            <b class="d-block totalAprox">
+                                @if (cantTotal.Hours != 0 && cantTotal.Days != 0 && cantTotal.Minutes != 0)
+                                {
+                                    <span class="font-italic">@cantTotal.Days Dias @cantTotal.Hours Horas y @cantTotal.Minutes Minutos.</span>
+
+                                }
+
+
+                                else if (cantTotal.Hours != 0 && cantTotal.Days != 0 && cantTotal.Minutes == 0)
+                                {
+                                    <span class="font-italic">@cantTotal.Days Dias y @cantTotal.Hours Horas.</span>
+                                }
+
+
+                                else if (cantTotal.Hours != 0 && cantTotal.Days == 0 && cantTotal.Minutes != 0)
+                                {
+                                    <span class="font-italic">@cantTotal.Hours Horas y @cantTotal.Minutes Minutos.</span>
+                                }
+
+                                else if (cantTotal.Hours != 0 && cantTotal.Days == 0 && cantTotal.Minutes == 0)
+                                {
+                                    <span class="font-italic">@cantTotal.Hours Horas.</span>
+                                }
+
+
+                                else if (cantTotal.Hours == 0 && cantTotal.Days != 0 && cantTotal.Minutes == 0)
+                                {
+                                    <span class="font-italic">@cantTotal.Days Dias.</span>
+                                }
+
+                                else if (cantTotal.Hours == 0 && cantTotal.Days == 0 && cantTotal.Minutes != 0)
+                                {
+                                    <span class="font-italic">@cantTotal.Minutes Minutos.</span>
+                                }
+
+
+                            </b>
+
+                        </p>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+

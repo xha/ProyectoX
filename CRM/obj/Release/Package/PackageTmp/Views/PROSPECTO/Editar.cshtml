@@ -1,0 +1,11 @@
+﻿
+@if (Session["Rol"].ToString() == "VENDEDOR")
+{
+
+    Html.RenderPartial("_oportunidadVendedor");
+}
+else
+{
+
+    Html.RenderPartial("_oportunidadAdmin");
+}

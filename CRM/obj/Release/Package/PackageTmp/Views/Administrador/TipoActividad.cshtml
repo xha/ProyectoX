@@ -1,0 +1,399 @@
+﻿
+
+
+
+@using CRM.sp_dinamic
+@{
+    var jss = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var actividad = jss.Serialize(ViewBag.tipoActividad);
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Tipo de Actividades</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Administrador") ">Inicio</a></li>
+                        <li class="breadcrumb-item">Actividad</li>
+                        <li class="breadcrumb-item"><a href="@Url.Action("TipoActividad", "Administrador") ">Tipo</a></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-success card-outline">
+                        <div class="card-header p-3">
+                            <h5>Gestionar Tipo de Actividades  </h5>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <a class="btn btn-md btn-success ml-3" style="color: aliceblue;" id="agregar" data-toggle="modal" data-target=".tipo"> <i class="fas fa-notes-medical"></i>  Agregar Tipo </a>
+
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+
+                                        <table id="actividad" class="table text-center table-bordered table-hover">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>Descripcion</th>
+                                                    <th>Color</th>
+                                                    <th>Acci&oacute;n</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.row -->
+                        </div>
+
+
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!--CREAR-->
+<div class="modal fade bd-example-modal-lg  tipo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header  bg-warning " style="padding: 16px;">
+                <h5 class="modal-title  font-weight-bold"> <span class="brand-text font-weight-bold" id="titulos">Agregar Tipo de Actividad </span> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <form id="quickForm">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Descripcion</label>
+                                <input type="text" name="descripcion" class="form-control limpiar"  id="descripcion" placeholder="Descripcion">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- textarea -->
+                            <div class="form-group">
+                                <label>Color</label>
+                                <input type="color" name="color" class="form-control limpiar" id="color" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid #c3c5c7;">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="guardar" class="btn btn-primary guardar">Grabar</button>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Modificar-->
+<div class="modal fade bd-example-modal-lg  tipo_modificar" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header  bg-warning " style="padding: 16px;">
+                <h5 class="modal-title  font-weight-bold"> <span class="brand-text font-weight-bold" id="titulos">Modificar Tipo de Actividad </span> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <form id="quickForm2">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Descripcion</label>
+                                <input type="text" name="descripcion_modificar" class="form-control limpiar" id="descripcion_modificar" placeholder="Descripcion">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- textarea -->
+                            <div class="form-group">
+                                <label>Color</label>
+                                <input type="color" name="color" class="form-control limpiar" id="color_modificar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid #c3c5c7;">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" id="modificar" class="btn btn-primary modificar" >Modificar</button>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var lang = {
+
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+
+        var actividad_json = @Html.Raw(actividad);
+
+
+        var table = $('#actividad').DataTable({
+
+           data: actividad_json,
+
+            columns: [
+                  { "data": "descripcion", "defaultContent": "" },
+                   {
+                       "render": function (data, type, row) {
+                           return ' <input type="color" name="color_s" class="form-control " disabled=true value= '+ row.color + ' >';
+                       }
+                   },
+
+                    {
+                        "render": function (data, type, row) {
+                            return '  <a class="btn btn-danger  eliminar btn-md" ><i class="fas fa-window-close" style="color: #fafafa;"></i></a> <a class="btn btn-info btn-md  editar" data-toggle="modal" data-target=".tipo_modificar" ><i class="fas fa-edit" style="color: #fafafa;"></i></a>';
+                        }
+                    }
+
+            ],
+            "order": [],
+            "lengthChange": false,
+            "info": false,
+            "autoWidth": false,
+            "language": lang
+        });
+        var validar = $('#quickForm').validate({
+            rules: {
+                descripcion: {
+                    required: true,
+                }
+            },
+            messages: {
+                descripcion: {
+                    required: "La descripcion es requerida",
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+        var validar2 = $('#quickForm2').validate({
+            rules: {
+                descripcion_modificar: {
+                    required: true,
+                }
+            },
+            messages: {
+                descripcion_modificar: {
+                    required: "La descripcion es requerida",
+                },
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+        $("#guardar").on("click", function (event) {
+            var va;
+            va = validar.form()
+            event.preventDefault();
+            if (va) {
+                var descripcion = $("#descripcion").val();
+                var color = $("#color").val();
+
+                var tipoActividad = [];
+                var tipoActividades  = {
+                    descripcion,
+                    color,
+
+                };
+                tipoActividad.push(tipoActividades);
+                var tipoActividad = JSON.stringify(tipoActividad);
+                var json ;
+               $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("save_tipoActividad", "Administrador")',
+                   data: { 'tipoActividad': tipoActividad },
+                    success: function (result) {
+
+                        if (!result.error) {
+                            limpiar();
+                            toastr.success(result.mensaje);
+                            limpiar();
+                            actividad_json = JSON.parse(result.users);
+                            console.log(actividad_json);
+                            $('#actividad').DataTable().clear();
+                            $('#actividad').DataTable().rows.add(actividad_json);
+                            $('#actividad').DataTable().draw();
+
+                        }else {
+                            toastr.error(result.mensaje);
+                        }
+                    },
+                });
+            }
+
+        });
+        var id;
+        var modificar_actividad = function (tbody, table) {
+            $(tbody).on("click", "a.editar", function () {
+                var data = table.row($(this).parents("tr")).data();
+                datas = data;
+                id = data.id_tipoActividad;
+                console.log(datas)
+                $("#descripcion_modificar").val(data.descripcion);
+                $("#color_modificar").val(data.color);
+
+            });
+        }
+
+        modificar_actividad("#actividad tbody", table);
+
+        $("#modificar").on("click", function (event) {
+            var va;
+            va = validar2.form()
+            event.preventDefault();
+            if (va) {
+                var descripcion = $("#descripcion_modificar").val();
+                var color = $("#color_modificar").val();
+                var tipoActividad = [];
+                var tipoActividades  = {
+                    descripcion,
+                    color,
+
+                };
+                tipoActividad.push(tipoActividades);
+                var tipoActividad = JSON.stringify(tipoActividad);
+                var json ;
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("modificar_tipoActividad", "Administrador")',
+                    data: { 'tipoActividad': tipoActividad , 'id':id },
+                    success: function (result) {
+
+                        if (!result.error) {
+                            toastr.success(result.mensaje);
+                            actividad_json = JSON.parse(result.users);
+                            console.log(actividad_json);
+                            $('#actividad').DataTable().clear();
+                            $('#actividad').DataTable().rows.add(actividad_json);
+                            $('#actividad').DataTable().draw();
+
+                        }
+                    },
+                });
+            }
+
+        });
+
+
+        var tipoActividad_delete = function (tbody, table) {
+            $(tbody).on("click", "a.eliminar", function () {
+                var data = table.row($(this).parents("tr")).data();
+
+                Swal.fire({
+                    title: '¿Desea eliminar la actividad ' + data.descripcion + '?',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si!'
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            url: '@Url.Action("eliminar_actividad", "Administrador")',
+                            data: { 'id': data.id_tipoActividad },
+                            success: function (result) {
+                                if (!result.error) {
+                                  toastr.success(result.mensaje);
+                            actividad_json = JSON.parse(result.users);
+                            console.log(actividad_json);
+                            $('#actividad').DataTable().clear();
+                            $('#actividad').DataTable().rows.add(actividad_json);
+                            $('#actividad').DataTable().draw();
+
+
+
+                                }
+                            }
+
+                        })
+                    }
+                })
+
+
+            });
+        }
+        tipoActividad_delete("#actividad tbody", table);
+        function limpiar() {
+            $('.limpiar').val("");
+        }
+    </script>
+
+}
+
+
+
+

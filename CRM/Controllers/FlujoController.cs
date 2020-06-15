@@ -20,15 +20,15 @@ namespace CRM.Controllers
         //Clientes Fidelizados de MAECLI
         public void cargarClientesFi()
         {
-            List<Maecli_Select> data = new List<Maecli_Select>();
+            List<POTENCIALCLI> data = new List<POTENCIALCLI>();
             Entidades db = new Entidades(CD.ConexDinamicaEntidades(Session["datasour"].ToString(), Session["catalog_user"].ToString(), Session["user"].ToString(), Session["password"].ToString()));
-            ViewBag.ListaClientesFi = db.MAECLI.Select(m => new { m.CCODCLI, m.CTIPO_DOCUMENTO, m.CDOCIDEN, m.CAPELLIDO_PATERNO, m.CAPELLIDO_MATERNO, m.CPRIMER_NOMBRE, m.CNOMCLI, m.CTELEFO, m.CEMAIL, m.CHOST, m.TCL_CODIGO, m.CDIRCLI, m.CPROV, m.CPAIS, m.CDISTRI }).ToList();
+            ViewBag.ListaClientesFi = db.POTENCIALCLI.Select(m => new { m.CCODCLI, m.CTIPO_DOCUMENTO, m.CDOCIDEN, m.CAPELLIDO_PATERNO, m.CAPELLIDO_MATERNO, m.CPRIMER_NOMBRE, m.CNOMCLI, m.CTELEFO, m.CEMAIL, m.CHOST, m.TCL_CODIGO, m.CDIRCLI, m.CPROV, m.CPAIS, m.CDISTRI }).ToList();
 
-            var clientes = (from m in db.MAECLI
+            var clientes = (from m in db.POTENCIALCLI
                             select new { m.CCODCLI, m.CNOMCLI, m.CTELEFO, m.CEMAIL }).ToList();
             foreach (var s in clientes)
             {
-                data.Add(new Maecli_Select() { CCODCLI = s.CCODCLI, CNOMCLI = s.CNOMCLI, CTELEFO = s.CTELEFO, CEMAIL = s.CEMAIL });
+                data.Add(new POTENCIALCLI() { CCODCLI = s.CCODCLI, CNOMCLI = s.CNOMCLI, CTELEFO = s.CTELEFO, CEMAIL = s.CEMAIL });
             }
             ViewBag.ListaClientesFi2 = data;
         }
@@ -56,7 +56,7 @@ namespace CRM.Controllers
             Entidades db = new Entidades(CD.ConexDinamicaEntidades(Session["datasour"].ToString(), Session["catalog_user"].ToString(), Session["user"].ToString(), Session["password"].ToString()));
             db.Configuration.ProxyCreationEnabled = false;
 
-            var fidelizado = db.MAECLI.Select(m => new { m.CCODCLI, m.CNOMCLI }).ToList();
+            var fidelizado = db.POTENCIALCLI.Select(m => new { m.CCODCLI, m.CNOMCLI }).ToList();
 
             var datos = new
             {
@@ -166,7 +166,7 @@ namespace CRM.Controllers
             else
             {
                 var actividad = db.CRONOGRAMA.Where(m => m.id_cronograma == id_cronograma && m.id_oportunidad == id_oportunidad).Select(m => new { Id_cronograma = m.id_cronograma, Id_oportunidad = m.id_oportunidad, fecha_inicio = m.fecha_inicial, fecha_final = m.fecha_final, complemento = m.descripcion, Titulo = m.observacion, Tipo_Actividad = m.TIPO_ACTIVIDAD.descripcion, respuesta = m.respuesta }).ToList();
-                var cliente = db.MAECLI.Where(m => m.CCODCLI == pROSPECTO.idCliente).Select(m => new { nombreCliente = m.CNOMCLI, telefono = m.CTELEFO, correo = m.CEMAIL }).ToList();
+                var cliente = db.POTENCIALCLI.Where(m => m.CCODCLI == pROSPECTO.idCliente).Select(m => new { nombreCliente = m.CNOMCLI, telefono = m.CTELEFO, correo = m.CEMAIL }).ToList();
                 var datos = new
                 {
                     usuarios,
@@ -251,7 +251,7 @@ namespace CRM.Controllers
         }
 
 
-        //Clientes Fidelizados de MAECLI
+        //Clientes Fidelizados de POTENCIALCLI
         public JsonResult editarFidelizado(string CCODCLI, string tipoDoc, string CDOCIDEN, string CAPELLIDO_PATERNO, string CAPELLIDO_MATERNO, string CPRIMER_NOMBRE, string CSEGUNDO_NOMBRE, string CNOMCLI, string CTELEFO, string CEMAIL, string CHOST, string tipoEmpresa, string CDIRCLI, string CPROV, string CPAIS, string distrito)
         {
 
@@ -260,7 +260,7 @@ namespace CRM.Controllers
             {
                 Entidades db = new Entidades(CD.ConexDinamicaEntidades(Session["datasour"].ToString(), Session["catalog_user"].ToString(), Session["user"].ToString(), Session["password"].ToString()));
 
-                MAECLI mAECLI = db.MAECLI.Find(CCODCLI);
+                POTENCIALCLI mAECLI = db.POTENCIALCLI.Find(CCODCLI);
 
                 mAECLI.CCODCLI = CCODCLI;
                 mAECLI.CTIPO_DOCUMENTO = tipoDoc;
@@ -679,15 +679,15 @@ namespace CRM.Controllers
             {
 
                 var consultaContactoFi = from datos in db.CONTACTO_VENTA where datos.COD_CLIENTE == cliente select datos;
-                List<Maecli_campos> data = new List<Maecli_campos>();
+                List<POTENCIALCLI> data = new List<POTENCIALCLI>();
 
-                var clientes = (from m in db.MAECLI
+                var clientes = (from m in db.POTENCIALCLI
                                 where m.CCODCLI == cliente
                                 select new { m.CCODCLI, m.CTIPO_DOCUMENTO, m.CDOCIDEN, m.CAPELLIDO_PATERNO, m.CAPELLIDO_MATERNO, m.CPRIMER_NOMBRE, m.CNOMCLI, m.CTELEFO, m.CEMAIL, m.CHOST, m.TCL_CODIGO, m.CDIRCLI, m.CPROV, m.CPAIS, m.CDISTRI, m.CSEGUNDO_NOMBRE }).ToList();
 
                 foreach (var s in clientes)
                 {
-                    data.Add(new Maecli_campos() { CCODCLI = s.CCODCLI, CNOMCLI = s.CNOMCLI, CTELEFO = s.CTELEFO, CEMAIL = s.CEMAIL, CTIPO_DOCUMENTO = s.CTIPO_DOCUMENTO, CDOCIDEN = s.CDOCIDEN, CAPELLIDO_PATERNO = s.CAPELLIDO_PATERNO, CAPELLIDO_MATERNO = s.CAPELLIDO_MATERNO, CPRIMER_NOMBRE = s.CPRIMER_NOMBRE, CHOST = s.CHOST, TCL_CODIGO = s.TCL_CODIGO, CDIRCLI = s.CDIRCLI, CPROV = s.CPROV, CPAIS = s.CPAIS, CDISTRI = s.CDISTRI, CSEGUNDO_NOMBRE = s.CSEGUNDO_NOMBRE });
+                    data.Add(new POTENCIALCLI() { CCODCLI = s.CCODCLI, CNOMCLI = s.CNOMCLI, CTELEFO = s.CTELEFO, CEMAIL = s.CEMAIL, CTIPO_DOCUMENTO = s.CTIPO_DOCUMENTO, CDOCIDEN = s.CDOCIDEN, CAPELLIDO_PATERNO = s.CAPELLIDO_PATERNO, CAPELLIDO_MATERNO = s.CAPELLIDO_MATERNO, CPRIMER_NOMBRE = s.CPRIMER_NOMBRE, CHOST = s.CHOST, TCL_CODIGO = s.TCL_CODIGO, CDIRCLI = s.CDIRCLI, CPROV = s.CPROV, CPAIS = s.CPAIS, CDISTRI = s.CDISTRI, CSEGUNDO_NOMBRE = s.CSEGUNDO_NOMBRE });
                 }
 
                 List<CONTACTO_VENTA> data2 = consultaContactoFi.ToList();
@@ -1240,7 +1240,7 @@ namespace CRM.Controllers
                     sql = "SELECT ep.id_estatusProspecto 'Id', ep.descripcion 'Descripcion', ISNULL(sum(p.ingreso),0) 'Total' FROM ESTATUS_PROSPECTO ep left JOIN PROSPECTO p ON ep.id_estatusProspecto = p.id_estatusProspecto and p.codigo_tipoMon='" + condicion + "' and p.fecha_inicial between '" + fecha_inicial + "' and '" + fecha_final + "' group by ep.id_estatusProspecto, ep.descripcion";
                     break;
                 case 4:
-                    sql = "select CAST(p.id_oportunidad as Int) 'Id',(case when p.tipoCliente = 1 then i.CNOMCLI else pt.CNOMCLI end) as 'Descripcion',p.ingreso 'Total' from PROSPECTO p left join MAECLI i on p.idCliente = i.CCODCLI left join POTENCIALCLI pt on p.idCliente = pt.CCODCLI WHERE p.fecha_inicial between '" + fecha_inicial + "' and '" + fecha_final + "' and p.id_estatusProspecto=3 and p.codigo_tipoMon='" + condicion + "'";
+                    sql = "select CAST(p.id_oportunidad as Int) 'Id',pt.CNOMCLI 'Descripcion',p.ingreso 'Total' from PROSPECTO p left join POTENCIALCLI pt on p.idCliente = pt.CCODCLI WHERE p.fecha_inicial between '" + fecha_inicial + "' and '" + fecha_final + "' and p.id_estatusProspecto=3 and p.codigo_tipoMon='" + condicion + "'";
                     break;
                 case 5:
                     sql = "select estatus 'Id', CASE  WHEN estatus = 0 THEN 'Pendiente' WHEN estatus = 1 THEN 'Cerrado' WHEN estatus=2 THEN 'Caducado' ELSE 'Eliminado' END as 'Descripcion',COUNT(estatus) 'Total' from CRONOGRAMA WHERE fecha_inicial between '" + fecha_inicial + "' and '" + fecha_final + "' GROUP BY estatus"; 

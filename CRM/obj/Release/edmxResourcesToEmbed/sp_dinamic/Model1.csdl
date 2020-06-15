@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BDWENCOModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="BDWENCOEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="SP_EMPRESA_CLIENTE_CRM" ReturnType="Collection(BDWENCOModel.SP_EMPRESA_CLIENTE_CRM_Result)" />
+    <FunctionImport Name="SP_EMPRESA_USUARIO_CRM" ReturnType="Collection(BDWENCOModel.SP_EMPRESA_USUARIO_CRM_Result)" />
+    <EntitySet Name="ADMINISTRADOR" EntityType="BDWENCOModel.ADMINISTRADOR" />
+    <EntitySet Name="USUARIO_FAC" EntityType="BDWENCOModel.USUARIO_FAC" />
+    <FunctionImport Name="SP_ACTUALIZAR_USUARIO" ReturnType="Collection(BDWENCOModel.SP_ACTUALIZAR_USUARIO_R_Result)">
+      <Parameter Name="NOMBRE" Mode="In" Type="String" />
+      <Parameter Name="EMAIL" Mode="In" Type="String" />
+      <Parameter Name="EMPRESA" Mode="In" Type="String" />
+      <Parameter Name="ALIAS" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_ACTUALIZAR_USAURIO_PASSWORD" ReturnType="Collection(BDWENCOModel.SP_ACTUALIZAR_USUARIO_R_Result)">
+      <Parameter Name="PASSWORD" Mode="In" Type="String" />
+      <Parameter Name="EMPRESA" Mode="In" Type="String" />
+      <Parameter Name="ALIAS" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_PORTAL_VERIFICAR_DATABASE1" ReturnType="Collection(BDWENCOModel.SP_PORTAL_VERIFICAR_DATABASE_Result)">
+      <Parameter Name="BASEDATOS" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="CRM_Usuarios_Rol" EntityType="BDWENCOModel.CRM_Usuarios_Rol" />
+  </EntityContainer>
+  <ComplexType Name="SP_EMPRESA_CLIENTE_CRM_Result">
+    <Property Type="String" Name="CTEMPRESA" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="CTUALIAS" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="CTUNOMUSU" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="CTUPASSWO" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="CTUPUNVEN" Nullable="true" MaxLength="2" />
+    <Property Type="String" Name="CTUTIPUSU" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="CTUNROALM" Nullable="true" MaxLength="2" />
+    <Property Type="DateTime" Name="CTUFECCRE" Nullable="true" Precision="16" />
+    <Property Type="String" Name="CTUUSUARI" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="CTUSERFAC" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="CTUSERBOL" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="CTUSERNC" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="CTUSERND" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="CTUSERGUI" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="CTUPEDIDO" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="CTUCOTIZA" Nullable="true" MaxLength="1" />
+    <Property Type="String" Name="CTUVEND" Nullable="true" MaxLength="2" />
+    <Property Type="String" Name="CTUSERFACE" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="CTULOCEMI" Nullable="true" MaxLength="2" />
+    <Property Type="String" Name="CTUPERMARG" Nullable="false" MaxLength="1" />
+    <Property Type="Boolean" Name="CTUPERMPED" Nullable="false" />
+    <Property Type="Boolean" Name="CTUPRECVTA" Nullable="true" />
+    <Property Type="Boolean" Name="CT_CONFIGURACION" Nullable="true" />
+    <Property Type="Boolean" Name="CTMODIFICA_PRECIO_MINIMO" Nullable="true" />
+    <Property Type="Boolean" Name="CTACTIVAR_CLIE" Nullable="true" />
+    <Property Type="Boolean" Name="CTULIMCRED" Nullable="true" />
+    <Property Type="Int32" Name="rol_id" Nullable="true" />
+    <Property Type="String" Name="EMAIL" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="USU_ESTADO" Nullable="false" />
+    <Property Type="DateTime" Name="USU_FEC_CREA" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="USU_FEC_INACTIVO" Nullable="true" Precision="23" />
+    <Property Type="Boolean" Name="FLGACTUALIZAR_VENDEDORES" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="SP_EMPRESA_USUARIO_CRM_Result">
+    <Property Type="String" Name="EMP_CODIGO" Nullable="true" MaxLength="6" />
+    <Property Type="String" Name="TIPODOC_CODIGO" Nullable="true" MaxLength="2" />
+    <Property Type="String" Name="EMP_RAZON_NOMBRE" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="EMP_APELLIDOPAT" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EMP_APELLIDOMAT" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EMP_DIRECCION" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EMP_TELEFONO" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="EMP_FAX" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="EMP_RUC_DOCUMENTO" Nullable="true" MaxLength="11" />
+    <Property Type="String" Name="EMP_REPRESENTANTE" Nullable="true" MaxLength="40" />
+    <Property Type="String" Name="EMP_DOCUMENTO" Nullable="true" MaxLength="15" />
+    <Property Type="Int16" Name="EMP_NIVEL" Nullable="true" />
+    <Property Type="Int16" Name="EMP_NIV01" Nullable="true" />
+    <Property Type="Int16" Name="EMP_NIV02" Nullable="true" />
+    <Property Type="Int16" Name="EMP_NIV03" Nullable="true" />
+    <Property Type="Int16" Name="EMP_NIV04" Nullable="true" />
+    <Property Type="Int16" Name="EMP_NIV05" Nullable="true" />
+    <Property Type="Int16" Name="EMP_NIV06" Nullable="true" />
+    <Property Type="String" Name="EMP_PANTALLA" Nullable="true" MaxLength="100" />
+    <Property Type="Boolean" Name="EMP_NUMEAUTO" Nullable="false" />
+    <Property Type="Decimal" Name="EMP_NUMECARAC" Nullable="true" Precision="18" Scale="0" />
+    <Property Type="String" Name="EMP_REPORTE" Nullable="true" MaxLength="100" />
+    <Property Type="Boolean" Name="EMP_ACTIVA" Nullable="false" />
+    <Property Type="Int16" Name="EMP_NIV07" Nullable="true" />
+    <Property Type="Int16" Name="EMP_NIV08" Nullable="true" />
+    <Property Type="String" Name="EMP_PLANILLAS" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="EMP_PORTAL_RENDICIONCTA" Nullable="true" />
+    <Property Type="Boolean" Name="EMP_PORTAL_PROVEEDOR" Nullable="true" />
+    <Property Type="Binary" Name="LOGO" Nullable="true" MaxLength="Max" />
+  </ComplexType>
+  <EntityType Name="ADMINISTRADOR">
+    <Key>
+      <PropertyRef Name="ADM_PASSWORD" />
+    </Key>
+    <Property Name="ADM_CODIGO" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="ADM_NOMBRE" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ADM_PASSWORD" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="ADM_FECHA_CREACION" Type="DateTime" Precision="0" />
+    <Property Name="ADM_FECHA_ELIMINACION" Type="DateTime" Precision="0" />
+    <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="USUARIO_FAC">
+    <Key>
+      <PropertyRef Name="CTUPERMARG" />
+      <PropertyRef Name="CTUPERMPED" />
+      <PropertyRef Name="USU_ESTADO" />
+    </Key>
+    <Property Name="CTEMPRESA" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CTUALIAS" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CTUNOMUSU" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CTUPASSWO" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CTUPUNVEN" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CTUTIPUSU" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CTUNROALM" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CTUFECCRE" Type="DateTime" Precision="0" />
+    <Property Name="CTUUSUARI" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="CTUSERFAC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CTUSERBOL" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CTUSERNC" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CTUSERND" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CTUSERGUI" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CTUPEDIDO" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CTUCOTIZA" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CTUVEND" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CTUSERFACE" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <Property Name="CTULOCEMI" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CTUPERMARG" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CTUPERMPED" Type="Boolean" Nullable="false" />
+    <Property Name="CTUPRECVTA" Type="Boolean" />
+    <Property Name="CT_CONFIGURACION" Type="Boolean" />
+    <Property Name="CTMODIFICA_PRECIO_MINIMO" Type="Boolean" />
+    <Property Name="CTACTIVAR_CLIE" Type="Boolean" />
+    <Property Name="CTULIMCRED" Type="Boolean" />
+    <Property Name="rol_id" Type="Int32" />
+    <Property Name="EMAIL" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="USU_ESTADO" Type="Boolean" Nullable="false" />
+    <Property Name="USU_FEC_CREA" Type="DateTime" Precision="3" />
+    <Property Name="USU_FEC_INACTIVO" Type="DateTime" Precision="3" />
+    <Property Name="FLGACTUALIZAR_VENDEDORES" Type="Boolean" />
+  </EntityType>
+  <ComplexType Name="SP_ACTUALIZAR_USUARIO_R_Result">
+    <Property Type="String" Name="CTEMPRESA" Nullable="true" MaxLength="3" />
+    <Property Type="String" Name="CTUALIAS" Nullable="true" MaxLength="8" />
+    <Property Type="String" Name="CTUNOMUSU" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="EMAIL" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="SP_PORTAL_VERIFICAR_DATABASE_Result">
+    <Property Type="String" Name="data" Nullable="true" MaxLength="13" />
+  </ComplexType>
+  <EntityType Name="CRM_Usuarios_Rol">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="codigoEmpresa" Type="String" MaxLength="6" FixedLength="false" Unicode="false" />
+    <Property Name="alias" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="nombreUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="contrase" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Rol" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>

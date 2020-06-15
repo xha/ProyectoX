@@ -1,0 +1,2898 @@
+﻿@{
+    List<CRM.Models.ESTADO_PROSPECTO> ESTADOS = ViewBag.estados;
+
+    List<CRM.Models.POTENCIALCLI> ClientePot = ViewBag.ListaClientesPot;
+    List<CRM.Models.TIPO_MONEDA> TipoMoneda = ViewBag.ListaTipoMoneda;
+    List<CRM.Models.Maecli_Select> Fi = ViewBag.ListaClientesFi2;
+    SelectList listaFi = new SelectList(ViewBag.ListaClientesFi, "CCODCLI", "CNOMCLI");
+    SelectList listaPot = new SelectList(ClientePot, "CCODCLI", "CNOMCLI");
+    SelectList ListaTipoMoneda = new SelectList(TipoMoneda, "TIPOMON_CODIGO", "TIPOMON_SIMBOLO", "MN");
+    ViewBag.Title = "kanban";
+    int i = 0;
+    int cont = 0;
+}
+    <div class="content-wrapper">
+        <div id="cuerpo">
+            <div class="content">
+                <div class="container-fluid">
+                    <!--AQUI SE PONE EL CODIGO-->
+                    <div class="card card-primary card-outline">
+                        <div class="card-header "><h4 class="p-3 text-center"> Flujo de las Oportunidades</h4> </div>
+                        <div class="card-body">
+                            <div class="container-fluid overflow-auto">
+
+                                <div id="tablero" class="row flex-row flex-nowrap ">
+                                    @foreach (var item in ESTADOS)
+                                    {
+                                        <div class="">
+                                            <div id="@item.posicion" class="columna mt-4 mb-4">
+
+                                                <div id="" class="panel card panel-primary" style="width: 300px ;        box-shadow: 0 0 1px rgba(51, 34, 34, 0.98), 0 1px 3px rgba(0, 0, 0, 0.64) !important;">
+                                                    <div class="card-header tabla-abierta align-text-center estado " estadoDraggable=true id="@item.id_estadoOportunidad" data-background-color="blue" style="background: @item.color ;border-radius: 6px;">
+                                                        <div class="titulo d-flex">
+                                                            <h1 class="card-titulo mt-auto mb-auto font-weight-bolder text-white">@item.decripcion  </h1>
+                                                            <div class="editarEstado mt-auto mb-auto">
+                                                                <input type="text" id="nombreEstado" class="form-control float-left mover" value="@item.decripcion">
+
+                                                                <div id="btn-colorEst" class="mover">
+
+                                                                    <a id="picker3" class="text-white" name="0" href="#" onclick="return false;"><i class="fas fa-palette"></i>   </a>
+                                                                    <input type="hidden" id="colorNuevo" class="form-control " value="@item.color">
+                                                                    <input type="hidden" id="colorAnterior" class="form-control " value="@item.color">
+                                                                </div>
+
+                                                                <a type="button" href="#" onclick="return false;" id="btn-guardarEst" aria-label="Guardar cambios" class="btn mover text-white p-0 "><i class="fas fa-check"></i></a>
+                                                                <a type="button" href="#" onclick="return false;" id="btn-eliminarEst" aria-label="Eliminar estado" class="btn mover text-white p-0 "><i class="fas fa-times"></i></a>
+                                                            </div>
+
+                                                            <div class="card-tools ml-auto mt-auto mb-auto">
+
+                                                                <a type="button" href="#" onclick="return false;" id="btn-editarOP" aria-label="Editar estado" class="btn btn-editarOP text-white p-0 w-50"><i class="fas fa-edit"></i></a>
+                                                                <a type="button" href="#" onclick="return false;" id="btn-nuevaOP" aria-label="Nueva Oportunidad" class="btn btn-nuevaOP text-white p-0 float-right"><i class="fas fa-plus"></i></a>
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        <div id="flecha-derecha" style="border-left-color: @item.color ;"></div>
+                                                    </div>
+
+                                                    <div class="Fila_sup row justify-content-start text-center ">
+
+
+
+
+
+                                                        <div class="col-12">
+
+                                                            <h1 class="MontoSoles m-0">S/<span>0</span></h1>
+                                                            <h4 class="MontoDolar m-0">$<span>0</span></h4>
+
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="panel-body  text-justify" style="max-height: none;">
+
+                                                        <div id="@item.id_estadoOportunidad" class="kanban-centered">
+
+                                                            @foreach (var a in item.PROSPECTO.Where(p => p.id_estatusProspecto == 1).OrderByDescending(p => p.id_prioridad))
+                                                            {
+                                                                <article class="kanban-entry grab oportunidad p-0" id="@a.id_oportunidad" link="@Url.Action("editar", "PROSPECTO", new { id = a.id_oportunidad, tipoCli = a.tipoCliente, cliente = a.idCliente })" draggable="true" style="box-shadow:  -2px 2px 3px 2px #00060; border-left-color: @a.color;">
+                                                                    <div class="kanban-entry-inner">
+                                                                        <div class="kanban-label">
+
+                                                                            <div>
+                                                                                <a href="@Url.Action("editar", "PROSPECTO" , new { id=a.id_oportunidad, tipoCli=a.tipoCliente, cliente=a.idCliente })" class="text-bold">@a.nombre</a><p class="float-right"><a id="opcionesOp" data-toggle="modal" data-target="#modal_@a.id_oportunidad" href="" class="fas fa-ellipsis-v p-2"></a></p>
+
+                                                                            </div>
+
+                                                                            <div>
+                                                                                @foreach (var moneda in TipoMoneda)
+                                                                                {
+                                                                                    if (a.codigo_tipoMon == moneda.TIPOMON_CODIGO)
+                                                                                    {
+                                                                                        <span id="simboloMon">@moneda.TIPOMON_SIMBOLO</span><span id="ingreso" class="ml-2">@a.ingreso</span>
+                                                                                    }
+                                                                                }
+
+
+                                                                            </div>
+                                                                            <div class="tipo_cliente" id="@a.tipoCliente" style="overflow-x: hidden">
+
+                                                                                @if (a.tipoCliente == 0)
+                                                                                {
+                                                                                    <a class="nombreCli" data-toggle="tooltip" data-placement="top" title="Prospecto" href="@Url.Action("editar", "PROSPECTO" , new { id=a.id_oportunidad, tipoCli=a.tipoCliente, cliente=a.idCliente })">
+                                                                                        <i class="far fa-user"></i>
+
+                                                                                        @foreach (var cliPot in ClientePot)
+                                                                                        {
+                                                                                            if (a.idCliente == cliPot.CCODCLI)
+                                                                                            {
+                                                                                                <span id="@cliPot.CCODCLI">@cliPot.CNOMCLI</span>
+                                                                                            }
+                                                                                        }
+                                                                                    </a>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <a class="nombreCli" data-toggle="tooltip" data-placement="top" title="Cliente" href="@Url.Action("editar", "PROSPECTO" , new { id=a.id_oportunidad, tipoCli=a.tipoCliente, cliente=a.idCliente })">
+                                                                                        <i class="fas fa-user"></i>
+                                                                                        @foreach (var cliFi in Fi)
+                                                                                        {
+                                                                                            if (a.idCliente == cliFi.CCODCLI)
+                                                                                            {
+                                                                                                <span id="@cliFi.CCODCLI">@cliFi.CNOMCLI;</span>
+                                                                                            }
+                                                                                        }
+                                                                                    </a>
+                                                                                }
+
+
+
+
+
+
+
+
+                                                                            </div>
+
+                                                                            <div class="pt-2">
+                                                                                <div class="prioridad op_abajo_izq float-left ">
+                                                                                    @if (a.id_prioridad == 0)
+                                                                                    {
+
+                                                                                        <a href="#" title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad_estrella  far fa-star" style="color: #000;"></a>
+                                                                                        <a href="#" title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad_estrella far fa-star" style="color: #000;"></a>
+                                                                                        <a href="#" title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad_estrella far fa-star" style="color: #000"></a>
+                                                                                    }
+
+                                                                                    @if (a.id_prioridad == 1)
+                                                                                    {
+
+                                                                                        <a href="#" title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad_estrella  far fa-star" style="color: #000;"></a>
+                                                                                        <a href="#" title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad_estrella far fa-star" style="color: #000;"></a>
+                                                                                        <a href="#" title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad_estrella fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                                                    }
+                                                                                    @if (a.id_prioridad == 2)
+                                                                                    {
+
+                                                                                        <a href="#" title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad_estrella  far fa-star" style="color: #000;"></a>
+                                                                                        <a href="#" title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad_estrella fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                                                        <a href="#" title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad_estrella fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                                                    }
+                                                                                    @if (a.id_prioridad == 3)
+                                                                                    {
+
+                                                                                        <a href="#" title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad_estrella fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                                                        <a href="#" title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad_estrella fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                                                        <a href="#" title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad_estrella fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                                                    }
+
+                                                                                    <a href="#" title="@a.id_usuario" data-toggle="tooltip" data-placement="top" id="prio1" aria-label="@a.id_usuario" data-index="1" class="mr-3"><i class="fa fa-user-circle"></i></a>
+
+                                                                                    <input type="hidden" id="prioridad" name="prioridadVal" value="@a.id_prioridad">
+
+                                                                                </div>
+
+                                                                                <div class="op_abajo_izq float-right pb-2">
+
+                                                                                    <div class="btn-group" style="position: relative;">
+                                                                                        <div class="dropdown-menu dropdown-menu-right animated-dropdown-menu p-0 text-white">
+
+
+                                                                                            @foreach (var plan in a.CRONOGRAMA.Where(p => p.estatus == 0 || p.estatus == 2))
+                                                                                            {
+
+                                                                                                if (plan.fecha_inicial > DateTime.Now && plan.fecha_final > DateTime.Now)
+                                                                                                {
+                                                                                                    <div id="actividad" estatus="@plan.estatus" tipo="@plan.id_tipoActividad" id_cronograma="@plan.id_cronograma" idOportunidad="@plan.id_oportunidad" data-toggle="tooltip" data-placement="top" title="@plan.fecha_inicial.ToString("dd/MM/yyyy HH:mm") a @plan.fecha_final.ToString("dd/MM/yyyy HH:mm")" class="dropdown-item bg-gradient-olive">
+                                                                                                        <a class="media align-middle" data-toggle="modal" data-target="#modal_actividad" style="cursor: pointer;">
+
+                                                                                                            <div class="media-body text-left mt-auto mb-auto p-2">
+                                                                                                                <h3 class="dropdown-item-title">
+
+                                                                                                                    @Html.DisplayFor(modelItem => plan.TIPO_ACTIVIDAD.descripcion)
+
+                                                                                                                </h3>
+
+                                                                                                            </div>
+                                                                                                        </a>
+                                                                                                    </div>
+                                                                                                }
+                                                                                                if (plan.fecha_inicial < DateTime.Now && plan.fecha_final > DateTime.Now)
+                                                                                                {
+                                                                                                    <div id="actividad" estatus="@plan.estatus" tipo="@plan.id_tipoActividad" id_cronograma="@plan.id_cronograma" idOportunidad="@plan.id_oportunidad" data-toggle="tooltip" data-placement="top" title="@plan.fecha_inicial.ToString("dd/MM/yyyy HH:mm") a @plan.fecha_final.ToString("dd/MM/yyyy HH:mm")" class="dropdown-item bg-gradient-yellow">
+                                                                                                        <a class="media align-middle" data-toggle="modal" data-target="#modal_actividad" style="cursor: pointer;">
+
+                                                                                                            <div class="media-body text-left mt-auto mb-auto p-2">
+                                                                                                                <h3 class="dropdown-item-title">
+
+                                                                                                                    @Html.DisplayFor(modelItem => plan.TIPO_ACTIVIDAD.descripcion)
+
+                                                                                                                </h3>
+                                                                                                            </div>
+                                                                                                        </a>
+                                                                                                    </div>
+                                                                                                }
+
+                                                                                                if (plan.fecha_inicial < DateTime.Now && plan.fecha_final < DateTime.Now)
+                                                                                                {
+                                                                                                    <div id="actividad" estatus="@plan.estatus" tipo="@plan.id_tipoActividad" id_cronograma="@plan.id_cronograma" idOportunidad="@plan.id_oportunidad" data-toggle="tooltip" data-placement="top" title="@plan.fecha_inicial.ToString("dd/MM/yyyy HH:mm") a @plan.fecha_final.ToString("dd/MM/yyyy HH:mm")" class="dropdown-item bg-gradient-danger">
+                                                                                                        <a class="media align-middle" data-toggle="modal" data-target="#modal_actividad" style="cursor: pointer;">
+
+                                                                                                            <div class="media-body text-left mt-auto mb-auto p-2">
+                                                                                                                <h3 class="dropdown-item-title">
+
+                                                                                                                    @Html.DisplayFor(modelItem => plan.TIPO_ACTIVIDAD.descripcion)
+
+                                                                                                                </h3>
+
+
+                                                                                                            </div>
+                                                                                                        </a>
+                                                                                                    </div>
+                                                                                                }
+
+
+
+
+
+                                                                                                cont = cont + 1;
+                                                                                            }
+                                                                                            @if (cont == 0)
+                                                                                            {
+                                                                                                <div class="dropdown-item">
+                                                                                                    <small>
+                                                                                                        No tienes Actividades asignadas
+                                                                                                    </small>
+                                                                                                </div>
+                                                                                            }
+
+                                                                                            <div class="dropdown-divider"></div>
+                                                                                            <a href="javascript:void(0)" onclick="abrir_calendario('@a.id_oportunidad')" class="dropdown-item dropdown-footer">Crear actividades  <i class="far fa-calendar-alt"></i></a>
+                                                                                        </div>
+                                                                                        <a class="nav-link" data-toggle="dropdown" href="#" style="position:absolute ; right:-15px;bottom:-20px">
+                                                                                            <i class="far fa-clock fa-2x"></i>
+                                                                                            <span class="badge badge-danger navbar-badge text-bold" style="font-size: .8rem;">@cont</span>
+                                                                                        </a>
+                                                                                    </div>
+
+
+                                                                                </div>
+                                                                            </div>
+
+
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                </article>
+                                                                cont = 0;
+                                                            }
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        i++;
+                                    }
+
+                                    <div class="col-1">
+                                        <div class="columna ml-4 mt-2 mb-2">
+
+                                            <span class=""><a class="mt-0 align-middle d-flex align-items-center btn btn-sm pt-2" id="nuevaColumna" href="#"><i class="fas fa-3x fa-plus-square mr-2"></i></a></span>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+
+            @foreach (var item in ESTADOS)
+            {
+                foreach (var Prospecto in item.PROSPECTO)
+                {
+
+                    <div class="modal fade modalEditar" id="modal_@Prospecto.id_oportunidad">
+
+                        <div class="modal-dialog d-flex justify-content-center align-items-center">
+                            <div class="modal-content">
+
+
+                                <article class="contenidoOp p-3 kanban-entry oportunidad callout p-0 mb-0" id="@Prospecto.id_oportunidad" style="box-shadow:  -2px 2px 3px 2px #00060; border-left-color: @Prospecto.color;">
+                                    <div class="texto kanban-entry-inner">
+                                        <div class="kanban-label">
+
+                                            <div>
+                                                <p href="#" class="text-bold">@Prospecto.nombre</p><p class="float-right"></p>
+
+                                            </div>
+
+                                            <div>
+                                                @foreach (var moneda in TipoMoneda)
+                                                {
+                                                    if (Prospecto.codigo_tipoMon == moneda.TIPOMON_CODIGO)
+                                                    {
+                                                        <span id="simboloMon">@Prospecto.TIPO_MONEDA.TIPOMON_SIMBOLO </span><span id="ingreso" class="ml-2">@Prospecto.ingreso</span>
+                                                    }
+                                                }
+
+
+                                            </div>
+                                            <div class="tipo_cliente" id="@Prospecto.tipoCliente" style="overflow-x: hidden">
+
+                                                @if (Prospecto.tipoCliente == 0)
+                                                {
+                                                    <p class="nombreCli" data-toggle="tooltip" data-placement="top" title="Prospecto">
+                                                        <i class="far fa-user"></i>
+
+                                                        @foreach (var cliPot in ClientePot)
+                                                        {
+                                                            if (Prospecto.idCliente == cliPot.CCODCLI)
+                                                            {
+                                                                <span id="@cliPot.CCODCLI">@cliPot.CNOMCLI</span>
+                                                            }
+                                                        }
+                                                    </p>
+                                                }
+                                                else
+                                                {
+                                                    <p class="nombreCli" data-toggle="tooltip" data-placement="top" title="Cliente">
+                                                        <i class="fas fa-user"></i>
+                                                        @foreach (var cliFi in Fi)
+                                                        {
+                                                            if (Prospecto.idCliente == cliFi.CCODCLI)
+                                                            {
+                                                                <span id="@cliFi.CCODCLI">@cliFi.CNOMCLI;</span>
+                                                            }
+                                                        }
+                                                    </p>
+                                                }
+
+
+
+
+
+
+
+
+                                            </div>
+
+                                            <div class="pt-2">
+                                                <div class="prioridad op_abajo_izq float-left ">
+                                                    @if (Prospecto.id_prioridad == 0)
+                                                    {
+
+                                                        <a title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad  far fa-star" style="color: #000;"></a>
+                                                        <a title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad far fa-star" style="color: #000;"></a>
+                                                        <a title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad far fa-star" style="color: #000"></a>
+                                                    }
+
+                                                    @if (Prospecto.id_prioridad == 1)
+                                                    {
+
+                                                        <a title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad  far fa-star" style="color: #000;"></a>
+                                                        <a title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad far fa-star" style="color: #000;"></a>
+                                                        <a title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                    }
+                                                    @if (Prospecto.id_prioridad == 2)
+                                                    {
+
+                                                        <a title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad  far fa-star" style="color: #000;"></a>
+                                                        <a title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                        <a title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                    }
+                                                    @if (Prospecto.id_prioridad == 3)
+                                                    {
+
+                                                        <a title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                        <a title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                        <a title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad fas fa-star" style="color: rgb(255, 149, 0)"></a>
+                                                    }
+
+
+
+                                                    <input type="hidden" id="prioridad" name="prioridadVal" value="@Prospecto.id_prioridad">
+
+                                                </div>
+                                                <div class="op_abajo_izq float-right pb-2">
+                                                    <p class="far fa-clock text-bold" data-toggle="dropdown"></p>
+
+
+
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </article>
+
+
+                                <div id="estatusOpModal">
+                                    <div class="btn-group">
+                                        <a href="@Url.Action("cambiarEstatus", "PROSPECTO", new { estatusFinal = 2, idProspecto = Prospecto.id_oportunidad })" id="archivar" class="btn text-white text-bold " style="background: #3c8dbc" title="archivar">
+                                            ARCHIVAR <i class="fas fa-archive"></i>
+                                        </a>
+                                        <a href="@Url.Action("cambiarEstatus", "PROSPECTO", new { estatusFinal = 3, idProspecto = Prospecto.id_oportunidad })" id="ganado" class="btn text-white text-bold " style="background: #28a745" title="ganado">
+                                            GANADO <i class="fas fa-sun"></i>
+                                        </a>
+                                        <a href="@Url.Action("cambiarEstatus", "PROSPECTO", new { estatusFinal = 4, idProspecto = Prospecto.id_oportunidad })" id="perdido" class="btn text-white text-bold " style="background: #dc3545" title="perdido">
+                                            PERDIDO <i class="fas fa-cloud-showers-heavy"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div id="MoverOp">
+
+
+
+                                </div>
+
+                                <div class="botones-modal-op fade-in">
+                                    <a class="btn btn-dark text-white text-uppercase" href="@Url.Action("editar", "PROSPECTO" , new { id=Prospecto.id_oportunidad, tipoCli=Prospecto.tipoCliente, cliente=Prospecto.idCliente })">
+                                        Editar
+                                    </a>
+
+                                    <a class="btn btn-dark text-white text-uppercase colorOp" idOp="@Prospecto.id_oportunidad" name="0">
+                                        Color
+                                    </a>
+                                    <input type="hidden" id="colorNuevo" class="form-control " value="@Prospecto.color">
+                                    <input type="hidden" id="colorAnterior" class="form-control " value="@Prospecto.color">
+
+                                    <a class="btn btn-dark text-white text-uppercase MostrarMover">
+                                        Mover
+                                    </a>
+
+
+
+                                    <div id="jsMoverOp" class="hidden">
+                                        @foreach (var estado in ESTADOS)
+                                        {
+                                            if (Prospecto.id_estadoOporunidad == estado.id_estadoOportunidad)
+                                            {
+
+                                                SelectList listaEstado = new SelectList(ESTADOS, "id_estadoOportunidad", "decripcion", estado.id_estadoOportunidad);<label class="d-block">Seleccionar un Destino</label>@Html.DropDownList("Estado", listaEstado as SelectList, null, htmlAttributes: new { @class = "form-control mw-100", @id = "SelectMoverOp" });<input type="submit" id="botonMoverEstado" idop="@Prospecto.id_oportunidad" class="btn btn-success mt-2" value="Mover">
+                                                <input type="hidden" class="form-control mw-75" id="estadoActual" name="estadoActual" value="@Prospecto.id_estadoOporunidad">
+                                            }
+
+                                        }
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                }
+            }
+
+
+            <div class="modal fade" id="modal_crearPotencial">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Crear Prospecto</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form role="form" class="" id="formCrearpot">
+                            <div class="card card-primary card-tabs">
+                                <div class="card-header navbar navbar-expand p-0 pt-1">
+                                    <ul class="navbar-nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="crear-tab" data-toggle="pill" href="#nuevo-cliente" role="tab" aria-controls="nuevo-cliente" aria-selected="true">Datos</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="direccion-tab" data-toggle="pill" href="#nuevo-direccion" role="tab" aria-controls="nuevo-direccion" aria-selected="false">Direcciones</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="contacto-tab" data-toggle="pill" href="#nuevo-contacto" role="tab" aria-controls="nuevo-contacto" aria-selected="false">Contactos</a>
+                                        </li>
+
+                                    </ul>
+
+
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="tab-content" id="custom-tabs-one-tabContent">
+
+
+                                        <div class="tab-pane fade show active" id="nuevo-cliente" role="tabpanel" aria-labelledby="nuevo-cliente">
+                                            <div class="row ">
+                                                <div class="col-12 ">
+                                                    <div class="row text-left  m-0">
+                                                        <div class="col-sm-6  p-0 pr-2 mb-2  ">
+
+
+                                                            <div class="form-group">
+                                                                <label for="">Código del cliente:</label>
+                                                                <input type="text" class="form-control form-control-sm infoCliente text-uppercase" name="CCODCLI" id="codCli">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 pl-2 p-0 mb-2">
+                                                            <label for="">Tipo de Documento:</label>
+                                                            <div class="row ">
+                                                                <div class="col-8 ">
+                                                                    <div class="form-group">
+
+                                                                        <select name="tipoDoc" id="tipoDoc" class="form-control infoCliente form-control-sm text-uppercase">
+                                                                            <option value="1">DNI</option>
+                                                                            <option value="2">Carnet de fuerzas policiales</option>
+                                                                            <option value="3">Carnet de fuerzas armadas</option>
+                                                                            <option value="4">Carnet de extrangería</option>
+                                                                            <option value="6" selected>RUC</option>
+                                                                            <option value="7">Pasaporte</option>
+                                                                            <option value="0">Otro tipo de documento</option>
+                                                                        </select>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control form-control-sm infoCliente text-uppercase" id="NroDoc" name="CDOCIDEN" onblur="buscarSunat(this.value)" title="Debe contener solo numeros">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="InfoCLi">
+
+
+                                                                <div>
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+
+                                                                            <input type="hidden" class="form-control form-control-sm mb-2 infoCliente text-uppercase" id="apPaterno" name="CAPELLIDO_PATERNO" placeholder="Apellido Paterno">
+
+
+
+                                                                        </div>
+                                                                        <div class="col-6">
+
+                                                                            <input type="hidden" class="form-control form-control-sm mb-2 infoCliente text-uppercase" id="apMaterno" name="CAPELLIDO_MATERNO" placeholder="Apellido Materno">
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+
+                                                                            <input type="hidden" class="form-control form-control-sm infoCliente text-uppercase" id="pNombre" name="CPRIMER_NOMBRE" placeholder="Primer nombre">
+
+
+
+                                                                        </div>
+                                                                        <div class="col-6">
+
+                                                                            <input type="hidden" class="form-control form-control-sm infoCliente text-uppercase" id="sNombre" name="CSEGUNDO_NOMBRE" placeholder="Segundo nombre">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-12">
+
+                                                                        <input type="text" class="form-control  infoCliente text-uppercase" id="nombreCli" name="CNOMCLI" placeholder="Nombre / Razon social">
+
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Teléfono:</label>
+                                                        <input type="text" class="form-control infoCliente text-uppercase" id="celularPersona" name="CTELEFO">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Correo:</label>
+                                                        <input type="email" class="form-control infoCliente text-uppercase" name="CEMAIL" id="correoPersona">
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-sm-6">
+
+                                                    <div class="form-group">
+                                                        <label for="pagina">Página Web:</label>
+                                                        <input type="text" class="form-control infoCliente text-uppercase" name="CHOST" id="paginaPersona">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Tipo de Empresa:</label>
+                                                        <div class="form-group">
+
+                                                            <select name="tipoEmpresa" id="tipoEmpresa" class="form-control infoCliente  text-uppercase" required>
+                                                                <option value="1">Terceros</option>
+                                                                <option value="2">Matriz</option>
+                                                                <option value="3">Subsidiarias</option>
+                                                                <option value="4">Asociadas</option>
+                                                                <option value="6">Sucursal</option>
+                                                                <option value="7">Otros</option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane fade" id="nuevo-direccion" role="tabpanel" aria-labelledby="direccion-tab">
+                                            <div class="form-group">
+                                                <label>Domicilio legal:</label>
+                                                <textarea class="form-control" rows="3" id="Direccion" name="CDIRCLI" onkeyup="textCounter(this.id,'counter_direccion',100)"></textarea>
+                                                <label class="w-md-25 w-sm-50">
+                                                    <input id="counter_direccion" class="form-control w-50" value="100" readonly />
+                                                </label>
+
+
+                                                <div class="row mt-2">
+
+                                                    <div class="col-5">
+                                                        <input type="text" class="form-control infoCliente text-uppercase" id="CPROV" name="CPROV" placeholder="Provincia">
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <input type="text" class="form-control infoCliente text-uppercase" id="CPAIS" name="CPAIS" placeholder="País">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Distrito:</label>
+
+                                                @Html.DropDownList("distrito", ViewBag.Distrito as SelectList, "Selecciona un Distrito", htmlAttributes: new { @class = "form-control mw-100 select2 text-uppercase infoCliente" })
+
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="nuevo-contacto" role="tabpanel" aria-labelledby="contacto-tab">
+                                            <div id="Contacto" class="row text-cente flex-row flex-nowrap ">
+
+                                                <div class="col-12  table-responsive">
+
+                                                    <table id="example2" class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+
+                                                                <th>
+                                                                    Contacto
+                                                                </th>
+                                                                <th>
+                                                                    Área
+                                                                </th>
+                                                                <th>
+                                                                    Cargo
+                                                                </th>
+                                                                <th>
+                                                                    Correo
+                                                                </th>
+                                                                <th>
+                                                                    Teléfono
+                                                                </th>
+                                                                <th>
+                                                                    Celular
+                                                                </th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+
+
+                                            <a id="agregarContactoPot" class="btn btn-sm btn-success text-white float-right">Agregar</a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">Descartar</button>
+                                <button type="button" class="btn btn-primary" id="nuevoClientepot">Guardar</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="modal fade" id="modal-eliminarEstado">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h4 class="modal-title">Confirmar eliminación</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Está seguro que desea eliminar este estado?&hellip;</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <a href="#" id="confirmar-eliminar" class="btn btn-danger ">Eliminar</a>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <div class="modal fade" id="modal_actividad" tabindex="0" role="dialog" aria-labelledby="Modal Central" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document" id="m_tamanio">
+                    <div class="modal-content">
+                        <div class="modal-header col-sm-12">
+
+                            <h1 class="text-black-50 text-bold align-middle dato mb-0">
+                                <i class="fa fa-clock"></i>&nbsp;
+                                <span id="x_titulo">Actividad</span>
+                            </h1>
+
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card card-primary card-tabs">
+                            <div class="card-header navbar navbar-expand p-0 pt-1">
+                                <ul class="navbar-nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="Actividadinfo-tab" data-toggle="pill" href="#Actividadinfo" role="tab" aria-controls="Actividadinfo" aria-selected="true">Información</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="Cliente-tab" data-toggle="pill" href="#Cliente" role="tab" aria-controls="Cliente" aria-selected="false">Cliente</a>
+                                    </li>
+
+
+                                </ul>
+
+
+                            </div>
+
+                            <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-one-tabContent">
+
+
+                                    <div class="tab-pane fade show active" id="Actividadinfo" role="tabpanel" aria-labelledby="Actividadinfo">
+                                        <div class="row">
+
+                                            <div class="col-sm-12 ">
+                                                <label>Título</label>
+                                                <p id="Titulo"></p>
+                                                <input type="hidden" id="id_tarea" value="" />
+                                            </div>
+                                            <div id="selecUsuario" class="col-sm-12 mb-2">
+
+
+
+
+                                            </div>
+
+                                            <div class="col-6">
+                                                <label>Tipo de Actividad</label>
+                                                <p id="tipoActividad"></p>
+                                            </div>
+                                            <div class="col-6">
+                                                <label>Complemento</label>
+                                                <p id="complemento"></p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Fecha Desde</label>
+                                                <p id="fecha_inicio"></p>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Fecha Hasta</label>
+                                                <p id="fecha_final"></p>
+                                            </div>
+                                            <div class="col-12 ">
+                                                <label>Observaciones/Respuesta</label>
+                                                <textarea id="respuesta" class="form-control" rows="3" onkeyup="textCounter(this.id,'counter_respuesta',500)"></textarea>
+                                                <label class="w-md-25 w-sm-50">
+                                                    <input id="counter_respuesta" class="form-control w-50" value="500" readonly />
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <a id="btn_actualizar" class="btn btn-primary"> Actualizar</a>
+                                    </div>
+                                    <div class="tab-pane fade" id="Cliente" role="tabpanel" aria-labelledby="Cliente">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Cliente:</label>
+                                            <p id="clienteAct"></p>
+
+                                            <div class="row mt-2">
+
+                                                <div class="col-6">
+                                                    <label class="d-block" for="exampleInputEmail1">Llamar:</label>
+
+                                                    <a class="text-white text-md mr-3 btn btn-success" href="#" onclick="llamada(); return false;"><i alt="LLamada" class="img-circle text-center mt-auto mb-auto img-circle fas fa-phone-alt"></i></a>
+
+                                                    <div class="">
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="d-block" for="exampleInputEmail1">Correo:</label>
+                                                    <a class="text-md text-white btn btn-info" href="#" onclick="enviarCorreo(); return false;"><i alt="Correo" class="img-circle text-center  mt-auto mb-auto img-circle far fa-envelope"></i></a>
+
+                                                </div>
+
+                                                <div id="correoActividad" class="col-12 hidden">
+
+                                                    <label for="">Para:</label>
+                                                    <input type="email" class="form-control text-uppercase" id="confirmarCorreo" placeholder="correo@correo.com" value="">
+
+                                                    <a id="linkcorreo" href="#" class="btn btn-primary">Contactar</a>
+                                                    <a class="btn btn-default cancelar">Cancelar</a>
+
+                                                </div>
+                                                <div id="llamadaActividad" class="col-12 hidden">
+
+
+                                                    <label for="exampleInputEmail1">Teléfono:</label>
+
+                                                    <input type="tel" class="form-control text-uppercase" id="confirmarTelefono" placeholder="99999999" value="">
+
+
+
+                                                    <a id="linkLlamar" href="#" class="btn btn-primary">llamar</a>
+                                                    <a class="btn btn-default cancelar">Cancelar</a>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body h500" id="x_cuerpo">
+
+                            <div class="modal-footer mr-auto ml-auto" id="x_pie ">
+
+                                <a class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                                    <i class="fa fa-times "></i>
+                                    Cerrar
+                                </a>
+                                <a id_cronograma="" id_oportunidad="" tipo="" class="btn btn-success text-white" id="btn_realizado">
+                                    Marcar como cerrado
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+   
+
+
+
+        <script src="@Url.Content("~/Scripts/kanban.js") "></script>
+
+
+
+        <script>
+            var dataUsuarios;
+
+            function textCounter(f, c, maxlimit) {
+                var field = $("#" + f)[0];
+                var countfield = $("#" + c)[0];
+                if (field.value.length > maxlimit) {// if too long...trim it!
+                    field.value = field.value.substring(0, maxlimit);
+                    // otherwise, update 'characters left' counter
+                } else {
+                    countfield.value = maxlimit - field.value.length;
+                }
+            }
+        function cargarUsuarios() {
+
+                    var usuario = $("#idUsuario")[0];
+
+
+               for (i = 0; i < dataUsuarios.length; i++) {
+
+                   usuario[i + 1] = new Option(dataUsuarios[i].alias + " (" + dataUsuarios[i].Rol + ")", dataUsuarios[i].alias, "", "");
+
+
+               }
+
+               $("#idUsuario").val("@Convert.ToString(Session["alias"])");
+
+
+
+        };
+       $(function () {
+            $.ajax({
+                url: "@Url.Content("~/Flujo/ListarUsuarios")",
+                dataType: "json",
+                type: 'GET',
+                cache: false,
+                success: function (data) {
+
+                    dataUsuarios = data;
+
+
+                }
+
+            });
+
+
+        $('#confirmarCorreo').keyup(function () {
+            var correo = $(this).val()
+            $("#linkcorreo").attr("href", 'mailto:' + correo + '?Subject=');
+
+        });
+        $('#confirmarTelefono').keyup(function () {
+            var telefono = $(this).val()
+            $("#linkLlamar").attr("href", 'tel: ' + telefono + '');
+
+
+        });
+    });
+
+    function llamada() {
+        $('#llamadaActividad').removeClass('hidden');
+        $('#correoActividad').addClass('hidden');
+    };
+    function enviarCorreo() {
+        $('#correoActividad').removeClass('hidden');
+        $('#llamadaActividad').addClass('hidden');
+    };
+    $(function () {
+
+                $('#cuerpo').on('click', '#actividad',function () {
+
+            var id_cronograma = $(this).attr('id_cronograma');
+            var idOportunidad = $(this).attr('idOportunidad');
+            var tipo = $(this).attr('tipo');
+            var data = { id_cronograma: id_cronograma, id_oportunidad: idOportunidad, tipo: tipo };
+            $.ajax({
+                url: "@Url.Content("~/Flujo/cargarActividad")",
+                dataType: "json",
+                data: data,
+                type: 'GET',
+                cache: false,
+                success: function (data) {
+
+                    $("#fecha_inicio").html("");
+                    $("#fecha_final").html("");
+                    $("#complemento").html("");
+                    $("#tipoActividad").html("");
+                    $("#Titulo").html("");
+                    $("#clienteAct").html("");
+                    $("#llamadaAct").html("");
+                    $("#correoAct").html("");
+                    $("#selecUsuario").html("")
+                    $("#respuesta").val("");
+
+
+                    $("#fecha_inicio").prepend(data.inicial);
+                    $("#fecha_final").prepend(data.final);
+                    $("#complemento").prepend(data.actividad[0].complemento);
+                    $("#tipoActividad").prepend(data.actividad[0].Tipo_Actividad);
+                    $("#Titulo").prepend(data.actividad[0].Titulo);
+                    $("#clienteAct").prepend(data.cliente[0].nombreCliente);
+
+
+                    if (data.cliente[0].telefono != "") {
+                        $("#confirmarTelefono").val(data.cliente[0].telefono);
+                        $("#linkLlamar").attr("href", 'tel: ' + data.cliente[0].telefono + '');
+                    }
+                    if (data.cliente[0].correo != "") {
+                        $("#confirmarCorreo").val(data.cliente[0].correo);
+                        $("#linkcorreo").attr("href", 'mailto:' + data.cliente[0].correo + '');
+                    }
+                    if (data.actividad[0].respuesta == null) {
+                        $("#respuesta").val("");
+                    } else {
+                        $("#respuesta").val("" + data.actividad[0].respuesta + "");
+                    }
+                    if (data.actividad[0].estatus == 2) {
+                        $("#modal_actividad .modal-header").attr('style', 'background: #dc3545; border-bottom-color: #dc3545;');
+                        $("#modal_actividad .modal-header h1").removeClass('text-black-50');
+                        $("#modal_actividad .modal-header h1").addClass('text-white');
+                        $("#modal_actividad #respuesta").removeAttr('disabled');
+                    }
+
+                    if (data.actividad[0].estatus == 0) {
+                        $("#modal_actividad .modal-header").attr('style', 'background: #fff; border-bottom-color: #fff;');
+                        $("#modal_actividad .modal-header h1").addClass('text-black-50');
+                        $("#modal_actividad .modal-header h1").removeClass('text-white');
+                        $("#modal_actividad #respuesta").removeAttr('disabled');
+                    }
+
+                    textCounter('respuesta', 'counter_respuesta', 500);
+                    $("#selecUsuario").append(`                   <label>Usuario Asignado</label>                        <select name = "UsuarioAsig" id = "UsuarioAsig" class= "form-control infoCliente form-control-sm text-uppercase" ></select >`);
+
+                    var usuario = $("#selecUsuario select")[0];
+
+
+                    usuario[0] = new Option(" No tiene usuario asignado ", "", "", "");
+                    for (i = 0; i < data.usuarios.Data.length; i++) {
+
+                        usuario[i + 1] = new Option(data.usuarios.Data[i].alias + " (" + data.usuarios.Data[i].Rol + ")", data.usuarios.Data[i].alias, "", "");
+
+
+                    }
+
+                    $("#selecUsuario select").val(data.actividad[0].usuarioAsig);
+                    $("#selecUsuario select").select2();
+                    $("#btn_realizado").attr('id_cronograma', data.actividad[0].Id_cronograma).attr('id_oportunidad', data.actividad[0].Id_oportunidad).attr('tipo', data.actividad[0].Tipo_Actividad);
+
+                }
+
+            });
+        });
+                $("#btn_actualizar").on('click', function () {
+                    var id_cronograma = $("#btn_realizado").attr('id_cronograma');
+                    var idOportunidad = $("#btn_realizado").attr('id_oportunidad');
+                    var Asignado = $("#selecUsuario select").val();
+                    var respuesta = $("#respuesta").val();
+
+                    var data = { id_cronograma: id_cronograma, id_oportunidad: idOportunidad, asignado: Asignado, respuesta: respuesta};
+            $.ajax({
+                url: "@Url.Content("~/Calendario/editarAsignadoCronograma")",
+                dataType: "json",
+                data: data,
+                type: 'POST',
+                success: function (datos) {
+
+
+                    if (datos.Cambio == true) {
+
+                        toastr.success('se actualizó con éxito.')
+
+                    } else {
+                        toastr.error('Algo salio mal.')
+                    }
+                    //cambiar por el otro modal
+
+
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+        });
+        $("#btn_realizado").on('click', function () {
+            var id_cronograma = $(this).attr('id_cronograma');
+            var idOportunidad = $(this).attr('id_oportunidad');
+            var tipo = $(this).attr('tipo');
+            var respuesta = $("#respuesta").val();
+            var Asignado = $("#selecUsuario select").val();
+
+            var data = { id_cronograma: id_cronograma, id_oportunidad: idOportunidad, tipo: tipo, respuesta: respuesta, usuario: Asignado };
+            $.ajax({
+                url: "@Url.Content("~/Calendario/cambiarEstatusCronograma")",
+                dataType: "json",
+                data: data,
+                type: 'POST',
+                success: function (datos) {
+
+
+                    if (datos.Cambio == true) {
+
+
+                        window.location.href = "@Url.Content("~/Flujo/Index")";
+                    } else {
+                        toastr.error('Algo salio mal.')
+                    }
+                    //cambiar por el otro modal
+
+
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+        });
+
+
+        if ('@ViewBag.Error' != '') {
+            toastr.error('@ViewBag.Error')
+        }
+        $("#cuerpo").on('click', ".colorOp", function () {
+
+            var Creado = $(this).attr('Name');
+            var idObjetivo = $(this).attr('idOp');
+
+            if (Creado == 0) {
+                $(this).spectrum({
+                    type: "color",
+                    showPalette: "true",
+                    showSelectionPalette: "true",
+                    togglePaletteOnly: "true",
+                    showInitial: "true",
+                    showAlpha: "false",
+                    allowEmpty: "false",
+                    localStorageKey: "spectrum.homepage",
+                    palette: ["#0006"],
+
+                    move: function (color) {
+                        var cambioColor = color.toHexString();
+                        console.log($('#' + idObjetivo + ''))
+                        $('#' + idObjetivo + '').attr('style', 'box-shadow: -2px 2px 3px 2px #00060; border-left-color:' + cambioColor + '');
+                        $("#modal_" + idObjetivo + "").find('.oportunidad').attr('style', 'box-shadow: -2px 2px 3px 2px #00060; border-left-color:'+ cambioColor + '');
+                        $(this).parent().find('#colorNuevo').val(cambioColor);
+                    },
+
+                    change: function(color) {
+                    var cambioColor = color.toHexString();
+                                    //se agrega el campo de editar con la información del cliente
+                    var url = "@Url.Action("cambiarColorOp", "Flujo")";
+                    var data = { color: cambioColor, idOportunidad: idObjetivo };
+
+                    $.ajax({
+                        url: url,
+                        data: data,
+                        type: 'POST',
+
+                        success: function (datos) {
+
+                            if (datos.Cambio == true) {
+
+                            } else {
+                            toastr.error('Algo salio mal.')
+                            }
+
+                        },
+                        error: function (error) {
+                            toastr.error('Algo salio mal.')
+
+                        },
+
+                    });
+                     }
+                });
+
+                $(this).attr('Name', 1);
+                $(this).spectrum("toggle");
+                return false;
+            }
+        });
+
+        $('.MostrarMover').on('click', function () {
+
+            if ($(this).parent().find('div').attr('class') == 'hidden') {
+                $(this).parent().find('div').removeClass('hidden');
+            } else {
+                $(this).parent().find('div').addClass('hidden');
+            }
+
+        });
+
+
+        //para guardar el cambio de estado
+        $("#cuerpo").on('click', '#botonMoverEstado', function () {
+
+
+            //se agrega el campo de editar con la información del cliente
+            var url = "@Url.Action("cambiarEstado", "Flujo")";
+            var elementoEstadoActual = $(this).parent().find("#estadoActual");
+            var sourceId = elementoEstadoActual.val();
+            var targetId = $(this).parent().find("#SelectMoverOp").val();
+            var idOportunidad = $(this).attr('idOp');
+            var data = { estadoInicial: sourceId, estadoFinal: targetId, idOportunidad: idOportunidad };
+            var targetCol = $('.panel-body').find('#' + targetId + '.kanban-centered');
+            var elementoOp = $('#' + idOportunidad + '');
+            var elementoCambio = $(this).parent().parent().find('div');
+
+            $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+
+                success: function (datos) {
+
+
+                    if (datos.Cambio == true) {
+
+                        if (elementoCambio.attr('class') == 'hidden') {
+                            elementoCambio.removeClass('hidden');
+                        } else {
+                            elementoCambio.addClass('hidden');
+                        }
+
+                        elementoEstadoActual.val(targetId);
+                        $('#' + idOportunidad + '').remove();
+                        targetCol.prepend(elementoOp);
+                        $('#modal_' + idOportunidad + '').modal('toggle');
+                        getTotal();
+                    } else {
+                        toastr.info('Para cambiar de estado debes seleccionar otro')
+                    }
+                        //cambiar por el otro modal
+
+
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+        });
+    });
+    $("#cuerpo").on('dblclick', '.oportunidad', function () {
+
+        window.location.href = ""+ $(this).attr('link') +"";
+
+    });
+    $("#cuerpo").on('click', '.modal .card .card-header li a', function () {
+        $(this).parent().parent().parent().find("a").each(function () {
+            $(this).removeClass('active');
+            $(this).attr("aria-selected", 'false');
+        });
+
+        var objetivo = $(this).attr("href");
+        $(this).addClass('active');
+        $(this).attr("aria-selected", 'true');
+
+        $(this).parent().parent().parent().parent().parent().parent().find('[role=tabpanel]').each(function () {
+
+            $(this).removeClass('active');
+            $(this).removeClass('show');
+
+
+        });
+
+        $(this).parent().parent().parent().parent().parent().parent().find(objetivo).addClass('active');
+        $(this).parent().parent().parent().parent().parent().parent().find(objetivo).addClass('show');
+    });
+
+    var urlcambiarEst = "@Url.Action("cambiarEstado", "Flujo")";
+    var urlcambiarPosicion = "@Url.Action("cambiarPosicion", "Flujo")";
+    //eliminar el estado
+    var urlEliminar = "@Url.Action("Eliminar", "ESTADO_PROSPECTO")";
+    var dataEliminar;
+    var columnaEliminar;
+
+    $(document).ready(function () {
+
+        $("#tablero").on('mouseenter', '.card-header', function () {
+
+
+
+            $(this).find('#btn-editarOP').css({
+                'right': '25px',
+
+                '-webkit-transition': 'all 0.5s',
+                '-moz-transition': 'all 0.5s',
+                '-mos-transition': 'all 0.5s',
+                '-o-transition': 'all 0.5s',
+                'transition': 'all 0.5s',
+
+
+
+            });
+        })
+
+        $("#tablero").on('mouseleave', '.card-header', function () {
+
+
+            $(this).find('#btn-editarOP').css({
+                'right': '-1000px',
+
+                '-webkit-transition': 'all 1s',
+                '-moz-transition': 'all 1s',
+                '-mos-transition': 'all 1s',
+                '-o-transition': 'all 1s',
+                'transition': 'all 1s',
+
+
+
+            });
+
+        })
+
+
+
+
+        $("#tablero").on('click', '.btn-nuevaOP', function () {
+            cadena = `                    <article class="kanban-entry" id="nueva" draggable="false">
+@using (Html.BeginForm("nuevoProspecto", "Flujo", FormMethod.Post, new {  enctype = "multipart/form-data" }))
+{
+ @Html.AntiForgeryToken()
+                        <div class="kanban-entry-inner">
+
+                            <div class="row justify-content-around mb-0 ml-0 mr-0 p-2"><div class="col-8"><div class="row text-left"><div class="col p-0"><h5 class="m-0">Nueva Oportunidad</h5></div></div></div><div class="col-4"><div class="row text-right"><div class="col p-0"><a href="#" class="eliminar " style="color: red;"><i class="right fas fa-times"></i></a></div></div></div> </div><hr class="m-0">
+
+    <div class="row justify-content-around mb-2 ml-0 mr-0 p-2">
+                                <input type="hidden" name="idEstatus" value="1" />
+                                <input type="hidden" name="idEstadoOp" value="" />
+                                <input type="hidden" name="nombreEstado" value="" />
+
+
+                                <div class="col-12 p-0  mb-2 ">
+
+                                    <label for="Num_Op" class="usuario text-left  w-100 mb-0"> Nombre:</label>
+                                    <input class="w-100 form-control" id="Num_Op" name="nombreOp" required="required" type="text" placeholder="Descripción" />
+
+                                </div>
+                                <div class="col-12 p-0 mb-0 ">
+                                    <label for="Num_Op" class ="usuario text-left  w-100  pl-2 mb-0"> Cliente: </label>
+                                    <article class ="kanban-entry" draggable="false">
+                                            <div class ="kanban-entry-inner">
+                                                <div class ="row justify-content-between p-2 mb-2 m-0">
+                                                    <div class ="col-12  p-0 mb-2  ">
+                                                        <div class ="form-group">
+                                                            <div class ="row">
+                                                                <div class ="col-6">
+                                                                    <div class ="custom-control custom-radio">
+                                                                        <input class ="custom-control-input" type="radio" id="ind_radio" name="tipoContacto" required = "required" checked>
+                                                                        <label for="ind_radio" class ="custom-control-label">Prospecto </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class ="col-6">
+                                                                    <div class ="custom-control custom-radio">
+                                                                        <input class ="custom-control-input" type="radio" id="emp_radio" name="tipoContacto" required = "required">
+                                                                        <label for="emp_radio" class ="custom-control-label">Cliente </label>
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class ="col-12 " id="contenidoTipo">
+                                                        <input type="hidden" id="tipo" name="tipContacto" value="0">
+                                                             <div id="potencial" class ="potencial">
+                                                                <div class ="row p-0 d-flex align-items-center">
+
+
+
+                                                                <div class ="col-12 p-0">
+                                                                    <div class ="form-group">
+
+                                                                        <select class ="form-control mw-100 select2" id="clientePot"  data-placeholder="Prospecto"  required="" name="clientePot"></select>
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class ="p-0 mb-3 pl-3 col-2 hidden" id="editar">
+                                                                    <div class ="input-group">
+                                                                        <div class ="input-group-append">
+                                                                        <a href="#" id="modeditarClientePot" class =" fas fa-edit" data-toggle="modal" data-target="#modal_editarClientePot"  value="" name="accion:Editar" style="background: #fff;"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <a href="#" class ="btn  btn-contacto w-100 p-0 font-weight-bold" data-toggle="modal" data-target="#modal_crearPotencial"><i class ="fas fa-user-plus  pr-2" style="color: #0275d8"></i>Agregar prospecto</a>
+
+                                                            </div>
+                                                        </div>
+                                                        <div id="fidelizado" class ="fidelizado hidden">
+                                                            <div class ="row p-0 d-flex align-items-center">
+
+
+
+                                                                <div class ="col-12 p-0">
+                                                                    <div class ="form-group">
+                                                                        <select class="form-control mw-100 select2" id="clienteFi" data-placeholder="Fidelizado" name="clienteFi"></select>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class ="p-0 mb-3 pl-3 col-2 hidden" id="editar">
+                                                                    <div class ="input-group">
+                                                                        <div class ="input-group-append">
+                                                                        <a href="#" id="modeditarClienteFi" class =" fas fa-edit"  data-toggle="modal" data-target="#modal_editarClienteFi"   value="" name="accion:Editar" style="background: #fff;"></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </article>
+
+                                </div>
+
+
+
+                                <div class ="col-12 mb-2">
+                                    <label for="in" class ="text-left mb-0">Probabilidad para Convertir: </label>
+                                    <input id="range_5" type="text" name="probabilidad" value="">
+                                </div>
+
+                                <div class="col-12 ">
+                                    <div class="prioridad">
+                                        <label for="" class="text-left mb-0">Prioridad:</label>
+
+                                        <a href="#" onclick="return false;" title="Alta" id="prio3" aria-label="Alta" data-index="3" class="float-right prioridad_estrella far fa-star" style="color: #000;"></a>
+                                        <a href="#" onclick="return false;" title="Media" id="prio2" aria-label="Media" data-index="2" class="float-right prioridad_estrella far fa-star" style="color: #000;"></a>
+                                        <a href="#" onclick="return false;" title="Baja" id="prio1" aria-label="Baja" data-index="1" class="float-right prioridad_estrella far fa-star " style="color: #000;"></a>
+                                        <input type="hidden" id="prioridad" name="prioridadVal" value="0">
+
+                                    </div>
+                                    <div class="row  justify-content-around  p-0">
+
+                                        <div class="col-7 p-0"><label for="" class="text-left  w-100">Ingreso Estimado</label><input class="w-100 pl-2 form-control" name="ingreso" value="0.00" type="number" step="0.01" /></div>
+                                    <div class="col-4 p-0">
+                                        <label for="" class="moneda text-left  w-100">Moneda</label>
+                                        <select class="form-control mw-100" id="tipoMoneda" data-placeholder="Tipo" required="required" name="tipoMoneda"></select>
+                                    </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div id="usuarioOP" class="col-sm-12 mb-2">
+
+                                        <label for="" class="moneda text-left  w-100">Usuario Asignado</label>
+                                        <select class="form-control mw-100 select2" id="idUsuario" data-placeholder="Usuario" required="required" name="idUsuario"></select>
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class ="col-12 mt-2">
+                                <div class ="form-group">
+                                    <input type="hidden" id="vista" name="vista" value="Index">
+                                    <input type="submit" id="nuevaOportunidad" class ="btn btn-primary" value="Añadir" >
+                                    <a id="cancelar" class ="btn btn-default" >Cancelar</a>
+                                </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+            }
+                    </article>
+                     `
+            $(".panel-body").each(function () {
+                $(this).find('article[id=nueva]').remove();
+            });
+            $(this).parent().parent().parent().parent().find(".kanban-centered").prepend(cadena);
+
+
+            var idEstado = $(this).parent().parent().parent().parent().find(".estado").attr("id");
+            var nomEstado = $(this).parent().parent().parent().parent().find(".card-titulo").html();
+            $('input[name=idEstadoOp]').attr("value", idEstado);
+            $('input[name=nombreEstado]').attr("value", nomEstado);
+
+
+            $("input[name='tipoContacto']").change(function () {
+
+
+                if (this.id == "ind_radio") {
+
+
+                    $("#contenidoTipo").find('#tipo').val(0);
+                    $("#contenidoTipo").find('#potencial').removeClass('hidden');
+                    $("#contenidoTipo").find("#clientePot").attr('required', 'required')
+                    $("#contenidoTipo").find("#clienteFi").removeAttr('required')
+                    $("#contenidoTipo").find('#fidelizado').addClass('hidden');
+
+
+                } else {
+
+                    $("#contenidoTipo").find('#tipo').val(1);
+                    $("#contenidoTipo").find('#fidelizado').removeClass('hidden');
+                    $("#contenidoTipo").find("#clienteFi").attr('required', 'required')
+                    $("#contenidoTipo").find("#clientePot").removeAttr('required')
+                    $("#contenidoTipo").find('#potencial').addClass('hidden');
+
+                }
+
+
+            });
+            prioridad();
+            cargarUsuarios();
+            cargarPotencial();
+            cargarFidelizado();
+            cargarMoneda();
+            CambioCli();
+            eliminarNuevo();
+            Ingreso();
+            $("#tipoMoneda").val("MN");
+            $('#range_5').ionRangeSlider({
+                min: 0,
+                max: 100,
+                type: 'single',
+                step: 1,
+                postfix: ' %',
+                prettify: false,
+                hasGrid: true
+            });
+
+            $('.select2').select2();
+        });
+
+
+
+
+    function cargarFidelizado() {
+        $.ajax({
+            url: "@Url.Content("~/Flujo/cargarFidelizado")",
+            dataType: "json",
+        type: 'GET',
+        cache: false,
+        success: function (data) {
+
+
+            var fidelizado = $("#clienteFi")[0];
+            fidelizado.length = 0;
+
+
+            for (i = 0; i < data.fidelizado.length; i++) {
+                fidelizado[i + 1] = new Option(data.fidelizado[i].CNOMCLI, data.fidelizado[i].CCODCLI, "", "");
+            }}
+        })
+    };
+
+    function cargarMoneda() {
+        $.ajax({
+            url: "@Url.Content("~/Flujo/cargarMoneda")",
+            dataType: "json",
+        type: 'GET',
+        cache: false,
+        success: function (data) {
+
+
+            var moneda = $("#tipoMoneda")[0];
+            moneda.length = 0;
+
+
+            for (i = 0; i < data.moneda.length; i++) {
+                moneda[i + 1] = new Option(data.moneda[i].TIPOMON_SIMBOLO, data.moneda[i].TIPOMON_CODIGO, "", "");
+            }
+            $("#tipoMoneda").val("MN");
+            }
+
+        })
+    };
+        $("#tablero").on('click', '#nuevaOportunidad', function () {
+
+        });
+
+
+        $("#tablero").on('click', '#nuevaColumna', function () {
+            $(this).addClass('disabled');
+
+            var posicion = $("#tablero").find(".panel-body").length + 1;
+
+            var cadena = ` <div id="` + posicion + `" class="columna mt-4 mb-4"><div id="nuevoProspecto"  class="panel card panel-primary kanban-col ">`;
+
+            cadena += `<div class ="card-header tabla-abierta align-text-center estado " id= "` + posicion + `"  estadoDraggable=true id="" data-background-color="blue"  style="background: rgb(255, 217, 102) ;border-radius: 6px 0px 0px 6px;">`;
+            cadena += `<div class="titulo d-flex">`;
+            cadena += `<h1 class="card-titulo mt-auto mb-auto font-weight-bolder text-white"> Título </h1>`;
+            cadena += `<div class="editarEstado mt-auto mb-auto">`;
+            cadena += `<input type="text" id="nombreEstado" class ="form-control float-left mover" placeholder="Título" value="">`;
+
+            cadena += ` <div id="btn-colorEst" class="mover">`;
+
+            cadena += `   <a id="picker3" class="text-white" name="0" href="#"><i class="fas fa-palette"></i>   </a>`;
+            cadena += `   <input type="hidden" id="colorNuevo" class="form-control " value="rgb(255, 217, 102)">`;
+            cadena += `<input type="hidden" id="colorAnterior" class="form-control " value="rgb(255, 217, 102)">`;
+            cadena += ` </div>`;
+
+            cadena += ` <a type="button" href="#" id="btn-guardarNuevoEst" aria-label="Guardar cambios" class="btn mover text-white p-0 "><i class="fas fa-check"></i></a>`;
+            cadena += `  <a type="button" href="#" id="btn-eliminarNuevoEst" aria-label="Eliminar estado" class="btn mover text-white p-0 " ><i class="fas fa-times"></i></a>`;
+            cadena += ` </div>`;
+
+            cadena += `   <div class="card-tools ml-auto mt-auto mb-auto">`;
+
+            cadena += `        <a type="button" href="#" id="btn-editarOP" aria-label="Editar estado" class="btn btn-editarOP text-white p-0 w-50"><i class="fas fa-edit"></i></a>`;
+            cadena += `      <a type="button" href="#" id="btn-nuevaOP" aria-label="Nueva Oportunidad" class="btn btn-nuevaOP text-white p-0 float-right"><i class="fas fa-plus"></i></a>`;
+
+            cadena += `    </div>`;
+
+            cadena += `  </div>`;
+
+
+            cadena += `   <div id="flecha-derecha" style="border-left-color: rgb(255, 217, 102) ;"></div>`;
+            cadena += ` </div>`;
+
+            cadena += `   <div class="Fila_sup row justify-content-start text-center ">`;
+
+
+
+
+
+            cadena += `      <div class="col-12">`;
+            cadena += `         <h1 class="Monto">$<span>0</span></h1>`;
+            cadena += `     </div>`;
+
+
+            cadena += ` </div>`;
+
+            cadena += `   <div class="panel-cuerpo  text-justify">`;
+
+            cadena += `     <div id=  '` + posicion + `' class ='kanban-centered'></div></div></div></div>`;
+
+
+            $("#tablero .columna:last").before(cadena);
+
+            $("#nuevoProspecto").find('.card-titulo').addClass("hidden");
+            $("#nuevoProspecto").find('.card-tools').addClass("hidden");
+            $("#nuevoProspecto").find('.mover').css({
+
+
+                '-webkit-transition': 'all 0.5s',
+                '-moz-transition': 'all 0.5s',
+                '-mos-transition': 'all 0.5s',
+                '-o-transition': 'all 0.5s',
+                'transition': 'all 0.5s',
+
+
+
+            });
+            $("#nuevoProspecto").find('#nombreEstado').css({ 'right': '75px', 'top': '0px', 'border': '0' });
+            $("#nuevoProspecto").find('#btn-colorEst').css({ 'right': '50px', 'top': '8px', });
+            $("#nuevoProspecto").find('#btn-guardarNuevoEst').css({ 'right': '23px', 'top': '8px', });
+            $("#nuevoProspecto").find('#btn-eliminarNuevoEst').css({ 'right': '0px', 'top': '8px', });
+
+
+
+        });
+
+        $("#tablero").on('click', '#btn-eliminarNuevoEst', function () { $("#nuevoProspecto").remove(); $("#tablero").find("#nuevaColumna").removeClass('disabled'); });
+
+        $("#tablero").on('click', '#btn-guardarNuevoEst', function () {
+
+
+
+
+            var urlNuevoEstado = "@Url.Action("Nuevo", "ESTADO_PROSPECTO")";
+            var idEstado = $(this).parent().parent().parent().attr("id");
+            var colorBuscado = $(this).parent().parent().find('#colorNuevo').val();
+            $(this).parent().parent().find('#colorAnterior').val(colorBuscado);
+            var nombreNuevo = $(this).parent().find('#nombreEstado').val();
+            var data = { id_estadoOportunidad: idEstado, color: colorBuscado, decripcion: nombreNuevo, posicion: idEstado };
+            $(this).parent().parent().parent().parent().find('.card-titulo').html(nombreNuevo);
+            var elemento = $(this);
+            $.ajax({
+                url: urlNuevoEstado,
+                data: data,
+                type: 'POST',
+
+                success: function (data) {
+
+                    elemento.parent().parent().find('.mover').css({
+
+
+
+                        '-webkit-transition': 'all 1s',
+                        '-moz-transition': 'all 1s',
+                        '-mos-transition': 'all 1s',
+                        '-o-transition': 'all 1s',
+                        'transition': 'all 1s',
+
+
+                    });
+                    elemento.parent().parent().find('#nombreEstado').css({ 'right': '-1075px', 'top': '0px' });
+                    elemento.parent().parent().find('#btn-colorEst').css({ 'right': '-1050px', 'top': '8px', });
+                    elemento.parent().parent().find('#btn-guardarEst').css({ 'right': '-1023px', 'top': '8px', });
+                    elemento.parent().parent().find('#btn-eliminarEst').css({ 'right': '-1075px', 'top': '8px', });
+                    elemento.parent().parent().find("#btn-editarOP").css({ 'right': '-1000px' })
+                    elemento.parent().parent().parent().parent().find('.card-titulo').removeClass("hidden");
+                    elemento.parent().parent().parent().parent().find('.card-tools').removeClass("hidden");
+                    elemento.parent().parent().parent().parent().find('.panel-cuerpo').addClass('panel-body');
+                    $("#tablero").find("#nuevaColumna").removeClass('disabled');
+                    $("#nuevoProspecto").find('#btn-guardarNuevoEst').attr('id', 'btn-guardarEst');
+                    $("#nuevoProspecto").find('#btn-eliminarNuevoEst').attr('id', 'btn-eliminarEst');
+                    $("#nuevoProspecto").attr('id', '');
+                    window.location.href = "@Url.Action("Index", "Flujo")";
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                }
+
+            });
+
+        });
+        function eliminarNuevo() {
+            $("a.eliminar").click(function () {
+                $(this).parent().parent().parent().parent().parent().parent().parent().fadeOut("normal", function () {
+                    $(this).remove();
+                });
+            });
+            $("a#cancelar").click(function () {
+                $(this).parent().parent().parent().parent().parent().parent().fadeOut("normal", function () {
+                    $(this).remove();
+                });
+            });
+        };
+
+
+    });
+
+
+
+    //funcion al pasar el mouse sobre la prioridad
+
+
+function prioridad() {
+    $("#tablero").on('mouseenter', ".prioridad_estrella", function () {
+
+
+        $(this).parent().find('#prio1').removeClass("fas fa-star");
+        $(this).parent().find('#prio1').addClass("far fa-star");
+        $(this).parent().find('#prio2').removeClass("fas fa-star");
+        $(this).parent().find('#prio2').addClass("far fa-star");
+        $(this).parent().find('#prio3').removeClass("fas fa-star");
+        $(this).parent().find('#prio3').addClass("far fa-star");
+        $(this).removeClass("fas fa-star");
+        $(this).addClass("far fa-star");
+
+        $(this).attr("style", "color: #000;");
+        $(this).parent().find('#prio1').attr("style", "color: #000;");
+        $(this).parent().find('#prio2').attr("style", "color: #000;");
+        $(this).parent().find('#prio3').attr("style", "color: #000;");
+
+        valor = $(this).attr("data-index");
+        $(this).parent().find('#prioridad').attr("value", '0')
+        if (valor == 1) {
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+        if (valor == 2) {
+            $(this).parent().find('#prio1').removeClass("far fa-star");
+            $(this).parent().find('#prio1').addClass("fas fa-star");
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).parent().find('#prio1').attr("style", "color: rgb(255, 149, 0)");
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+        if (valor == 3) {
+            $(this).parent().find('#prio1').removeClass("far fa-star");
+            $(this).parent().find('#prio1').addClass("fas fa-star");
+            $(this).parent().find('#prio2').removeClass("far fa-star");
+            $(this).parent().find('#prio2').addClass("fas fa-star");
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).parent().find('#prio1').attr("style", "color: rgb(255, 149, 0)");
+            $(this).parent().find('#prio2').attr("style", "color: rgb(255, 149, 0)");
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+    });
+
+    $("#tablero").on('mouseleave', ".prioridad_estrella", function () {
+
+        Prioridad = $(this).parent().find('#prioridad').attr("value");
+        if (Prioridad == 0) {
+            valor = $(this).attr("data-index");
+            if (valor == 1) {
+                $(this).removeClass("fas fa-star");
+                $(this).addClass("far fa-star");
+
+                $(this).attr("style", "color: #000;");
+            }
+            if (valor == 2) {
+                $(this).parent().find('#prio1').removeClass("fas fa-star");
+                $(this).parent().find('#prio1').addClass("far fa-star");
+                $(this).removeClass("fas fa-star");
+                $(this).addClass("far fa-star");
+
+                $(this).attr("style", "color: #000;");
+                $(this).parent().find('#prio1').attr("style", "color: #000;");
+
+            }
+            if (valor == 3) {
+                $(this).parent().find('#prio1').removeClass("fas fa-star");
+                $(this).parent().find('#prio1').addClass("far fa-star");
+                $(this).parent().find('#prio2').removeClass("fas fa-star");
+                $(this).parent().find('#prio2').addClass("far fa-star");
+                $(this).removeClass("fas fa-star");
+                $(this).addClass("far fa-star");
+
+                $(this).attr("style", "color: #000;");
+                $(this).parent().find('#prio1').attr("style", "color: #000;");
+                $(this).parent().find('#prio2').attr("style", "color: #000;");
+            }
+        }
+
+
+    });
+
+
+
+    $("#tablero").on('click', ".prioridad_estrella", function () {
+
+
+        valor = $(this).attr("data-index");
+        $(this).parent().find('#prioridad').attr("value", valor)
+
+        if (valor == 1) {
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+        if (valor == 2) {
+            $(this).parent().find('#prio1').removeClass("far fa-star");
+            $(this).parent().find('#prio1').addClass("fas fa-star");
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).parent().find('#prio1').attr("style", "color: rgb(255, 149, 0)");
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+        if (valor == 3) {
+            $(this).parent().find('#prio1').removeClass("far fa-star");
+            $(this).parent().find('#prio1').addClass("fas fa-star");
+            $(this).parent().find('#prio2').removeClass("far fa-star");
+            $(this).parent().find('#prio2').addClass("fas fa-star");
+            $(this).removeClass("far fa-star");
+            $(this).addClass("fas fa-star");
+
+            $(this).parent().find('#prio1').attr("style", "color: rgb(255, 149, 0)");
+            $(this).parent().find('#prio2').attr("style", "color: rgb(255, 149, 0)");
+            $(this).attr("style", "color: rgb(255, 149, 0)");
+        }
+
+
+    });
+
+    }
+    //cambia los campos del nuevo cliente
+    $(document).ready(function () {
+
+        $("#modal_crearPotencial").find('select[name=tipoDoc]').change(function () {
+            var tipoDoc = $(this).val();
+
+
+            if (tipoDoc == 1 || tipoDoc == 2 || tipoDoc == 3) {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#sNombre').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "hidden");
+
+            } else {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#sNombre').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "text");
+
+
+            }
+        });
+
+    });
+
+
+    //boton guardar empresa
+    var uri = '@Url.Action("CrearEmpresa", "Home")';
+    $('#guardarEmp').click(function () {
+        nombre = $(this).parent().parent().find('#nombreEmpresa').val();
+        celular = $(this).parent().parent().find('#celularEmpresa').val();
+        telefono = $(this).parent().parent().find('#telefonoEmpresa').val();
+        correo = $(this).parent().parent().find('#correoEmpresa').val();
+        pagina = $(this).parent().parent().find('#paginaEmpresa').val();
+        $('#crearIndividual').find('#nombreEmpresa input').attr("value", nombre);
+        cadena = '<li class="select2-selection__choice" title="' + nombre + '" data-select2-id="179"><span class="select2-selection__choice__remove" role="presentation">×</span>Tennessee</li>';
+
+
+
+        $(this).parent().parent().parent().find("#TODO").prepend(cadena);
+
+        $.ajax({
+            url: uri,
+            data: { nombre: nombre, celular: celular, telefono: telefono, correo: correo, pagina: pagina },
+            type: 'POST',
+
+            success: function (data) {
+                toastr.success('Pedido validado satisfactoriamente.')
+            },
+            error: function (error) {
+                toastr.error('Algo salio mal.')
+
+            }
+
+        });
+    });
+    //poner formato al ingreso
+    function Ingreso() {
+
+        // manejador que asegura que el valor tiene el formato correcto cuando
+        // se modifica el valor, ya sea manual o con los botones inc/dec
+        $('[name=ingreso]').blur('input', function (event) {
+            event.target.value = event.target.valueAsNumber.toFixed(2)
+        });
+    };
+    function getTotal() {
+        var decimal_places = 2;
+        var decimal_factor = decimal_places === 0 ? 1 : Math.pow(10, decimal_places);
+        var totalDolares = 0;
+        var totalSoles = 0;
+        $(".panel-body").each(function () {
+
+            $(this).find(".oportunidad").each(function () {
+                if ($(this).find('#simboloMon').html() == '$.') {
+                    totalDolares = totalDolares + parseFloat($(this).find("#ingreso").html());
+                } else {
+                    totalSoles = totalSoles + parseFloat($(this).find("#ingreso").html());
+                }
+            });
+            $(this).parent().find(".MontoDolar span").animateNumber({
+                number: totalDolares.toFixed(2) * decimal_factor,
+
+                numberStep: function (now, tween) {
+                    var floored_number = Math.floor(now) / decimal_factor,
+                        target = $(tween.elem);
+
+                    if (decimal_places > 0) {
+                        // coloca los decimales asi sean 0
+                        floored_number = floored_number.toFixed(decimal_places);
+
+                        // cambia '.' por la  ','
+
+                        //floored_number = floored_number.toString().replace(',', '.');
+                    }
+
+                    target.text(floored_number);
+                }
+
+            }, 1200);
+            totalDolares = 0;
+
+            $(this).parent().find(".MontoSoles span").animateNumber({
+                number: totalSoles.toFixed(2) * decimal_factor,
+
+                numberStep: function (now, tween) {
+                    var floored_number = Math.floor(now) / decimal_factor,
+                        target = $(tween.elem);
+
+                    if (decimal_places > 0) {
+                        // coloca los decimales asi sean 0
+                        floored_number = floored_number.toFixed(decimal_places);
+
+                        // cambia '.' por la  ','
+                        //floored_number = floored_number.toString().replace('.', ',');
+                    }
+
+                    target.text(floored_number);
+                }
+
+            }, 1200);
+            totalSoles = 0;
+        });
+    };
+    //total de cada estado y colocando plugin para animar numeros
+    $(document).ready(function () {
+        var decimal_places = 2;
+        var decimal_factor = decimal_places === 0 ? 1 : Math.pow(10, decimal_places);
+        var totalDolares = 0;
+        var totalSoles = 0;
+        $(".panel-body").each(function () {
+
+            $(this).find(".oportunidad").each(function () {
+                if ($(this).find('#simboloMon').html() == '$.') {
+                    totalDolares = totalDolares + parseFloat($(this).find("#ingreso").html());
+                } else {
+                    totalSoles = totalSoles + parseFloat($(this).find("#ingreso").html());
+                }
+            });
+            $(this).parent().find(".MontoDolar span").animateNumber({
+                number: totalDolares.toFixed(2) * decimal_factor,
+
+                numberStep: function (now, tween) {
+                    var floored_number = Math.floor(now) / decimal_factor,
+                        target = $(tween.elem);
+
+                    if (decimal_places > 0) {
+                        // coloca los decimales asi sean 0
+                        floored_number = floored_number.toFixed(decimal_places);
+
+                        // cambia '.' por la  ','
+
+                        //floored_number = floored_number.toString().replace(',', '.');
+                    }
+
+                    target.text(floored_number);
+                }
+
+            }, 1200);
+            totalDolares = 0;
+
+            $(this).parent().find(".MontoSoles span").animateNumber({
+                number: totalSoles.toFixed(2) * decimal_factor,
+
+                numberStep: function (now, tween) {
+                    var floored_number = Math.floor(now) / decimal_factor,
+                        target = $(tween.elem);
+
+                    if (decimal_places > 0) {
+                        // coloca los decimales asi sean 0
+                        floored_number = floored_number.toFixed(decimal_places);
+
+                        // cambia '.' por la  ','
+                        //floored_number = floored_number.toString().replace('.', ',');
+                    }
+
+                    target.text(floored_number);
+                }
+
+            }, 1200);
+            totalSoles = 0;
+        });
+
+
+    });
+
+    //boton para buardar los cambios de los estados
+    $("#tablero").on('click', "[id='btn-guardarEst']", function () {
+
+        var urlEditar = "@Url.Action("Editar", "ESTADO_PROSPECTO")";
+        var idEstado = $(this).parent().parent().parent().attr("id");
+        var colorBuscado = $(this).parent().parent().find('#colorNuevo').val();
+        $(this).parent().parent().find('#colorAnterior').val(colorBuscado);
+        var nombreNuevo = $(this).parent().find('#nombreEstado').val();
+        var data = { id: idEstado, color: colorBuscado, nombre: nombreNuevo };
+        $(this).parent().parent().parent().parent().find('.card-titulo').html(nombreNuevo);
+
+        $.ajax({
+            url: urlEditar,
+            data: data,
+            type: 'POST',
+
+            success: function (data) {
+                toastr.success('Estado editado con exito.')
+            },
+            error: function (error) {
+                toastr.error('Algo salio mal.')
+
+            }
+
+        });
+        $(this).parent().parent().find('.mover').css({
+
+
+
+            '-webkit-transition': 'all 1s',
+            '-moz-transition': 'all 1s',
+            '-mos-transition': 'all 1s',
+            '-o-transition': 'all 1s',
+            'transition': 'all 1s',
+
+
+        });
+        $(this).parent().parent().find('#nombreEstado').css({ 'right': '-1075px', 'top': '0px' });
+        $(this).parent().parent().find('#btn-colorEst').css({ 'right': '-1050px', 'top': '8px', });
+        $(this).parent().parent().find('#btn-guardarEst').css({ 'right': '-1023px', 'top': '8px', });
+        $(this).parent().parent().find('#btn-eliminarEst').css({ 'right': '-1075px', 'top': '8px', });
+        $(this).parent().parent().find("#btn-editarOP").css({ 'right': '-1000px' })
+        $(this).parent().parent().parent().parent().find('.card-titulo').removeClass("hidden");
+        $(this).parent().parent().parent().parent().find('.card-tools').removeClass("hidden");
+
+    });
+
+    //boton para eliminar los estados
+    $("#tablero").on('click', "[id='btn-eliminarEst']", function () {
+
+
+
+        var longitud = 0;
+
+        var idEstado = $(this).parent().parent().parent().attr("id");
+        columnaEliminar = $(this).parent().parent().parent().parent().parent();
+        dataEliminar = { id: idEstado };
+
+
+
+        $(this).parent().parent().parent().parent().find(".oportunidad").each(function () {
+            longitud = longitud + 1;
+        });
+
+        if (longitud == 0) {
+
+            $('#modal-eliminarEstado').modal('toggle');
+
+
+        } else {
+            $(function () {
+                $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: '¡Tienes ' + longitud + ' Oportunidades dentro de este estado!',
+                    subtitle: 'Error',
+                    body: 'Para eliminar el estado debe estar completamente vacio'
+                })
+            });
+        }
+
+
+
+    });
+    //boton para crear los selectores de color de los estados
+    $("#tablero").on('click', "[id='picker3']", function () {
+
+        var Creado = $(this).attr('Name');
+        if (Creado == 0) {
+            $(this).spectrum({
+                type: "color",
+                showPalette: "false",
+                showPaletteOnly: "true",
+                togglePaletteOnly: "true",
+                showAlpha: "false",
+                allowEmpty: "false",
+
+                move: function (color) {
+                    var cambioColor = color.toHexString();
+                    $(this).parent().parent().parent().parent().css({ 'background': cambioColor, 'border-radius': '6px 0px 0px 6px' });
+                    $(this).parent().parent().parent().parent().parent().find('#flecha-derecha').css({ 'border-left-color': cambioColor });
+                    $(this).parent().find('#colorNuevo').val(cambioColor);
+                }
+            });
+
+            $(this).attr('Name', 1);
+            $(this).spectrum("toggle");
+            return false;
+        }
+    });
+
+    //Eliminando el estado
+    $("#cuerpo").on('click', '[id="confirmar-eliminar"]', function () {
+
+        $.ajax({
+            url: urlEliminar,
+            data: dataEliminar,
+            type: 'POST',
+
+            success: function (datos) {
+
+                toastr.success('Estado eliminado.')
+
+            },
+            error: function (error) {
+                toastr.error('Algo salio mal.')
+
+            },
+
+        });
+
+        $('#modal-eliminarEstado').modal('toggle');
+        columnaEliminar.fadeOut("normal", function () {
+            $(this).remove();
+        });
+
+
+    });
+
+    //boton para mostrar las funciones de editar los estados
+    $("#tablero").on('click', "[id='btn-editarOP']", function () {
+
+
+
+
+        $(this).parent().parent().find('.card-titulo').addClass("hidden");
+        $(this).parent().parent().find('.card-tools').addClass("hidden");
+        $(this).parent().parent().find('.mover').css({
+
+
+            '-webkit-transition': 'all 0.5s',
+            '-moz-transition': 'all 0.5s',
+            '-mos-transition': 'all 0.5s',
+            '-o-transition': 'all 0.5s',
+            'transition': 'all 0.5s',
+
+
+
+        });
+        $(this).parent().parent().find('#nombreEstado').css({ 'right': '75px', 'top': '0px', 'border': '0' });
+        $(this).parent().parent().find('#btn-colorEst').css({ 'right': '50px', 'top': '8px', });
+        $(this).parent().parent().find('#btn-guardarEst').css({ 'right': '23px', 'top': '8px', });
+        $(this).parent().parent().find('#btn-eliminarEst').css({ 'right': '0px', 'top': '8px', });
+    });
+
+
+
+
+    //Para crear Contacto nuevo
+    $("#cuerpo").on('click', "[id=agregarContacto]", function () {
+
+        $(this).addClass('disabled')
+        var cadena = `
+                                                     <tr id="Nuevo">
+                                                        <td class="align-middle columnaContacto">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75 infoContacto" id="CONTACTO" name="CONTACTO">
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75 " id="AREA" name="AREA" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CARGO" name="CARGO" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CORREO" name="CORREO" >
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="TELEFONO" name="TELEFONO" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="exampleInputPassword1" name="CELULAR" >
+                                                        </td>
+
+                                                        <td class ="align-middle">
+                                                            <div class ="row justify-content-around text-center">
+                                                                <div class ="col-auto">
+                                                                    <a id="guardarNuevoContacto" class ="btn btn-xs btn-success"><i class ="fas fa-check text-white"></i></a>
+
+                                                                </div>
+                                                                <div class ="col-auto">
+
+                                                                    <a id="removerNuevoContacto" class ="btn btn-xs btn-danger"><i class ="fas fa-times text-white"></i></a>
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                `
+
+        var CodCli = $(this).parent().find("table").attr('id');
+        var tipoCliente = $(this).parent().find("table").attr('tipoCliente');
+        var UltimoCod = $(this).parent().find('table tbody tr#guardado:last [name=COD_CONTACTO]').val();
+        var Codigo = parseInt(UltimoCod) + parseInt("1");
+        if (UltimoCod == null) {
+            Codigo = 1;
+        }
+
+        $(this).parent().find('table tbody').append(cadena);
+
+        $(this).parent().find("#removerNuevoContacto").click(function (event) { $(this).parent().parent().parent().parent().remove(); $("#cuerpo").find("#agregarContacto").removeClass('disabled'); });
+        $(this).parent().find("#guardarNuevoContacto").click(function (event) {
+
+
+            var paso = 1;
+            var Cadena = `<tr id="guardado">`
+
+            var dataNuevoContacto = "{COD_CLIENTE: '" + CodCli + "', COD_CONTACTO: '" + Codigo + "',";
+
+            //recorre todos los input de contacto nuevo
+            $(this).parent().parent().parent().parent().find("td [name]").each(function () {
+                if ($(this).attr("name") == 'CONTACTO' && $(this).val() == '') {
+                    toastr.warning("el campo contacto debe estar lleno");
+                    paso = 0;
+                } else {
+                    //para crear la cadena a mostrar
+                    if ($(this).attr("name") == 'CONTACTO') {
+                        Cadena += `<td class ="align-middle"><p id="infoContacto" class="m-0">` + $(this).val() + `</p><input type="hidden" class ="form-control mw-75" id="COD_CLIENTE" name="COD_CLIENTE" value="` + CodCli + `">`;
+                        Cadena += `<input type="hidden" class ="form-control mw-75 infoCli" id="tipoCli"  name="tipoCli" value="` + tipoCliente + `"><input type="hidden" class ="form-control mw-75" id="COD_CONTACTO" name="COD_CONTACTO" value="` + Codigo + `">`;
+                        Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="exampleInputPassword1" name="CONTACTO" value="` + $(this).val() + `">`;
+                        Cadena += `</td>`
+                    } else {
+                        Cadena += `<td class ="align-middle"><p id="infoContacto" class="m-0">` + $(this).val() + `</p>`;
+
+                        Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="exampleInputPassword1" name="` + $(this).attr('name') + `" value="` + $(this).val() + `"></td>`
+
+                    }
+                    if ($(this).attr("name") == 'CELULAR') {
+                        dataNuevoContacto += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                    } else {
+                        dataNuevoContacto += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                    }
+                }
+
+            });
+
+            dataNuevoContacto += "}";
+
+            if (paso == 1) {
+                if (tipoCliente == 0) {
+                    var urlNuevoContacto = "@Url.Action("nuevoContactoPot", "Flujo")";
+                    var json = eval("(" + dataNuevoContacto + ')');
+
+                    $.post(urlNuevoContacto, json);
+
+
+                    Cadena += `<td class ="align-middle"><div class ="row justify-content-around text-center"><div class ="col-auto"><a id="editarContacto" class="btn btn-xs btn-primary  pl-1 pr-1"><i class="fas fa-user-edit text-white"></i></a><a id="guardarEditado" class="btn btn-xs btn-success hidden"><i class="fas fa-check text-white"></i></a></div><div class ="col-auto"><a id="eliminarContacto" class ="btn btn-xs btn-danger"><i class ="far fa-trash-alt text-white"></i></a></div></div></td></tr>`
+
+
+
+                    $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find('table tbody').append(Cadena);
+                    $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find("#agregarContacto").removeClass('disabled');
+                    $(this).parent().parent().parent().parent().remove();
+
+                } else {
+                    var urlNuevoContacto = "@Url.Action("nuevoContactoFi", "Flujo")";
+                    var json = eval("(" + dataNuevoContacto + ')');
+
+                    $.post(urlNuevoContacto, json);
+
+                    Cadena += `<td class ="align-middle"><div class ="row justify-content-around text-center"><div class ="col-auto"><a id="editarContacto" class="btn btn-xs btn-primary  pl-1 pr-1"><i class="fas fa-user-edit text-white"></i></a><a id="guardarEditado" class="btn btn-xs btn-success hidden"><i class="fas fa-check text-white"></i></a></div><div class ="col-auto"><a id="eliminarContacto" class ="btn btn-xs btn-danger"><i class ="far fa-trash-alt text-white"></i></a></div></div></td></tr>`
+
+
+                    $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find('table tbody').append(Cadena);
+                    $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find("#agregarContacto").removeClass('disabled');
+                    $(this).parent().parent().parent().parent().remove();
+                }
+            }
+        });
+
+    });
+
+    //para editar cada contacto
+
+    $("#cuerpo").on('click', '#formEditarCli tr td [id=guardarEditado]', function () {
+
+        var paso = 1;
+        var Cadena = `<tr id="guardado">`
+        var CodCli = $(this).parent().parent().parent().parent().find("[name=COD_CLIENTE]").val()
+        var Codigo = $(this).parent().parent().parent().parent().find("td [name=COD_CONTACTO]").val();
+        var tipoCliente = $(this).parent().parent().parent().parent().find('[name=tipoCli]').val();
+        var data = "{COD_CLIENTE: '" + CodCli + "', COD_CONTACTO: '" + Codigo + "',";
+
+        //recorre todos los input de contacto nuevo
+        $(this).parent().parent().parent().parent().find("td [name]").each(function () {
+            if ($(this).attr("name") == 'CONTACTO' && $(this).val() == '') {
+                alert("el campo contacto debe estar lleno");
+                paso = 0;
+            } else {
+                //para crear la cadena a mostrar
+                if ($(this).attr("name") == 'COD_CONTACTO' || $(this).attr("name") == 'COD_CLIENTE' || $(this).attr("name") == 'tipoCli') {
+
+                } else {
+                    $(this).parent().find('[id=infoContacto]').html($(this).val())
+                    $(this).parent().find('[id=infoContacto]').removeClass('hidden')
+                    $(this).attr('type', 'hidden');
+                }
+                if ($(this).attr("name") == 'CELULAR') {
+                    data += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                } else {
+                    data += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                }
+            }
+        });
+
+        data += "}";
+
+        if (paso == 1) {
+            if (tipoCliente == 0) {
+                var urlEditarContacto = "@Url.Action("editarContactoPot", "Flujo")";
+                var json = eval("(" + data + ')');
+
+                $.post(urlEditarContacto, json)
+
+
+                $('#modal_editarClientePot').find('[id=guardarEditado]').addClass('hidden');
+                $('#modal_editarClientePot').find('[id=editarContacto]').removeClass('hidden');
+            } else {
+                var urlEditarContacto = "@Url.Action("editarContactoFi", "Flujo")";
+                var json = eval("(" + data + ')');
+
+                $.post(urlEditarContacto, json)
+
+                $('#modal_editarClienteFi').find('[id=guardarEditado]').addClass('hidden');
+                $('#modal_editarClienteFi').find('[id=editarContacto]').removeClass('hidden');
+            }
+
+        }
+    });
+
+    //click al boton editar contacto
+
+    $("#cuerpo").on('click', 'tr td [id=editarContacto]', function () {
+        $(this).addClass('hidden');
+        $(this).parent().find('#guardarEditado').removeClass('hidden');
+        $(this).parent().parent().parent().parent().find("td").each(function () {
+            $(this).find('p').addClass('hidden');
+            if ($(this).find('.infoContacto').attr('name') == 'COD_CLIENTE' || $(this).find('.infoContacto').attr('name') == 'COD_CONTACTO') {
+
+            } else {
+
+                $(this).find('.infoContacto').attr('type', 'text');
+
+            }
+
+        });
+        $(this).parent().parent().parent().parent().find('[name=CONTACTO]').attr('type', 'text');
+    });
+
+
+    //click al boton eliminar contacto
+
+    $("#cuerpo").on('click', '#formEditarCli tr td [id=eliminarContacto]', function () {
+
+        var CodCli = $(this).parent().parent().parent().parent().find("[name=COD_CLIENTE]").val()
+        var Codigo = $(this).parent().parent().parent().parent().find("td [name=COD_CONTACTO]").val();
+        var tipoCliente = $(this).parent().parent().parent().parent().find('[name=tipoCli]').val();
+        var data = "{COD_CLIENTE:'" + CodCli + "', COD_CONTACTO:'" + Codigo + "'}";
+
+        if (tipoCliente == 0) {
+            var urlEliminarContacto = "@Url.Action("EliminarContactoPot", "Flujo")";
+            var json = eval("(" + data + ')');
+            var elemento = $(this);
+            $.ajax({
+                url: urlEliminarContacto,
+                data: json,
+                type: 'POST',
+
+                success: function (datos) {
+
+                    elemento.parent().parent().parent().parent().remove();
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+
+
+
+
+        } else {
+            var urlEliminarContacto = "@Url.Action("EliminarContactoFi", "Flujo")";
+            var json = eval("(" + data + ')');
+            var elemento = $(this);
+            $.ajax({
+                url: urlEliminarContacto,
+                data: json,
+                type: 'POST',
+
+                success: function (datos) {
+
+                    elemento.parent().parent().parent().parent().remove();
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+        }
+
+
+    });
+
+    function CambioCli() {
+        $("#cuerpo").on('change', 'select[name=clienteFi]', function () {
+
+            $("#cuerpo").find("#modal_editarClienteFi").remove();
+            //se agrega el campo de editar con la información del cliente
+            var url = "@Url.Action("infoCliente", "Flujo")";
+            var tipoCli = $("#contenidoTipo").find('#tipo').val();
+            var codCli = $(this).val();
+            var data = { cliente: codCli, tipoCli: tipoCli };
+
+
+
+            $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+
+                success: function (datos) {
+
+                    $("#tablero").after(datos);
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+
+
+            $(this).parent().parent().attr("class", "col-10 p-0");
+            $(this).parent().parent().parent().find("#editar").removeClass('hidden');
+
+
+
+
+
+
+
+        });
+        $("#cuerpo").on('change', 'select[name=clientePot]', function () {
+
+            $("#cuerpo").find("#modal_editarClientePot").remove();
+            //se agrega el campo de editar con la información del cliente
+            var url = "@Url.Action("infoCliente", "Flujo")";
+            var tipoCli = $("#contenidoTipo").find('#tipo').val();
+            var codCli = $(this).val();
+            var data = { cliente: codCli, tipoCli: tipoCli };
+
+
+
+            $.ajax({
+                url: url,
+                data: data,
+                type: 'POST',
+
+                success: function (datos) {
+
+                    $("#tablero").after(datos);
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+
+
+            $(this).parent().parent().attr("class", "col-10 p-0");
+            $(this).parent().parent().parent().find("#editar").removeClass('hidden');
+
+
+
+
+
+
+
+        });
+    };
+
+    $("#tablero").on('click', '#modeditarClientePot', function () {
+
+
+        $("#modal_editarClientePot").find('select[name=tipoDoc]').change(function () {
+            var tipoDoc = $(this).val();
+
+
+            if (tipoDoc == 1 || tipoDoc == 2 || tipoDoc == 3) {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "text");
+                $('#formCrearpot').find('[name=CSEGUNDO_NOMBRE]').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "hidden");
+
+            } else {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "hidden");
+                $('#formCrearpot').find('[name=CSEGUNDO_NOMBRE]').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "text");
+
+
+            }
+        });
+        var urlEditarPot = "@Url.Action("editarPot", "Flujo")";
+
+
+        $("#modal_editarClientePot").on('click', '#editarCliente', function () {
+
+
+            var dataEditar = "{";
+            $("#formEditarCli").find(".infoCliente").each(function () {
+
+
+                if ($(this).attr("name") == 'distrito') {
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                } else {
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                }
+
+            });
+
+            dataEditar += "}";
+
+            var json = eval("(" + dataEditar + ')');
+
+            $.ajax({
+                url: urlEditarPot,
+                data: json,
+                type: 'POST',
+
+                success: function (datos) {
+
+
+                    toastr.success("se edito el cliente con éxito");
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+
+
+        });
+    });
+
+    $("#tablero").on('click', '#modeditarClienteFi', function () {
+
+
+        $("#modal_editarClienteFi").find('select[name=tipoDoc]').change(function () {
+            var tipoDoc = $(this).val();
+
+
+            if (tipoDoc == 1 || tipoDoc == 2 || tipoDoc == 3) {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#sNombre').attr("type", "text");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "hidden");
+
+            } else {
+
+                $(this).parent().parent().parent().parent().find('input#apPaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#apMaterno').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#pNombre').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#sNombre').attr("type", "hidden");
+                $(this).parent().parent().parent().parent().find('input#nombreCli').attr("type", "text");
+
+
+            }
+        });
+        var urlEditarFi = "@Url.Action("editarFidelizado", "Flujo")";
+
+
+        $("#modal_editarClienteFi").on('click', '#editarCliente', function () {
+
+
+            var dataEditar = "{";
+            $("#formEditarCli").find(".infoCliente").each(function () {
+
+
+                if ($(this).attr("name") == 'distrito') {
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "'";
+                } else {
+                    dataEditar += "" + $(this).attr("name") + ": '" + $(this).val() + "',";
+                }
+
+            });
+
+            dataEditar += "}";
+
+            var json = eval("(" + dataEditar + ')');
+            $.ajax({
+                url: urlEditarFi,
+                data: json,
+                type: 'POST',
+
+                success: function (datos) {
+
+
+                    toastr.success("se edito el cliente con éxito");
+
+                },
+                error: function (error) {
+                    toastr.error('Algo salio mal.')
+
+                },
+
+            });
+
+
+        });
+    });
+
+
+
+    //nuevo Contacto Cliente
+
+    $("#modal_crearPotencial").find("#agregarContactoPot").click(function (event) {
+        var CodCli = $("#modal_crearPotencial").find("[name=CCODCLI]").val();
+
+        $(this).addClass('disabled')
+        var cadena = `
+                                                     <tr id="Nuevo">
+                                                        <td class="align-middle columnaContacto">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75 infoContacto" id="CONTACTO" name="CONTACTO">
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75 " id="AREA" name="AREA" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CARGO" name="CARGO" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CORREO" name="CORREO" >
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="TELEFONO" name="TELEFONO" >
+                                                        </td>
+                                                        <td class="align-middle">
+
+                                                            <input type="text" class ="form-control form-control-sm mw-75" id="CELULAR" name="CELULAR" >
+                                                        </td>
+
+                                                        <td class ="align-middle">
+                                                            <div class ="row justify-content-around text-center">
+                                                                <div class ="col-auto">
+                                                                    <a id="guardarNuevoContacto" class ="btn btn-xs btn-success"><i class ="fas fa-check text-white"></i></a>
+
+                                                                </div>
+                                                                <div class ="col-auto">
+
+                                                                    <a id="removerNuevoContacto" class ="btn btn-xs btn-danger"><i class ="fas fa-times text-white"></i></a>
+                                                                </div>
+
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                `
+
+        var CodCli = $("#agregarContactoPot").find("[name=CCODCLI]").val();
+        var UltimoCod = $(this).parent().find('table tbody tr#guardado:last [name=COD_CONTACTO]').val();
+        var Codigo = parseInt(UltimoCod) + parseInt("1");
+        if (UltimoCod == null) {
+            Codigo = 1;
+        }
+
+        $(this).parent().find('table tbody').append(cadena);
+
+
+
+    });
+    $("#modal_crearPotencial").on('click', "#removerNuevoContacto", function (event) { $("#modal_crearPotencial").find('table tbody tr#Nuevo').remove(); $("#modal_crearPotencial").find("#agregarContactoPot").removeClass('disabled'); });
+    $("#modal_crearPotencial").on('click', "#eliminarContacto", function (event) { $(this).parent().parent().parent().parent().remove(); });
+    $("#modal_crearPotencial").on('click', "#guardarNuevoContacto", function (event) {
+        var CodCli = $("#modal_crearPotencial").find("[name=CCODCLI]").val();
+        var UltimoCod = $("#modal_crearPotencial").find('table tbody tr#guardado:last [id=COD_CONTACTO]').val();
+        var Codigo = parseInt(UltimoCod) + parseInt("1");
+        if (UltimoCod == null) {
+            Codigo = 1;
+        }
+
+        var paso = 1;
+        var Cadena = `<tr id="guardado">`
+
+
+
+        //recorre todos los input de contacto nuevo
+        $(this).parent().parent().parent().parent().find("td [name]").each(function () {
+            if ($(this).attr("id") == 'CONTACTO' && $(this).val() == '') {
+                toastr.warning("el campo contacto debe estar lleno");
+                paso = 0;
+            } else {
+                //para crear la cadena a mostrar
+                if ($(this).attr("id") == 'CONTACTO') {
+                    Cadena += `<td class ="align-middle"><p class="m-0" id="infoContacto">` + $(this).val() + `</p><input type="hidden" contacto="` + Codigo + `" class ="form-control mw-75 infoContacto" id="COD_CLIENTE" name="COD_CLIENTE" value="` + CodCli + `">`;
+                    Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="COD_CONTACTO" contacto="` + Codigo + `" name="COD_CONTACTO" value="` + Codigo + `">`;
+                    Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="CONTACTO" contacto="` + Codigo + `" name="CONTACTO" value="` + $(this).val() + `">`;
+                    Cadena += `</td>`
+                } else {
+                    Cadena += `<td class ="align-middle"><p class="m-0" id="infoContacto">` + $(this).val() + `</p>`;
+
+                    Cadena += `<input type="hidden" class ="form-control mw-75 infoContacto" id="` + $(this).attr('name') + `" contacto="` + Codigo + `" name="` + $(this).attr('name') + `" value="` + $(this).val() + `"></td>`
+
+                }
+            }
+
+        });
+        if (paso == 1) {
+
+
+            Cadena += `<td class ="align-middle"><div class ="row justify-content-around text-center"><div class ="col-auto"><a id="editarContacto" class="btn btn-xs btn-primary  pl-1 pr-1"><i class="fas fa-user-edit text-white"></i></a><a id="guardarEditado" class="btn btn-xs btn-success hidden"><i class="fas fa-check text-white"></i></a></div><div class ="col-auto"><a id="eliminarContacto" class ="btn btn-xs btn-danger"><i class ="far fa-trash-alt text-white"></i></a></div></div></td></tr>`
+
+
+
+            $("#modal_crearPotencial").find('table tbody tr#Nuevo').remove();
+            $("#modal_crearPotencial").find('table tbody').append(Cadena);
+            $("#modal_crearPotencial").find("#agregarContactoPot").removeClass('disabled');
+
+
+        }
+    });
+
+    //para editar cada contacto
+
+    $("#modal_crearPotencial").on('click', 'tr td [id=guardarEditado]', function () {
+        var paso = 1;
+        var Cadena = `<tr id="guardado">`
+        var CodCli = $("#modal_editarCliente").find("[name=CCODCLI]").val()
+        var Codigo = $(this).find("td [name=COD_CONTACTO]").val();
+
+        //recorre todos los input de contacto nuevo
+        $(this).parent().parent().parent().parent().find("td [name]").each(function () {
+            if ($(this).attr("name") == 'CONTACTO' && $(this).val() == '') {
+                toastr.warning("el campo contacto debe estar lleno");
+                paso = 0;
+            } else {
+                //para crear la cadena a mostrar
+                if ($(this).attr("name") == 'COD_CONTACTO' || $(this).attr("name") == 'COD_CLIENTE') {
+
+                } else {
+                    $(this).parent().find('[id=infoContacto]').html($(this).val())
+                    $(this).parent().find('[id=infoContacto]').removeClass('hidden')
+                    $(this).attr('type', 'hidden');
+                }
+            }
+        });
+
+
+        if (paso == 1) {
+
+            $(this).addClass('hidden');
+            $(this).parent().find('#editarContacto').removeClass('hidden')
+        }
+    });
+
+
+    function cargarPotencial() {
+        $.ajax({
+            url: "@Url.Content("~/Flujo/cargarPotencial")",
+            dataType: "json",
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+
+
+                var potencial = $("#clientePot")[0];
+                potencial.length = 0;
+
+
+                for (i = 0; i < data.potencial.length; i++) {
+                    potencial[i + 1] = new Option(data.potencial[i].CNOMCLI, data.potencial[i].CCODCLI, "", "");
+                }
+
+            }
+        })
+    };
+
+    //HILGER 030620
+    function abrir_calendario(oportunidad) {
+        var url = '@Url.Action("Index", "Calendario", new { propuestas = "asd" })';
+        url = url.replace('asd', oportunidad);
+        window.location.href = url;
+    }
+        </script>
+

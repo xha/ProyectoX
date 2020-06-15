@@ -1,0 +1,674 @@
+﻿@{
+    List<CRM.Models.Maecli_campos> ListaCLIENTEFI;
+    List<CRM.Models.Potencial_campos> ListaCLIENTEPOT;
+    List<CRM.Models.CONTACTO_VENTA> ContactoFI;
+    List<CRM.Models.CONTACTO_POTENCIAL> ContactoPOT;
+
+
+    var tipoDoc = 0;
+    var tipoEmpresa = 0;
+    var distrito = "";
+    Layout = null;
+}
+
+<div class="modal fade" id="@ViewBag.tipoCliente" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Editar Cliente</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form role="form" id="formEditarCli">
+                <div class="card card-primary card-tabs">
+                    <div class="card-header navbar navbar-expand p-0 pt-1">
+                        <ul class="navbar-nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="crear-tab" data-toggle="pill" href="#editar-cliente" role="tab" aria-controls="editar-cliente" aria-selected="true">Datos</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="direccion-tab" data-toggle="pill" href="#direccion" role="tab" aria-controls="direccion" aria-selected="false">Direcciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="contacto-tab" data-toggle="pill" href="#contacto" role="tab" aria-controls="contacto" aria-selected="false">Contactos</a>
+                            </li>
+
+                        </ul>
+
+
+                    </div>
+                    @if (ViewBag.clientePot == null)
+                    {
+                        ListaCLIENTEFI = ViewBag.clienteFi;
+                        ContactoFI = ViewBag.contactoFi;
+
+                        if (ListaCLIENTEFI != null)
+                        {
+                            foreach (var CLIENTEFI in ListaCLIENTEFI)
+                            {
+                                tipoDoc = Convert.ToInt32(CLIENTEFI.CTIPO_DOCUMENTO);
+                                tipoEmpresa = Convert.ToInt32(CLIENTEFI.TCL_CODIGO);
+                                distrito = CLIENTEFI.CDISTRI;
+                                <div class="card-body">
+                                    <div class="tab-content" id="custom-tabs-one-tabContent">
+
+
+                                        <div class="tab-pane fade show active" id="editar-cliente" role="tabpanel" aria-labelledby="editar-cliente">
+                                            <div class="row ">
+                                                <div class="col-12 ">
+                                                    <div class="row text-left  m-0">
+                                                        <div class="col-sm-6  p-0 pr-2 mb-2  ">
+
+                                                            <input type="hidden" class="form-control form-control-sm infoCliente" name="tipoCli" id="tipoCli" value="1">
+                                                            <div class="form-group">
+                                                                <label for="">Código del cliente:</label>
+                                                                <input type="text" class="form-control form-control-sm infoCliente" name="CCODCLI" id="codCli" value="@CLIENTEFI.CCODCLI" disabled="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 pl-2 p-0 mb-2">
+                                                            <div class="row ">
+                                                                <div class="col-8 ">
+                                                                    <div class="form-group">
+
+                                                                        <select name="tipoDoc" id="tipoDoc" class="form-control form-control-sm infoCliente">
+                                                                            <option value="">- Tipo de Documento -</option>
+
+                                                                            <option value="1">DNI</option>
+                                                                            <option value="2">Carnet de fuerzas policiales</option>
+                                                                            <option value="3">Carnet de fuerzas armadas</option>
+                                                                            <option value="4">Carnet de extrangería</option>
+                                                                            <option value="6">RUC</option>
+                                                                            <option value="7">Pasaporte</option>
+                                                                            <option value="0">Otro tipo de documento</option>
+                                                                        </select>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control form-control-sm infoCliente" id="NroDoc" name="CDOCIDEN" value="@CLIENTEFI.CDOCIDEN" title="Debe contener solo numeros">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="InfoCLi">
+                                                                @if (CLIENTEFI.CTIPO_DOCUMENTO == "1" || CLIENTEFI.CTIPO_DOCUMENTO == "2" || CLIENTEFI.CTIPO_DOCUMENTO == "3")
+                                                                {
+                                                                    <div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+
+                                                                                <input type="text" class="form-control form-control-sm mb-2 infoCliente" id="apPaterno" name="CAPELLIDO_PATERNO" value="@CLIENTEFI.CAPELLIDO_PATERNO" placeholder="Apellido Paterno">
+
+
+
+                                                                            </div>
+                                                                            <div class="col-6">
+
+                                                                                <input type="text" class="form-control form-control-sm mb-2 infoCliente" id="apMaterno" name="CAPELLIDO_MATERNO" value="@CLIENTEFI.CAPELLIDO_MATERNO" placeholder="Apellido Materno">
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+
+                                                                                <input type="text" class="form-control form-control-sm infoCliente" id="pNombre" name="CPRIMER_NOMBRE" value="@CLIENTEFI.CPRIMER_NOMBRE" placeholder="Primer nombre">
+
+
+
+                                                                            </div>
+                                                                            <div class="col-6">
+
+                                                                                <input type="text" class="form-control form-control-sm infoCliente" id="sNombre" name="CSEGUNDO_NOMBRE" value="@CLIENTEFI.CSEGUNDO_NOMBRE" placeholder="Segundo nombre">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+
+                                                                            <input type="hidden" class="form-control infoCliente " id="nombreCli" name="CNOMCLI" value="@CLIENTEFI.CNOMCLI" placeholder="Nombre / Razon social">
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+
+                                                                                <input type="hidden" class="form-control form-control-sm mb-2 infoCliente" id="apPaterno" name="CAPELLIDO_PATERNO" value="@CLIENTEFI.CAPELLIDO_PATERNO" placeholder="Apellido Paterno">
+
+
+
+                                                                            </div>
+                                                                            <div class="col-6">
+
+                                                                                <input type="hidden" class="form-control form-control-sm mb-2 infoCliente" id="apMaterno" name="CAPELLIDO_MATERNO" value="@CLIENTEFI.CAPELLIDO_MATERNO" placeholder="Apellido Materno">
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+
+                                                                                <input type="hidden" class="form-control form-control-sm infoCliente" id="pNombre" name="CPRIMER_NOMBRE" value="@CLIENTEFI.CPRIMER_NOMBRE" placeholder="Primer nombre">
+
+
+
+                                                                            </div>
+                                                                            <div class="col-6">
+
+                                                                                <input type="hidden" class="form-control form-control-sm infoCliente" id="sNombre" name="CSEGUNDO_NOMBRE" value="@CLIENTEFI.CSEGUNDO_NOMBRE" placeholder="Segundo nombre">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+
+                                                                            <input type="text" class="form-control infoCliente " id="nombreCli" name="CNOMCLI" value="@CLIENTEFI.CNOMCLI" placeholder="Nombre / Razon social">
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                }
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Teléfono:</label>
+                                                        <input type="text" class="form-control infoCliente" id="celularPersona" name="CTELEFO" value="@CLIENTEFI.CTELEFO">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Correo:</label>
+                                                        <input type="email" class="form-control infoCliente" name="CEMAIL" id="correoPersona" value="@CLIENTEFI.CEMAIL">
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-sm-6">
+
+                                                    <div class="form-group">
+                                                        <label for="pagina">Página Web:</label>
+                                                        <input type="text" class="form-control infoCliente" name="CHOST" id="paginaPersona" value="@CLIENTEFI.CHOST">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Tipo de Empresa:</label>
+                                                        <div class="form-group">
+
+                                                            <select name="tipoEmpresa" id="tipoEmpresa" class="form-control infoCliente" required>
+                                                                <option value="1">Terceros</option>
+                                                                <option value="2">Matriz</option>
+                                                                <option value="3">Subsidiarias</option>
+                                                                <option value="4">Asociadas</option>
+                                                                <option value="6">Sucursal</option>
+                                                                <option value="7">Otros</option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane fade" id="direccion" role="tabpanel" aria-labelledby="direccion-tab">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Domicilio legal:</label>
+                                                <input type="text" class="form-control infoCliente" id="Direccion" name="CDIRCLI" placeholder="Dirección" value="@CLIENTEFI.CDIRCLI">
+
+                                                <div class="row mt-2">
+
+                                                    <div class="col-5">
+                                                        <input type="text" class="form-control infoCliente" id="exampleInputEmail1" name="CPROV" placeholder="Provincia" value="@CLIENTEFI.CPROV">
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <input type="text" class="form-control infoCliente" id="exampleInputPassword1" name="CPAIS" placeholder="País" value="@CLIENTEFI.CPAIS">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Distrito:</label>
+                                                @Html.DropDownList("distrito", ViewBag.Distrito as SelectList, null, htmlAttributes: new { @class = "form-control infoCliente mw-100 select2" })
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="contacto" role="tabpanel" aria-labelledby="contacto-tab">
+                                            <div id="Contacto" class="row text-cente flex-row flex-nowrap ">
+
+                                                <div class="col-12  table-responsive">
+                                                    <table id="@CLIENTEFI.CCODCLI" tipoCliente="1" class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+
+                                                                <th>
+                                                                    Contacto
+                                                                </th>
+                                                                <th>
+                                                                    Área
+                                                                </th>
+                                                                <th>
+                                                                    Cargo
+                                                                </th>
+                                                                <th>
+                                                                    Correo
+                                                                </th>
+                                                                <th>
+                                                                    Teléfono
+                                                                </th>
+                                                                <th>
+                                                                    Celular
+                                                                </th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var cONTACTO in ContactoFI)
+                                                            {
+                                                                <tr id="guardado">
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.CONTACTO)</p>
+                                                                        <input type="hidden" class="form-control form-control-sm infoCli" name="tipoCli" id="tipoCli" value="1">
+                                                                        <input type="hidden" class="form-control mw-75" id="COD_CLIENTE" name="COD_CLIENTE" value="@cONTACTO.COD_CLIENTE">
+                                                                        <input type="hidden" class="form-control mw-75" id="COD_CONTACTO" name="COD_CONTACTO" value="@cONTACTO.COD_CONTACTO">
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto " id="exampleInputPassword1" name="CONTACTO" value="@cONTACTO.CONTACTO">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.AREA)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="exampleInputPassword1" name="AREA" value="@cONTACTO.AREA">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.CARGO)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="CARGO" name="CARGO" value="@cONTACTO.CARGO">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.CORREO)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="CORREO" name="CORREO" value="@cONTACTO.CORREO">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.TELEFONO)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="TELEFONO" name="TELEFONO" value="@cONTACTO.TELEFONO">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.CELULAR)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="CELULAR" name="CELULAR" value="@cONTACTO.CELULAR">
+                                                                    </td>
+
+                                                                    <td class="align-middle">
+                                                                        <div class="row justify-content-around text-center">
+                                                                            <div class="col-auto">
+                                                                                <a id="editarContacto" class="btn btn-xs btn-primary  pl-1 pr-1"><i class="fas fa-user-edit text-white"></i></a>
+                                                                                <a id="guardarEditado" class="btn btn-xs btn-success hidden"><i class="fas fa-check text-white"></i></a>
+                                                                            </div>
+                                                                            <div class="col-auto">
+
+                                                                                <a id="eliminarContacto" class="btn btn-xs btn-danger"><i class="far fa-trash-alt text-white"></i></a>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+
+
+                                                </div>
+                                            </div>
+                                            
+
+                                            <a id="agregarContacto" class="btn btn-sm btn-success text-white float-right">Agregar</a>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            }
+
+
+
+
+                        }
+                    }
+                    else
+                    {
+                        ContactoPOT = ViewBag.contactoPot;
+                        ListaCLIENTEPOT = ViewBag.clientePot;
+
+                        if (ListaCLIENTEPOT != null)
+                        {
+
+                            foreach (var CLIENTEPOT in ListaCLIENTEPOT)
+                            {
+                                tipoDoc = Convert.ToInt32(CLIENTEPOT.CTIPO_DOCUMENTO);
+                                tipoEmpresa = Convert.ToInt32(CLIENTEPOT.TCL_CODIGO);
+                                distrito = CLIENTEPOT.CDISTRI;
+                                <div class="card-body">
+                                    <div class="tab-content" id="custom-tabs-one-tabContent">
+
+
+                                        <div class="tab-pane fade show active" id="editar-cliente" role="tabpanel" aria-labelledby="editar-cliente">
+                                            <div class="row ">
+                                                <div class="col-12 ">
+                                                    <div class="row text-left  m-0">
+                                                        <div class="col-sm-6  p-0 pr-2 mb-2  ">
+
+                                                            <input type="hidden" class="form-control form-control-sm infoCliente" name="tipoCli" id="tipoCli" value="0">
+                                                            <div class="form-group">
+                                                                <label for="">Código del cliente:</label>
+                                                                <input type="text" class="form-control form-control-sm infoCliente" name="CCODCLI" id="codCli" value="@CLIENTEPOT.CCODCLI" disabled="">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6 pl-2 p-0 mb-2">
+                                                            <div class="row ">
+                                                                <div class="col-8 ">
+                                                                    <div class="form-group">
+
+                                                                        <select name="tipoDoc" id="tipoDoc" class="form-control form-control-sm infoCliente">
+                                                                            <option value="">- Tipo de Documento -</option>
+
+                                                                            <option value="1">DNI</option>
+                                                                            <option value="2">Carnet de fuerzas policiales</option>
+                                                                            <option value="3">Carnet de fuerzas armadas</option>
+                                                                            <option value="4">Carnet de extrangería</option>
+                                                                            <option value="6">RUC</option>
+                                                                            <option value="7">Pasaporte</option>
+                                                                            <option value="0">Otro tipo de documento</option>
+                                                                        </select>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div class="form-group">
+                                                                        <input class="form-control form-control-sm infoCliente" id="NroDoc" name="CDOCIDEN" value="@CLIENTEPOT.CDOCIDEN" title="Debe contener solo numeros">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="InfoCLi">
+                                                                @if (CLIENTEPOT.CTIPO_DOCUMENTO == "1" || CLIENTEPOT.CTIPO_DOCUMENTO == "2" || CLIENTEPOT.CTIPO_DOCUMENTO == "3")
+                                                                {
+                                                                    <div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+
+                                                                                <input type="text" class="form-control form-control-sm mb-2 infoCliente" id="apPaterno" name="CAPELLIDO_PATERNO" value="@CLIENTEPOT.CAPELLIDO_PATERNO" placeholder="Apellido Paterno">
+
+
+
+                                                                            </div>
+                                                                            <div class="col-6">
+
+                                                                                <input type="text" class="form-control form-control-sm mb-2 infoCliente" id="apMaterno" name="CAPELLIDO_MATERNO" value="@CLIENTEPOT.CAPELLIDO_MATERNO" placeholder="Apellido Materno">
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+
+                                                                                <input type="text" class="form-control form-control-sm infoCliente" id="pNombre" name="CPRIMER_NOMBRE" value="@CLIENTEPOT.CPRIMER_NOMBRE" placeholder="Primer nombre">
+
+
+
+                                                                            </div>
+                                                                            <div class="col-6">
+
+                                                                                <input type="text" class="form-control form-control-sm infoCliente" id="sNombre" name="CSEGUNDO_NOMBRE" value="@CLIENTEPOT.CSEGUNDO_NOMBRE" placeholder="Segundo nombre">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+
+                                                                            <input type="hidden" class="form-control infoCliente " id="nombreCli" name="CNOMCLI" value="@CLIENTEPOT.CNOMCLI" placeholder="Nombre / Razon social">
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+
+                                                                                <input type="hidden" class="form-control form-control-sm mb-2 infoCliente" id="apPaterno" name="CAPELLIDO_PATERNO" value="@CLIENTEPOT.CAPELLIDO_PATERNO" placeholder="Apellido Paterno">
+
+
+
+                                                                            </div>
+                                                                            <div class="col-6">
+
+                                                                                <input type="hidden" class="form-control form-control-sm mb-2 infoCliente" id="apMaterno" name="CAPELLIDO_MATERNO" value="@CLIENTEPOT.CAPELLIDO_MATERNO" placeholder="Apellido Materno">
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-6">
+
+                                                                                <input type="hidden" class="form-control form-control-sm infoCliente" id="pNombre" name="CPRIMER_NOMBRE" value="@CLIENTEPOT.CPRIMER_NOMBRE" placeholder="Primer nombre">
+
+
+
+                                                                            </div>
+                                                                            <div class="col-6">
+
+                                                                                <input type="hidden" class="form-control form-control-sm infoCliente" id="sNombre" name="CSEGUNDO_NOMBRE" value="@CLIENTEPOT.CSEGUNDO_NOMBRE" placeholder="Segundo nombre">
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+
+                                                                            <input type="text" class="form-control infoCliente " id="nombreCli" name="CNOMCLI" value="@CLIENTEPOT.CNOMCLI" placeholder="Nombre / Razon social">
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                }
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Teléfono:</label>
+                                                        <input type="text" class="form-control infoCliente" id="celularPersona" name="CTELEFO" value="@CLIENTEPOT.CTELEFO">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Correo:</label>
+                                                        <input type="email" class="form-control infoCliente" name="CEMAIL" id="correoPersona" value="@CLIENTEPOT.CEMAIL">
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-sm-6">
+
+                                                    <div class="form-group">
+                                                        <label for="pagina">Página Web:</label>
+                                                        <input type="text" class="form-control infoCliente" name="CHOST" id="paginaPersona" value="@CLIENTEPOT.CHOST">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Tipo de Empresa:</label>
+                                                        <div class="form-group">
+
+                                                            <select name="tipoEmpresa" id="tipoEmpresa" class="form-control infoCliente" required>
+                                                                <option value="1">Terceros</option>
+                                                                <option value="2">Matriz</option>
+                                                                <option value="3">Subsidiarias</option>
+                                                                <option value="4">Asociadas</option>
+                                                                <option value="6">Sucursal</option>
+                                                                <option value="7">Otros</option>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane fade" id="direccion" role="tabpanel" aria-labelledby="direccion-tab">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Domicilio legal:</label>
+                                                <input type="text" class="form-control infoCliente" id="Direccion" name="CDIRCLI" placeholder="Dirección" value="@CLIENTEPOT.CDIRCLI">
+
+                                                <div class="row mt-2">
+
+                                                    <div class="col-5">
+                                                        <input type="text" class="form-control infoCliente" id="exampleInputEmail1" name="CPROV" placeholder="Provincia" value="@CLIENTEPOT.CPROV">
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <input type="text" class="form-control infoCliente" id="exampleInputPassword1" name="CPAIS" placeholder="País" value="@CLIENTEPOT.CPAIS">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Distrito:</label>
+                                                @Html.DropDownList("distrito", ViewBag.Distrito as SelectList, null, htmlAttributes: new { @class = "form-control infoCliente mw-100 select2" })
+
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="contacto" role="tabpanel" aria-labelledby="contacto-tab">
+                                            <div id="Contacto" class="row text-cente flex-row flex-nowrap ">
+
+                                                <div class="col-12  table-responsive">
+
+                                                    <table id="@CLIENTEPOT.CCODCLI" tipoCliente="0" class="table table-bordered table-hover">
+                                                        <thead>
+                                                            <tr>
+
+                                                                <th>
+                                                                    Contacto
+                                                                </th>
+                                                                <th>
+                                                                    Área
+                                                                </th>
+                                                                <th>
+                                                                    Cargo
+                                                                </th>
+                                                                <th>
+                                                                    Correo
+                                                                </th>
+                                                                <th>
+                                                                    Teléfono
+                                                                </th>
+                                                                <th>
+                                                                    Celular
+                                                                </th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var cONTACTO in ContactoPOT)
+                                                            {
+                                                                <tr id="guardado">
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.CONTACTO)</p>
+                                                                        <input type="hidden" class="form-control form-control-sm infoCli" name="tipoCli" id="tipoCli" value="0">
+                                                                        <input type="hidden" class="form-control mw-75" id="COD_CLIENTE" name="COD_CLIENTE" value="@cONTACTO.COD_CLIENTE">
+                                                                        <input type="hidden" class="form-control mw-75" id="COD_CONTACTO" name="COD_CONTACTO" value="@cONTACTO.COD_CONTACTO">
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto " id="exampleInputPassword1" name="CONTACTO" value="@cONTACTO.CONTACTO">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.AREA)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="exampleInputPassword1" name="AREA" value="@cONTACTO.AREA">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.CARGO)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="CARGO" name="CARGO" value="@cONTACTO.CARGO">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.CORREO)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="CORREO" name="CORREO" value="@cONTACTO.CORREO">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.TELEFONO)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="TELEFONO" name="TELEFONO" value="@cONTACTO.TELEFONO">
+                                                                    </td>
+                                                                    <td class="align-middle">
+                                                                        <p id="infoContacto" class="m-0">@Html.DisplayFor(modelItem => cONTACTO.CELULAR)</p>
+                                                                        <input type="hidden" class="form-control mw-75 infoContacto" id="CELULAR" name="CELULAR" value="@cONTACTO.CELULAR">
+                                                                    </td>
+
+                                                                    <td class="align-middle">
+                                                                        <div class="row justify-content-around text-center">
+                                                                            <div class="col-auto">
+                                                                                <a id="editarContacto" class="btn btn-xs btn-primary  pl-1 pr-1"><i class="fas fa-user-edit text-white"></i></a>
+                                                                                <a id="guardarEditado" class="btn btn-xs btn-success hidden"><i class="fas fa-check text-white"></i></a>
+                                                                            </div>
+                                                                            <div class="col-auto">
+
+                                                                                <a id="eliminarContacto" class="btn btn-xs btn-danger"><i class="far fa-trash-alt text-white"></i></a>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                           
+
+                                            <a id="agregarContacto" class="btn btn-sm btn-success text-white float-right">Agregar</a>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            }
+
+
+
+                        }
+                    }
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Descartar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="editarCliente">Guardar</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function(){
+        $("select[name=tipoDoc]").each(function () {
+            $(this).val(@tipoDoc);
+        });
+        $("select[name=tipoEmpresa]").each(function () {
+            $(this).val(@tipoEmpresa);
+        });
+        $("select[name=distrito]").each(function () {
+            $(this).val(@distrito);
+        });
+
+    });
+</script>

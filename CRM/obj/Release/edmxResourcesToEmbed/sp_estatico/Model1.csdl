@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CLIENTES_PORTALESModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="CLIENTES_PORTALESEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="SP_CLIENTE_LOGIN" ReturnType="Collection(CLIENTES_PORTALESModel.SP_CLIENTE_LOGIN_Result)">
+      <Parameter Name="ruc" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="SP_CLIENTE_LOGIN_Result">
+    <Property Type="Int32" Name="ID_Clientes_Portales" Nullable="false" />
+    <Property Type="String" Name="RUC_Cliente" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Servidor" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Base_Datos" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Usuario_Server" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Contrasenia_Server" Nullable="true" MaxLength="200" />
+    <Property Type="DateTime" Name="FechaCreacion" Nullable="true" Precision="23" />
+  </ComplexType>
+</Schema>

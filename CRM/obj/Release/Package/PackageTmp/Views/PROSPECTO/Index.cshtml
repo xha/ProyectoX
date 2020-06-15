@@ -1,0 +1,111 @@
+﻿@model IEnumerable<CRM.Models.PROSPECTO>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ingreso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idCliente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.color)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.id_usuario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cierre_previsto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.id_categoria)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.notas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.id_planificacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tipoCliente)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.codigo_tipoMon)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.porcentajeGanar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ESTADO_PROSPECTO.decripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PRIORIDAD.descripcion)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ingreso)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.idCliente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.color)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.id_usuario)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cierre_previsto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.id_categoria)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.notas)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.id_planificacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipoCliente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.codigo_tipoMon)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.porcentajeGanar)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ESTADO_PROSPECTO.decripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PRIORIDAD.descripcion)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id_oportunidad }) |
+            @Html.ActionLink("Planificar", "Planificar", new { id=item.id_oportunidad }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id_oportunidad })
+        </td>
+    </tr>
+}
+
+</table>

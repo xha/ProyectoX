@@ -1,0 +1,131 @@
+﻿
+
+@using CRM.sp_dinamic
+@{
+    var jss = new System.Web.Script.Serialization.JavaScriptSerializer();
+    var user = jss.Serialize(ViewBag.Usuarios);
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Clientes</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a  href="@Url.Action("Index", "Administrador") ">Inicio</a></li>
+                        <li class="breadcrumb-item">Clientes </li>
+                        <li class="breadcrumb-item"><a href="#">Clientes</a></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-success card-outline">
+                        <div class="card-header p-3">
+                            <h5>Listado de Clientes</h5>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                              
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+
+                                        <table id="user" class="table text-center table-bordered table-hover">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th>Codigo </th>
+                                                    <th>Nombre</th>
+                                                    <th>Correo</th>
+                                                    <th>Direccion </th>
+                                                    <th>Telefono</th>
+                                           
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.row -->
+                        </div>
+
+
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+@section Scripts {
+    <script>
+        var lang = {
+
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+
+        var user_json = @Html.Raw(user);
+     
+        var table = $('#user').DataTable({
+
+            data: user_json,
+
+            columns: [
+                  { "data": "CCODCLI", "defaultContent": "" },
+                  { "data": "CNOMCLI", "defaultContent": "" },
+                  { "data": "CEMAIL", "defaultContent": "" },
+                  { "data": "CDIRCLI", "defaultContent": "" },
+                  { "data": "CTELEFO", "defaultContent": "" },
+                
+            ],
+            "order": [],
+            "lengthChange": false,
+            "info": false,
+            "autoWidth": false,
+            "language": lang
+        });
+ 
+    </script>
+
+}
+
+

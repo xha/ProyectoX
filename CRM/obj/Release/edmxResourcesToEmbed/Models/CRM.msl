@@ -1,0 +1,459 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CRMmodelStoreContainer" CdmEntityContainer="Entidades">
+    <EntitySetMapping Name="CONTACTO_POTENCIAL">
+      <EntityTypeMapping TypeName="CRMmodel.CONTACTO_POTENCIAL">
+        <MappingFragment StoreEntitySet="CONTACTO_POTENCIAL">
+          <ScalarProperty Name="COD_CLIENTE" ColumnName="COD_CLIENTE" />
+          <ScalarProperty Name="COD_CONTACTO" ColumnName="COD_CONTACTO" />
+          <ScalarProperty Name="CONTACTO" ColumnName="CONTACTO" />
+          <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+          <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+          <ScalarProperty Name="AREA" ColumnName="AREA" />
+          <ScalarProperty Name="CARGO" ColumnName="CARGO" />
+          <ScalarProperty Name="CELULAR" ColumnName="CELULAR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CONTACTO_VENTA">
+      <EntityTypeMapping TypeName="CRMmodel.CONTACTO_VENTA">
+        <MappingFragment StoreEntitySet="CONTACTO_VENTA">
+          <ScalarProperty Name="COD_CLIENTE" ColumnName="COD_CLIENTE" />
+          <ScalarProperty Name="COD_CONTACTO" ColumnName="COD_CONTACTO" />
+          <ScalarProperty Name="CONTACTO" ColumnName="CONTACTO" />
+          <ScalarProperty Name="TELEFONO" ColumnName="TELEFONO" />
+          <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+          <ScalarProperty Name="AREA" ColumnName="AREA" />
+          <ScalarProperty Name="CARGO" ColumnName="CARGO" />
+          <ScalarProperty Name="CELULAR" ColumnName="CELULAR" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CRONOGRAMA">
+      <EntityTypeMapping TypeName="CRMmodel.CRONOGRAMA">
+        <MappingFragment StoreEntitySet="CRONOGRAMA">
+          <ScalarProperty Name="id_cronograma" ColumnName="id_cronograma" />
+          <ScalarProperty Name="observacion" ColumnName="observacion" />
+          <ScalarProperty Name="id_tipoActividad" ColumnName="id_tipoActividad" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="id_oportunidad" ColumnName="id_oportunidad" />
+          <ScalarProperty Name="fecha_inicial" ColumnName="fecha_inicial" />
+          <ScalarProperty Name="fecha_final" ColumnName="fecha_final" />
+          <ScalarProperty Name="estatus" ColumnName="estatus" />
+          <ScalarProperty Name="USU_CODIGO" ColumnName="USU_CODIGO" />
+          <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ESTADO_PROSPECTO">
+      <EntityTypeMapping TypeName="CRMmodel.ESTADO_PROSPECTO">
+        <MappingFragment StoreEntitySet="ESTADO_PROSPECTO">
+          <ScalarProperty Name="id_estadoOportunidad" ColumnName="id_estadoOportunidad" />
+          <ScalarProperty Name="decripcion" ColumnName="decripcion" />
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="posicion" ColumnName="posicion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GRUPO_USUARIO">
+      <EntityTypeMapping TypeName="CRMmodel.GRUPO_USUARIO">
+        <MappingFragment StoreEntitySet="GRUPO_USUARIO">
+          <ScalarProperty Name="id_grupoUuario" ColumnName="id_grupoUuario" />
+          <ScalarProperty Name="id_grupo" ColumnName="id_grupo" />
+          <ScalarProperty Name="int_usuario" ColumnName="int_usuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GRUPOS">
+      <EntityTypeMapping TypeName="CRMmodel.GRUPOS">
+        <MappingFragment StoreEntitySet="GRUPOS">
+          <ScalarProperty Name="id_grupo" ColumnName="id_grupo" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MAEART">
+      <EntityTypeMapping TypeName="CRMmodel.MAEART">
+        <MappingFragment StoreEntitySet="MAEART">
+          <ScalarProperty Name="ACODIGO" ColumnName="ACODIGO" />
+          <ScalarProperty Name="ACODIGO2" ColumnName="ACODIGO2" />
+          <ScalarProperty Name="ADESCRI" ColumnName="ADESCRI" />
+          <ScalarProperty Name="ADESCRI2" ColumnName="ADESCRI2" />
+          <ScalarProperty Name="AFAMILIA" ColumnName="AFAMILIA" />
+          <ScalarProperty Name="AMODELO" ColumnName="AMODELO" />
+          <ScalarProperty Name="AUNIDAD" ColumnName="AUNIDAD" />
+          <ScalarProperty Name="AGRUPO" ColumnName="AGRUPO" />
+          <ScalarProperty Name="ACUENTA" ColumnName="ACUENTA" />
+          <ScalarProperty Name="AFSERIE" ColumnName="AFSERIE" />
+          <ScalarProperty Name="APRECIO" ColumnName="APRECIO" />
+          <ScalarProperty Name="ADESCTO" ColumnName="ADESCTO" />
+          <ScalarProperty Name="APRECOM" ColumnName="APRECOM" />
+          <ScalarProperty Name="ACODPRO" ColumnName="ACODPRO" />
+          <ScalarProperty Name="AFECHA" ColumnName="AFECHA" />
+          <ScalarProperty Name="ACASILLERO" ColumnName="ACASILLERO" />
+          <ScalarProperty Name="AFSTOCK" ColumnName="AFSTOCK" />
+          <ScalarProperty Name="AUSER" ColumnName="AUSER" />
+          <ScalarProperty Name="AESTADO" ColumnName="AESTADO" />
+          <ScalarProperty Name="AFECVEN" ColumnName="AFECVEN" />
+          <ScalarProperty Name="ACODMON" ColumnName="ACODMON" />
+          <ScalarProperty Name="ATIPO" ColumnName="ATIPO" />
+          <ScalarProperty Name="ACOMENTA" ColumnName="ACOMENTA" />
+          <ScalarProperty Name="AFLOTE" ColumnName="AFLOTE" />
+          <ScalarProperty Name="AFDECI" ColumnName="AFDECI" />
+          <ScalarProperty Name="AUNIART" ColumnName="AUNIART" />
+          <ScalarProperty Name="APESO" ColumnName="APESO" />
+          <ScalarProperty Name="AISCPOR" ColumnName="AISCPOR" />
+          <ScalarProperty Name="AIGVPOR" ColumnName="AIGVPOR" />
+          <ScalarProperty Name="AHORA" ColumnName="AHORA" />
+          <ScalarProperty Name="AFPRELIB" ColumnName="AFPRELIB" />
+          <ScalarProperty Name="AFRESTA" ColumnName="AFRESTA" />
+          <ScalarProperty Name="AFUNIREF" ColumnName="AFUNIREF" />
+          <ScalarProperty Name="AUNIREF" ColumnName="AUNIREF" />
+          <ScalarProperty Name="AFACREF" ColumnName="AFACREF" />
+          <ScalarProperty Name="APDIS" ColumnName="APDIS" />
+          <ScalarProperty Name="APCOM" ColumnName="APCOM" />
+          <ScalarProperty Name="ACODMONC" ColumnName="ACODMONC" />
+          <ScalarProperty Name="AFLAGIGV" ColumnName="AFLAGIGV" />
+          <ScalarProperty Name="ACOLOR" ColumnName="ACOLOR" />
+          <ScalarProperty Name="AMARCA" ColumnName="AMARCA" />
+          <ScalarProperty Name="AFOTO" ColumnName="AFOTO" />
+          <ScalarProperty Name="ATALLA" ColumnName="ATALLA" />
+          <ScalarProperty Name="CODAUTO" ColumnName="CODAUTO" />
+          <ScalarProperty Name="AFLAGPERC" ColumnName="AFLAGPERC" />
+          <ScalarProperty Name="COD_IMAGEN" ColumnName="COD_IMAGEN" />
+          <ScalarProperty Name="UMREFERENCIA" ColumnName="UMREFERENCIA" />
+          <ScalarProperty Name="AMODELO1" ColumnName="AMODELO1" />
+          <ScalarProperty Name="AORIGEN" ColumnName="AORIGEN" />
+          <ScalarProperty Name="TERCERO" ColumnName="TERCERO" />
+          <ScalarProperty Name="MAR_CODIGO" ColumnName="MAR_CODIGO" />
+          <ScalarProperty Name="ZON_CODIGO" ColumnName="ZON_CODIGO" />
+          <ScalarProperty Name="AULTFECCOMP" ColumnName="AULTFECCOMP" />
+          <ScalarProperty Name="AULTPROV" ColumnName="AULTPROV" />
+          <ScalarProperty Name="AULTPAISPROV" ColumnName="AULTPAISPROV" />
+          <ScalarProperty Name="COD_ARANCEL" ColumnName="COD_ARANCEL" />
+          <ScalarProperty Name="APREFOB" ColumnName="APREFOB" />
+          <ScalarProperty Name="APRECIF" ColumnName="APRECIF" />
+          <ScalarProperty Name="AMONFOB" ColumnName="AMONFOB" />
+          <ScalarProperty Name="AMONCIF" ColumnName="AMONCIF" />
+          <ScalarProperty Name="FLG_EXONERADO_IGV" ColumnName="FLG_EXONERADO_IGV" />
+          <ScalarProperty Name="CODIGO_SUNAT" ColumnName="CODIGO_SUNAT" />
+          <ScalarProperty Name="COD_AUDITORIA" ColumnName="COD_AUDITORIA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MAECLI">
+      <EntityTypeMapping TypeName="CRMmodel.MAECLI">
+        <MappingFragment StoreEntitySet="MAECLI">
+          <ScalarProperty Name="CCODCLI" ColumnName="CCODCLI" />
+          <ScalarProperty Name="CNOMCLI" ColumnName="CNOMCLI" />
+          <ScalarProperty Name="CDIRCLI" ColumnName="CDIRCLI" />
+          <ScalarProperty Name="CTELEFO" ColumnName="CTELEFO" />
+          <ScalarProperty Name="CNUMRUC" ColumnName="CNUMRUC" />
+          <ScalarProperty Name="CDOCIDEN" ColumnName="CDOCIDEN" />
+          <ScalarProperty Name="CFLADES" ColumnName="CFLADES" />
+          <ScalarProperty Name="NPORDES" ColumnName="NPORDES" />
+          <ScalarProperty Name="CTIPVTA" ColumnName="CTIPVTA" />
+          <ScalarProperty Name="CESTADO" ColumnName="CESTADO" />
+          <ScalarProperty Name="DFECINS" ColumnName="DFECINS" />
+          <ScalarProperty Name="CNOMREP" ColumnName="CNOMREP" />
+          <ScalarProperty Name="CDISTRI" ColumnName="CDISTRI" />
+          <ScalarProperty Name="CUSUARI" ColumnName="CUSUARI" />
+          <ScalarProperty Name="DFECCRE" ColumnName="DFECCRE" />
+          <ScalarProperty Name="DFECMOD" ColumnName="DFECMOD" />
+          <ScalarProperty Name="CTIPPRE" ColumnName="CTIPPRE" />
+          <ScalarProperty Name="CVENDE" ColumnName="CVENDE" />
+          <ScalarProperty Name="CZONVTA" ColumnName="CZONVTA" />
+          <ScalarProperty Name="CPAIS" ColumnName="CPAIS" />
+          <ScalarProperty Name="CDEPT" ColumnName="CDEPT" />
+          <ScalarProperty Name="CPROV" ColumnName="CPROV" />
+          <ScalarProperty Name="DIRENT" ColumnName="DIRENT" />
+          <ScalarProperty Name="LOCENT" ColumnName="LOCENT" />
+          <ScalarProperty Name="LOCCLI" ColumnName="LOCCLI" />
+          <ScalarProperty Name="LOCEST" ColumnName="LOCEST" />
+          <ScalarProperty Name="ZONVTA" ColumnName="ZONVTA" />
+          <ScalarProperty Name="DIAATE" ColumnName="DIAATE" />
+          <ScalarProperty Name="SITCLI" ColumnName="SITCLI" />
+          <ScalarProperty Name="TIPIDE" ColumnName="TIPIDE" />
+          <ScalarProperty Name="REGVTA" ColumnName="REGVTA" />
+          <ScalarProperty Name="MONCRE" ColumnName="MONCRE" />
+          <ScalarProperty Name="LMCRUS" ColumnName="LMCRUS" />
+          <ScalarProperty Name="LMCRMN" ColumnName="LMCRMN" />
+          <ScalarProperty Name="SALDMN" ColumnName="SALDMN" />
+          <ScalarProperty Name="SALDUS" ColumnName="SALDUS" />
+          <ScalarProperty Name="LIMFAC" ColumnName="LIMFAC" />
+          <ScalarProperty Name="TOTFAC" ColumnName="TOTFAC" />
+          <ScalarProperty Name="TOTLEP" ColumnName="TOTLEP" />
+          <ScalarProperty Name="TOTCHD" ColumnName="TOTCHD" />
+          <ScalarProperty Name="FULABO" ColumnName="FULABO" />
+          <ScalarProperty Name="FECUFA" ColumnName="FECUFA" />
+          <ScalarProperty Name="NROSOL" ColumnName="NROSOL" />
+          <ScalarProperty Name="OBSERV" ColumnName="OBSERV" />
+          <ScalarProperty Name="DOCVEN" ColumnName="DOCVEN" />
+          <ScalarProperty Name="DIAVEN" ColumnName="DIAVEN" />
+          <ScalarProperty Name="NROORD" ColumnName="NROORD" />
+          <ScalarProperty Name="MORLET" ColumnName="MORLET" />
+          <ScalarProperty Name="MORFAC" ColumnName="MORFAC" />
+          <ScalarProperty Name="CHEDEV" ColumnName="CHEDEV" />
+          <ScalarProperty Name="LETPRO" ColumnName="LETPRO" />
+          <ScalarProperty Name="CTIPCLI" ColumnName="CTIPCLI" />
+          <ScalarProperty Name="CGIRNEG" ColumnName="CGIRNEG" />
+          <ScalarProperty Name="CTERRIT" ColumnName="CTERRIT" />
+          <ScalarProperty Name="CRUTA" ColumnName="CRUTA" />
+          <ScalarProperty Name="CSEGMEN" ColumnName="CSEGMEN" />
+          <ScalarProperty Name="CUBISEG" ColumnName="CUBISEG" />
+          <ScalarProperty Name="CCODBAN" ColumnName="CCODBAN" />
+          <ScalarProperty Name="CNUMCTA" ColumnName="CNUMCTA" />
+          <ScalarProperty Name="CFREVIS" ColumnName="CFREVIS" />
+          <ScalarProperty Name="CHORATE" ColumnName="CHORATE" />
+          <ScalarProperty Name="CTIPATE" ColumnName="CTIPATE" />
+          <ScalarProperty Name="CNUMFAX" ColumnName="CNUMFAX" />
+          <ScalarProperty Name="CEMAIL" ColumnName="CEMAIL" />
+          <ScalarProperty Name="CHOST" ColumnName="CHOST" />
+          <ScalarProperty Name="CZONPOS" ColumnName="CZONPOS" />
+          <ScalarProperty Name="COMENTA" ColumnName="COMENTA" />
+          <ScalarProperty Name="RETEN" ColumnName="RETEN" />
+          <ScalarProperty Name="CFLAGPRIN" ColumnName="CFLAGPRIN" />
+          <ScalarProperty Name="CCODTRANS" ColumnName="CCODTRANS" />
+          <ScalarProperty Name="SIN_CONTROL_LIMCREDITO" ColumnName="SIN_CONTROL_LIMCREDITO" />
+          <ScalarProperty Name="SUBCLA01" ColumnName="SUBCLA01" />
+          <ScalarProperty Name="SUBCLA02" ColumnName="SUBCLA02" />
+          <ScalarProperty Name="ZON_CODIGO" ColumnName="ZON_CODIGO" />
+          <ScalarProperty Name="CTIPO_DOCUMENTO" ColumnName="CTIPO_DOCUMENTO" />
+          <ScalarProperty Name="CAPELLIDO_PATERNO" ColumnName="CAPELLIDO_PATERNO" />
+          <ScalarProperty Name="CAPELLIDO_MATERNO" ColumnName="CAPELLIDO_MATERNO" />
+          <ScalarProperty Name="CPRIMER_NOMBRE" ColumnName="CPRIMER_NOMBRE" />
+          <ScalarProperty Name="CSEGUNDO_NOMBRE" ColumnName="CSEGUNDO_NOMBRE" />
+          <ScalarProperty Name="TCL_CODIGO" ColumnName="TCL_CODIGO" />
+          <ScalarProperty Name="NRO_AUTORIZACION_DIGEMID" ColumnName="NRO_AUTORIZACION_DIGEMID" />
+          <ScalarProperty Name="CONTACTO_COBRANZA" ColumnName="CONTACTO_COBRANZA" />
+          <ScalarProperty Name="CCODCLAS" ColumnName="CCODCLAS" />
+          <ScalarProperty Name="FLGPORTAL_CLIENTES" ColumnName="FLGPORTAL_CLIENTES" />
+          <ScalarProperty Name="ULTIMO_TC_VTA" ColumnName="ULTIMO_TC_VTA" />
+          <ScalarProperty Name="DESCUENTO_ESP" ColumnName="DESCUENTO_ESP" />
+          <ScalarProperty Name="CEMAIL_CONTACTO" ColumnName="CEMAIL_CONTACTO" />
+          <ScalarProperty Name="UBIGEO" ColumnName="UBIGEO" />
+          <ScalarProperty Name="FEC_INACTIVO_BLOQUEADO" ColumnName="FEC_INACTIVO_BLOQUEADO" />
+          <ScalarProperty Name="COD_AUDITORIA" ColumnName="COD_AUDITORIA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="POTENCIALCLI">
+      <EntityTypeMapping TypeName="CRMmodel.POTENCIALCLI">
+        <MappingFragment StoreEntitySet="POTENCIALCLI">
+          <ScalarProperty Name="CCODCLI" ColumnName="CCODCLI" />
+          <ScalarProperty Name="CNOMCLI" ColumnName="CNOMCLI" />
+          <ScalarProperty Name="CDIRCLI" ColumnName="CDIRCLI" />
+          <ScalarProperty Name="CTELEFO" ColumnName="CTELEFO" />
+          <ScalarProperty Name="CNUMRUC" ColumnName="CNUMRUC" />
+          <ScalarProperty Name="CDOCIDEN" ColumnName="CDOCIDEN" />
+          <ScalarProperty Name="CFLADES" ColumnName="CFLADES" />
+          <ScalarProperty Name="NPORDES" ColumnName="NPORDES" />
+          <ScalarProperty Name="CTIPVTA" ColumnName="CTIPVTA" />
+          <ScalarProperty Name="CESTADO" ColumnName="CESTADO" />
+          <ScalarProperty Name="DFECINS" ColumnName="DFECINS" />
+          <ScalarProperty Name="CNOMREP" ColumnName="CNOMREP" />
+          <ScalarProperty Name="CDISTRI" ColumnName="CDISTRI" />
+          <ScalarProperty Name="CUSUARI" ColumnName="CUSUARI" />
+          <ScalarProperty Name="DFECCRE" ColumnName="DFECCRE" />
+          <ScalarProperty Name="DFECMOD" ColumnName="DFECMOD" />
+          <ScalarProperty Name="CTIPPRE" ColumnName="CTIPPRE" />
+          <ScalarProperty Name="CVENDE" ColumnName="CVENDE" />
+          <ScalarProperty Name="CZONVTA" ColumnName="CZONVTA" />
+          <ScalarProperty Name="CPAIS" ColumnName="CPAIS" />
+          <ScalarProperty Name="CDEPT" ColumnName="CDEPT" />
+          <ScalarProperty Name="CPROV" ColumnName="CPROV" />
+          <ScalarProperty Name="DIRENT" ColumnName="DIRENT" />
+          <ScalarProperty Name="LOCENT" ColumnName="LOCENT" />
+          <ScalarProperty Name="LOCCLI" ColumnName="LOCCLI" />
+          <ScalarProperty Name="LOCEST" ColumnName="LOCEST" />
+          <ScalarProperty Name="ZONVTA" ColumnName="ZONVTA" />
+          <ScalarProperty Name="DIAATE" ColumnName="DIAATE" />
+          <ScalarProperty Name="SITCLI" ColumnName="SITCLI" />
+          <ScalarProperty Name="TIPIDE" ColumnName="TIPIDE" />
+          <ScalarProperty Name="REGVTA" ColumnName="REGVTA" />
+          <ScalarProperty Name="MONCRE" ColumnName="MONCRE" />
+          <ScalarProperty Name="LMCRUS" ColumnName="LMCRUS" />
+          <ScalarProperty Name="LMCRMN" ColumnName="LMCRMN" />
+          <ScalarProperty Name="SALDMN" ColumnName="SALDMN" />
+          <ScalarProperty Name="SALDUS" ColumnName="SALDUS" />
+          <ScalarProperty Name="LIMFAC" ColumnName="LIMFAC" />
+          <ScalarProperty Name="TOTFAC" ColumnName="TOTFAC" />
+          <ScalarProperty Name="TOTLEP" ColumnName="TOTLEP" />
+          <ScalarProperty Name="TOTCHD" ColumnName="TOTCHD" />
+          <ScalarProperty Name="FULABO" ColumnName="FULABO" />
+          <ScalarProperty Name="FECUFA" ColumnName="FECUFA" />
+          <ScalarProperty Name="NROSOL" ColumnName="NROSOL" />
+          <ScalarProperty Name="OBSERV" ColumnName="OBSERV" />
+          <ScalarProperty Name="DOCVEN" ColumnName="DOCVEN" />
+          <ScalarProperty Name="DIAVEN" ColumnName="DIAVEN" />
+          <ScalarProperty Name="NROORD" ColumnName="NROORD" />
+          <ScalarProperty Name="MORLET" ColumnName="MORLET" />
+          <ScalarProperty Name="MORFAC" ColumnName="MORFAC" />
+          <ScalarProperty Name="CHEDEV" ColumnName="CHEDEV" />
+          <ScalarProperty Name="LETPRO" ColumnName="LETPRO" />
+          <ScalarProperty Name="CTIPCLI" ColumnName="CTIPCLI" />
+          <ScalarProperty Name="CGIRNEG" ColumnName="CGIRNEG" />
+          <ScalarProperty Name="CTERRIT" ColumnName="CTERRIT" />
+          <ScalarProperty Name="CRUTA" ColumnName="CRUTA" />
+          <ScalarProperty Name="CSEGMEN" ColumnName="CSEGMEN" />
+          <ScalarProperty Name="CUBISEG" ColumnName="CUBISEG" />
+          <ScalarProperty Name="CCODBAN" ColumnName="CCODBAN" />
+          <ScalarProperty Name="CNUMCTA" ColumnName="CNUMCTA" />
+          <ScalarProperty Name="CFREVIS" ColumnName="CFREVIS" />
+          <ScalarProperty Name="CHORATE" ColumnName="CHORATE" />
+          <ScalarProperty Name="CTIPATE" ColumnName="CTIPATE" />
+          <ScalarProperty Name="CNUMFAX" ColumnName="CNUMFAX" />
+          <ScalarProperty Name="CEMAIL" ColumnName="CEMAIL" />
+          <ScalarProperty Name="CHOST" ColumnName="CHOST" />
+          <ScalarProperty Name="CZONPOS" ColumnName="CZONPOS" />
+          <ScalarProperty Name="COMENTA" ColumnName="COMENTA" />
+          <ScalarProperty Name="RETEN" ColumnName="RETEN" />
+          <ScalarProperty Name="CFLAGPRIN" ColumnName="CFLAGPRIN" />
+          <ScalarProperty Name="CCODTRANS" ColumnName="CCODTRANS" />
+          <ScalarProperty Name="SIN_CONTROL_LIMCREDITO" ColumnName="SIN_CONTROL_LIMCREDITO" />
+          <ScalarProperty Name="SUBCLA01" ColumnName="SUBCLA01" />
+          <ScalarProperty Name="SUBCLA02" ColumnName="SUBCLA02" />
+          <ScalarProperty Name="ZON_CODIGO" ColumnName="ZON_CODIGO" />
+          <ScalarProperty Name="CTIPO_DOCUMENTO" ColumnName="CTIPO_DOCUMENTO" />
+          <ScalarProperty Name="CAPELLIDO_PATERNO" ColumnName="CAPELLIDO_PATERNO" />
+          <ScalarProperty Name="CAPELLIDO_MATERNO" ColumnName="CAPELLIDO_MATERNO" />
+          <ScalarProperty Name="CPRIMER_NOMBRE" ColumnName="CPRIMER_NOMBRE" />
+          <ScalarProperty Name="CSEGUNDO_NOMBRE" ColumnName="CSEGUNDO_NOMBRE" />
+          <ScalarProperty Name="TCL_CODIGO" ColumnName="TCL_CODIGO" />
+          <ScalarProperty Name="NRO_AUTORIZACION_DIGEMID" ColumnName="NRO_AUTORIZACION_DIGEMID" />
+          <ScalarProperty Name="CONTACTO_COBRANZA" ColumnName="CONTACTO_COBRANZA" />
+          <ScalarProperty Name="CCODCLAS" ColumnName="CCODCLAS" />
+          <ScalarProperty Name="FLGPORTAL_CLIENTES" ColumnName="FLGPORTAL_CLIENTES" />
+          <ScalarProperty Name="ULTIMO_TC_VTA" ColumnName="ULTIMO_TC_VTA" />
+          <ScalarProperty Name="DESCUENTO_ESP" ColumnName="DESCUENTO_ESP" />
+          <ScalarProperty Name="CEMAIL_CONTACTO" ColumnName="CEMAIL_CONTACTO" />
+          <ScalarProperty Name="UBIGEO" ColumnName="UBIGEO" />
+          <ScalarProperty Name="FEC_INACTIVO_BLOQUEADO" ColumnName="FEC_INACTIVO_BLOQUEADO" />
+          <ScalarProperty Name="COD_AUDITORIA" ColumnName="COD_AUDITORIA" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PRIORIDAD">
+      <EntityTypeMapping TypeName="CRMmodel.PRIORIDAD">
+        <MappingFragment StoreEntitySet="PRIORIDAD">
+          <ScalarProperty Name="id_prioridad" ColumnName="id_prioridad" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RESPONSABLES">
+      <EntityTypeMapping TypeName="CRMmodel.RESPONSABLES">
+        <MappingFragment StoreEntitySet="RESPONSABLES">
+          <ScalarProperty Name="id_responsable" ColumnName="id_responsable" />
+          <ScalarProperty Name="id_actividad" ColumnName="id_actividad" />
+          <ScalarProperty Name="id_grupos" ColumnName="id_grupos" />
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="T_TIPO_CLIENTE">
+      <EntityTypeMapping TypeName="CRMmodel.T_TIPO_CLIENTE">
+        <MappingFragment StoreEntitySet="T_TIPO_CLIENTE">
+          <ScalarProperty Name="TCL_CODIGO" ColumnName="TCL_CODIGO" />
+          <ScalarProperty Name="TCL_DESCRIPCION" ColumnName="TCL_DESCRIPCION" />
+          <ScalarProperty Name="TCL_COD_ORIGEN" ColumnName="TCL_COD_ORIGEN" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TIPO_ACTIVIDAD">
+      <EntityTypeMapping TypeName="CRMmodel.TIPO_ACTIVIDAD">
+        <MappingFragment StoreEntitySet="TIPO_ACTIVIDAD">
+          <ScalarProperty Name="id_tipoActividad" ColumnName="id_tipoActividad" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="estado" ColumnName="estado" />
+          <ScalarProperty Name="color" ColumnName="color" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DIRE_CLIENTE">
+      <EntityTypeMapping TypeName="CRMmodel.DIRE_CLIENTE">
+        <MappingFragment StoreEntitySet="DIRE_CLIENTE">
+          <ScalarProperty Name="COD_DIRECCION" ColumnName="COD_DIRECCION" />
+          <ScalarProperty Name="CCODCLI" ColumnName="CCODCLI" />
+          <ScalarProperty Name="CDIRCLI" ColumnName="CDIRCLI" />
+          <ScalarProperty Name="Abreviado" ColumnName="Abreviado" />
+          <ScalarProperty Name="UBIGEO" ColumnName="UBIGEO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TIPO_MONEDA">
+      <EntityTypeMapping TypeName="CRMmodel.TIPO_MONEDA">
+        <MappingFragment StoreEntitySet="TIPO_MONEDA">
+          <ScalarProperty Name="TIPOMON_SIMBOLO" ColumnName="TIPOMON_SIMBOLO" />
+          <ScalarProperty Name="TIPOMON_NACIONALIDAD" ColumnName="TIPOMON_NACIONALIDAD" />
+          <ScalarProperty Name="TIPOMON_DESCRIPCION" ColumnName="TIPOMON_DESCRIPCION" />
+          <ScalarProperty Name="TIPOMON_CODIGO" ColumnName="TIPOMON_CODIGO" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TABAYU">
+      <EntityTypeMapping TypeName="CRMmodel.TABAYU">
+        <MappingFragment StoreEntitySet="TABAYU">
+          <ScalarProperty Name="TNOFOB" ColumnName="TNOFOB" />
+          <ScalarProperty Name="TADVALOR" ColumnName="TADVALOR" />
+          <ScalarProperty Name="TRESTA" ColumnName="TRESTA" />
+          <ScalarProperty Name="THORA" ColumnName="THORA" />
+          <ScalarProperty Name="TDATE" ColumnName="TDATE" />
+          <ScalarProperty Name="TNIVEL" ColumnName="TNIVEL" />
+          <ScalarProperty Name="TDIAVEN" ColumnName="TDIAVEN" />
+          <ScalarProperty Name="TDESCRI" ColumnName="TDESCRI" />
+          <ScalarProperty Name="TCLAVE" ColumnName="TCLAVE" />
+          <ScalarProperty Name="TCOD" ColumnName="TCOD" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ESTATUS_PROSPECTO">
+      <EntityTypeMapping TypeName="CRMmodel.ESTATUS_PROSPECTO">
+        <MappingFragment StoreEntitySet="ESTATUS_PROSPECTO">
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="id_estatusProspecto" ColumnName="id_estatusProspecto" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HISTORICO">
+      <EntityTypeMapping TypeName="CRMmodel.HISTORICO">
+        <MappingFragment StoreEntitySet="HISTORICO">
+          <ScalarProperty Name="id_oportunidad" ColumnName="id_oportunidad" />
+          <ScalarProperty Name="id_EstadoProspecto" ColumnName="id_EstadoProspecto" />
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+          <ScalarProperty Name="id_estatusOp" ColumnName="id-estatusOp" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+          <ScalarProperty Name="titulo" ColumnName="titulo" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="id_historico" ColumnName="id_historico" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PROSPECTO">
+      <EntityTypeMapping TypeName="CRMmodel.PROSPECTO">
+        <MappingFragment StoreEntitySet="PROSPECTO">
+          <ScalarProperty Name="monto_logrado" ColumnName="monto_logrado" />
+          <ScalarProperty Name="fecha_final" ColumnName="fecha_final" />
+          <ScalarProperty Name="fecha_inicial" ColumnName="fecha_inicial" />
+          <ScalarProperty Name="id_estatusProspecto" ColumnName="id_estatusProspecto" />
+          <ScalarProperty Name="porcentajeGanar" ColumnName="porcentajeGanar" />
+          <ScalarProperty Name="codigo_tipoMon" ColumnName="codigo_tipoMon" />
+          <ScalarProperty Name="tipoCliente" ColumnName="tipoCliente" />
+          <ScalarProperty Name="id_planificacion" ColumnName="id_planificacion" />
+          <ScalarProperty Name="notas" ColumnName="notas" />
+          <ScalarProperty Name="id_categoria" ColumnName="id_categoria" />
+          <ScalarProperty Name="cierre_previsto" ColumnName="cierre_previsto" />
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+          <ScalarProperty Name="color" ColumnName="color" />
+          <ScalarProperty Name="id_prioridad" ColumnName="id_prioridad" />
+          <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+          <ScalarProperty Name="id_estadoOporunidad" ColumnName="id_estadoOporunidad" />
+          <ScalarProperty Name="ingreso" ColumnName="ingreso" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="id_oportunidad" ColumnName="id_oportunidad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

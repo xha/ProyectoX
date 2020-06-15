@@ -1,0 +1,282 @@
+﻿
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Planificaciones</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Administrador") ">Inicio</a></li>
+                        <li class="breadcrumb-item">Actividades</li>
+                        <li class="breadcrumb-item"><a href="#">Planificadas</a></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-success card-outline">
+                        <div class="card-header p-3">
+                            <h5>Listado de Acitivades Planificadas   </h5>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 table-responsive">
+                                    <table id="actividades" class="table text-center table-bordered table-hover">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>C&oacute;digo</th>
+                                                <th>Descripci&oacute;n</th>
+                                                <th>Tipo de Actividad</th>
+                                                <th>Responsable</th>
+                                                <th>Estado</th>
+                                                <th>Oportunidad</th>
+                                                <th>Nombre Op.</th>
+                                                <th>RUC</th>
+                                                <th>Cliente</th>
+                                                <th>Ingreso Esperado</th>
+                                                <th>Moneda</th>
+                                                <th>Fecha Inicial</th>
+                                                <th>Acci&oacute;n</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                            </div>
+                            <!-- /.row -->
+                        </div>
+
+
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!--VER-->
+<div class="modal fade bd-example-modal-lg  ver" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header  bg-primary " style="padding: 16px;">
+                <h5 class="modal-title  font-weight-bold"> <span class="brand-text font-weight-bold">Actividad</span> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <form id="quickForm" role="form">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Codigo</label>
+                                <input type="text" id="codigo" readonly class="form-control limpiar">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input type="text"  id="nombre" readonly class="form-control limpiar">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <!-- textarea -->
+                            <div class="form-group">
+                                <label>Moneda</label>
+                                <input type="text"  id="moneda" readonly class="form-control limpiar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Tipo de actividad</label>
+                                <input type="text"  id="tipo" readonly class="form-control limpiar">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- textarea -->
+                            <div class="form-group">
+                                <label>Color</label>
+                                <input type="color"   id="color"  readonly class="form-control limpiar" disabled >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <!-- textarea -->
+                            <div class="form-group">
+                                <label>Ingreso</label>
+                                <input type="text" id="ingreso" readonly class="form-control limpiar">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Monto Logrado</label>
+                                <input type="text"  id="monto" readonly class="form-control limpiar">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <!-- textarea -->
+                            <div class="form-group">
+                                <label>Porcentaje a Ganar (%)</label>
+                                <input type="text"  id="porcentaje" readonly class="form-control limpiar">
+                            </div>
+                        </div>
+                    </div>
+                </form>               
+            </div>
+
+            <div class="modal-footer" style="border-top: 1px solid #c3c5c7;">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+ 
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var lang = {
+
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+        var json_actividad  = new Array();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("ListadoEspecial", "Calendario")',
+              
+            cache: false,
+            success: function (result) {
+                for (var i = 0; i < result.length; i++) {
+              
+                    json_actividad.push(result[i]);
+                     
+                }
+                tabla();
+                    }
+            });
+       function tabla (){
+           var table = $('#actividades').DataTable({
+               data: json_actividad,
+               columns: [
+                   { "data": "id_cronograma", "defaultContent": "" },
+                   { "data": "observacion", "defaultContent": "" },
+                   { "data": "Tipo_Actividad", "defaultContent": "" },
+                   { "data": "USU_CODIGO", "defaultContent": "" },
+                   {
+                       "render": function (data, type, row) {
+                           var retorno;
+                           switch (row.estatus) {
+                               case 0:
+                                   retorno = "<label class='text-primary'>Abierto</label>";
+                                   break;
+                               case 1:
+                                   retorno = "<label class='text-success'>Cerrado</label>";
+                                   break;
+                               case 2:
+                                   retorno = "<label class='text-danger'>Fuera de Fecha</label>";
+                                   break;
+                               case 3:
+                                   retorno = "<label class='text-secondary'>Eliminado</label>";
+                                   break;
+                           }
+                           
+                           return retorno;
+                       }
+                   },
+                   { "data": "id_oportunidad", "defaultContent": "" },
+                   { "data": "Nombre_Oportunidad", "defaultContent": "" },
+                   { "data": "idCliente", "defaultContent": "" }, 
+                   { "data": "Nombre_Cliente", "defaultContent": "" }, 
+                   { "data": "ingreso", "defaultContent": "" }, 
+                   { "data": "codigo_tipoMon", "defaultContent": "" }, 
+                    { "render": function (data, type, row) {
+                            if (row.fecha_inicial.length > 12) {
+                                var myDate = new Date(row.fecha_inicial.match(/\d+/)[0] * 1).toLocaleDateString();
+                                var arreglo = myDate.split("/");
+                                if (arreglo[0].length < 2) arreglo[0] = "0" + arreglo[0];
+                                if (arreglo[1].length < 2) arreglo[1] = "0" + arreglo[1];
+                                myDate = arreglo[0] + "/" + arreglo[1] + "/" + arreglo[2];
+                            } else {
+                                myDate = row.FECHA;
+                            }
+                        
+                            return myDate;
+                        }
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return '   <a class="btn btn-info btn-md actividades2 " data-toggle="modal" data-target=".ver" ><i class="fas fa-search" style="color: #fafafa;"></i></a>';
+                        }
+                    }
+               ],
+               "order": [],
+               "lengthChange": false,
+               "info": false,
+               "autoWidth": false,
+               "language": lang
+           });
+
+           actividad("#actividades tbody", table);
+       }
+       var actividad = function (tbody, table) {
+           $(tbody).on("click", "a.actividades2", function () {
+               var data = table.row($(this).parents("tr")).data();
+               $("#nombre").val(data.Nombre_Cliente);
+               $("#codigo").val(data.idCliente);
+               if (data.porcentajeGanar == null) data.porcentajeGanar = 0;
+               $("#porcentaje").val(parseFloat(data.porcentajeGanar).toFixed(2));
+               $("#tipo").val(data.Tipo_Actividad);
+               $("#color").val(data.Color_actividad);
+               if (data.ingreso == null) data.ingreso = 0;
+               $("#ingreso").val(parseFloat(data.ingreso).toFixed(2));
+               $("#moneda").val(data.codigo_tipoMon);
+               if (data.monto_logrado == null) data.monto_logrado = 0;
+               $("#monto").val(parseFloat(data.monto_logrado).toFixed(2));
+           });
+       }
+    </script>
+}
+
+
+
+

@@ -1,0 +1,90 @@
+﻿@model CRM.Models.PROSPECTO
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2 class="text-black-50 text-uppercase mt-2 mb-1">Prospecto:  @Model.nombre</h2>
+
+
+    <div class="row">
+        <div class="col">
+
+            <form role="form" id="formActividad">
+                <div class="card card-tabs">
+                    <div class="card-header">
+
+                        <h1 class="text-primary">
+                        <i class="fas fa-clock"></i> <span id="x_titulo">Actividades</span>
+                        </h1>
+                    </div>
+                    <div class="card-body h500" id="x_cuerpo">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Titulo</label>
+                                <input type="text" id="observacion" class="form-control" maxlength="200" onkeypress="solo_alfanumericos(event)" />
+                                <input type="hidden" id="id_tarea" value="0" />
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <label>Tipo de Actividad</label>
+                                <select class="form-control" id="tipo_actividad"></select>
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <label>Resumen de la actividad</label>
+                                <input type="text" maxlength="100" class="form-control" id="actividad" onkeypress="solo_alfanumericos(event)" />
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <label>Fecha:</label>
+                                <input type="datetime" id="fecha" class="form-control fecha" />
+                            </div>
+                            <div class="col-md-6 col-lg-3">
+                                <label>Fecha Hasta</label>
+                                <input type="datetime" id="fecha_hasta" class="form-control fecha" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top" id="x_pie">
+                        <a class="btn btn-success" href="javascript:void(0)" onclick="$('#id_tarea').val(0);grabar_tarea()" id="btn_grabar">
+                            <i class="fa fa-save"></i>
+                            Grabar
+                        </a>
+                        <a class="btn btn-danger d-none" href="javascript:void(0)" id="btn_borrar" onclick="borrar_tarea()">
+                            <i class="fa fa-times"></i>
+                            Borrar
+                        </a>
+                        <a class="btn btn-primary d-none" href="javascript:void(0)" onclick="actualizar_tarea()" id="btn_actualizar">
+                            <i class="fa fa-save"></i>
+                            Actualizar
+                        </a>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+
+@{
+            Html.RenderPartial("_Planificados");
+}
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id_oportunidad }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+<script>
+
+       
+
+    $("[id=fecha]").datepicker({
+        language: 'es',
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+        startDate: '-1Y',
+        endDate: '+1Y',
+        orientation: 'bottom'
+    });
+    $("[name=cierre_previsto]").inputmask('99/99/9999', { numericInput: true });
+</script>
